@@ -32,7 +32,7 @@
         </header>
 
         <main class="text-center py-20">
-            <h2 class="text-5xl font-bold mb-4 leading-tight">Hotel untuk Sahabat Berbulu Anda</h2>
+            <h2 class="text-5xl font-bold mb-4 leading-tight">Rumah untuk Sahabat Berbulu Anda</h2>
             <p class="text-lg max-w-2xl mx-auto mb-8">
                 Berikan kenyamanan terbaik untuk hewan kesayangan Anda dengan layanan hotel premium,
                 grooming profesional, dan perawatan 24/7 dari staff berpengalaman.
