@@ -149,12 +149,14 @@
 
       <!-- Submit Navbar -->
       <div class="flex justify-end space-x-4 mt-6 border-t pt-4">
+        <!-- 🔹 Tombol kembali dengan konfirmasi -->
         <button 
           type="button" 
           class="px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100"
-          onclick="window.location.href='{{ url('/') }}'">
+          onclick="konfirmasiKembali()">
           Kembali
         </button>
+
         <button 
           type="submit" 
           class="px-4 py-2 rounded bg-[#F2784B] hover:bg-[#e0673d] text-white">
@@ -163,6 +165,15 @@
       </div>
     </form>
   </div>
+
+  <!-- Script Konfirmasi -->
+  <script>
+    function konfirmasiKembali() {
+      if (confirm('Yakin mau kembali? Data reservasi yang sudah diisi bisa hilang.')) {
+        window.location.href = '/'; // arahkan ke halaman tujuan
+      }
+    }
+  </script>
 
   <!-- Script untuk Ringkasan Biaya -->
   <script>

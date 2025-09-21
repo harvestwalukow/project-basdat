@@ -33,10 +33,8 @@ Route::get('/reservasi', function () {
 })->name('reservasi.form');
 
 Route::post('/reservasi', function (Request $request) {
-    // Untuk uji coba, kita lempar semua input ke halaman pembayaran
-    return view('pembayaran', [
-        'data' => $request->all()
-    ]);
+    $data = $request->all(); // ambil semua input
+    return view('pembayaran', compact('data'));
 })->name('reservasi.submit');
 
 
