@@ -75,42 +75,42 @@
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
       <!-- Card 1 -->
       <div class="facility-card bg-white rounded-2xl shadow p-6 hover:shadow-xl transition opacity-0 translate-y-10">
-        <img src="/img/icon-ac.png" class="w-14 mx-auto mb-3" alt="AC">
+        <img src="/img/hotel.jpg" class="w-full h-48 overflow-hidden rounded-md mb-3" alt="AC">
         <h3 class="text-xl font-semibold mb-1">Kamar Ber-AC</h3>
         <p class="text-gray-600">Suhu ruangan stabil untuk istirahat yang nyaman.</p>
       </div>
 
       <!-- Card 2 -->
       <div class="facility-card bg-white rounded-2xl shadow p-6 hover:shadow-xl transition opacity-0 translate-y-10">
-        <img src="/img/icon-cctv.png" class="w-14 mx-auto mb-3" alt="CCTV">
+        <img src="/img/cctv.jpg" class="w-full h-48 overflow-hidden rounded-md mb-3" alt="CCTV">
         <h3 class="text-xl font-semibold mb-1">CCTV 24/7</h3>
         <p class="text-gray-600">Pengawasan nonstop; bisa minta video update.</p>
       </div>
 
       <!-- Card 3 -->
       <div class="facility-card bg-white rounded-2xl shadow p-6 hover:shadow-xl transition opacity-0 translate-y-10">
-        <img src="/img/icon-play.png" class="w-14 mx-auto mb-3" alt="Play">
+        <img src="/img/main.jpg" class="w-full h-48 overflow-hidden rounded-md mb-3" alt="Play">
         <h3 class="text-xl font-semibold mb-1">Area Bermain</h3>
         <p class="text-gray-600">Indoor/outdoor dengan permainan & obstacle.</p>
       </div>
 
       <!-- Card 4 -->
       <div class="facility-card bg-white rounded-2xl shadow p-6 hover:shadow-xl transition opacity-0 translate-y-10">
-        <img src="/img/icon-play.png" class="w-14 mx-auto mb-3" alt="Play">
+        <img src="/img/icon-play.png" class="w-full h-48 overflow-hidden rounded-md mb-3" alt="Play">
         <h3 class="text-xl font-semibold mb-1">Dapur Higienis</h3>
         <p class="text-gray-600">Menu bergizi & bisa disesuaikan diet.</p>
       </div>
 
       <!-- Card 5 -->
       <div class="facility-card bg-white rounded-2xl shadow p-6 hover:shadow-xl transition opacity-0 translate-y-10">
-        <img src="/img/icon-play.png" class="w-14 mx-auto mb-3" alt="Play">
+        <img src="/img/icon-play.png" class="w-full h-48 overflow-hidden rounded-md mb-3" alt="Play">
         <h3 class="text-xl font-semibold mb-1">Sterilisasi Rutin</h3>
         <p class="text-gray-600">Kandang & mainan disanitasi berkala.</p>
       </div>
 
       <!-- Card 6 -->
       <div class="facility-card bg-white rounded-2xl shadow p-6 hover:shadow-xl transition opacity-0 translate-y-10">
-        <img src="/img/icon-play.png" class="w-14 mx-auto mb-3" alt="Play">
+        <img src="/img/icon-play.png" class="w-full h-48 overflow-hidden rounded-md mb-3" alt="Play">
         <h3 class="text-xl font-semibold mb-1">Update Harian</h3>
         <p class="text-gray-600">Foto/Video via WhatsApp; opsi VC sesuai paket.</p>
       </div>
