@@ -88,7 +88,8 @@
       </div>
     </div>
   </section>
-  <!-- FOOTER -->
+
+<!-- FOOTER -->
   <footer id="kontak" class="bg-[#333] text-white py-10">
     <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
       <div>
@@ -112,6 +113,7 @@
     </div>
     <p class="text-center text-gray-400 mt-6">© 2025 PawsHotel. All rights reserved.</p>
   </footer>
+
 
 </body>
 </html>
