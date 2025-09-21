@@ -64,3 +64,32 @@ Route::get('/dashboard', function () {
 Route::get('/signup', function () {
     return view('signup'); // buat file resources/views/auth/signup.blade.php
 })->name('signup');
+
+// Admin Routes
+Route::get('/admin/', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard');
+
+Route::get('/admin/penitipan', function () {
+    return view('admin.booking');
+})->name('admin.booking');
+
+Route::get('/admin/pengguna', function () {
+    return view('admin.customer');
+})->name('admin.customer');
+
+Route::get('/admin/hewan', function () {
+    return view('admin.pets');
+})->name('admin.pets');
+
+Route::get('/admin/update-kondisi', function () {
+    return view('admin.rooms');
+})->name('admin.rooms');
+
+Route::get('/admin/paket-layanan', function () {
+    return view('admin.service');
+})->name('admin.service');
+
+Route::get('/admin/pembayaran', function () {
+    return view('admin.payments');
+})->name('admin.payments');
