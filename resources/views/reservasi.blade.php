@@ -95,6 +95,62 @@
               <option value="premium">Paket Premium - Rp 250.000</option>
             </select>
           </div>
+          <!-- Layanan Tambahan (Vertikal) -->
+           <div>
+            <label class="block font-medium mb-2">Layanan Tambahan (Opsional)</label>
+            <div class="flex flex-col space-y-2">
+              <label class="flex items-center space-x-2">
+                <input type="checkbox" name="additionalServices" value="grooming" class="w-5 h-5">
+                <span>Grooming Premium (+Rp 150.000)</span>
+              </label>
+              <label class="flex items-center space-x-2">
+                <input type="checkbox" name="additionalServices" value="pickup" class="w-5 h-5">
+                <span>Pick-up & Delivery (+Rp 100.000)</span>
+              </label>
+              <label class="flex items-center space-x-2">
+                <input type="checkbox" name="additionalServices" value="doctor" class="w-5 h-5">
+                <span>Kolam Renang (+Rp 100.000)</span>
+              </label>
+              <label class="flex items-center space-x-2">
+                <input type="checkbox" name="additionalServices" value="training" class="w-5 h-5">
+                <span>Boarding (+Rp 200.000)</span>
+              </label>
+            </div>
+          </div>
+          <title>Form Permintaan Khusus</title>
+          <style>
+        .form-group {
+          display: flex;
+          flex-direction: column; /* label di atas textarea */
+          margin-bottom: 1rem;
+        }
+
+        .form-group label {
+          font-weight: bold;
+          margin-bottom: 0.5rem;
+        }
+
+        .form-group textarea {
+          width: 100%;              /* biar penuh */
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          background-color: #f7f7f8; /* abu-abu lembut */
+          font-size: 14px;
+          resize: vertical;         /* hanya bisa tarik ke bawah */
+        }
+        </style>
+      </head>
+      <body>
+        <div class="form-group">
+          <label for="specialRequests">Permintaan Khusus</label>
+          <textarea 
+            id="specialRequests"
+            name="specialRequests"
+            placeholder="Catatan khusus untuk perawatan hewan (alergi, obat, dll)"
+            rows="3"
+          ></textarea>
+        </div>
 
           <div class="grid md:grid-cols-2 gap-4">
             <div>
