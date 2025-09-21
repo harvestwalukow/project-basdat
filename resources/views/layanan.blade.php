@@ -1,152 +1,106 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PetHotel</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body { font-family: Arial, sans-serif; }
-    .hero {
-      position: relative;
-      background: linear-gradient(to right, #2563eb, #7c3aed);
-      color: white;
-    }
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.2);
-    }
-    .hero-content {
-      position: relative;
-      z-index: 1;
-    }
-    .feature-card {
-      transition: box-shadow 0.2s ease;
-    }
-    .feature-card:hover {
-      box-shadow: 0px 4px 16px rgba(0,0,0,0.1);
-    }
-    .cta {
-      background: #2563eb;
-      color: white;
-    }
-    .star {
-      color: #facc15;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-[#FEFBF7] text-[#333333]">
 
-  <!-- Hero Section -->
-  <section class="hero py-5">
-    <div class="container hero-content">
-      <div class="row align-items-center">
-        <div class="col-lg-6 mb-4">
-          <h1 class="display-4 fw-bold mb-3">Tempat Nyaman untuk Anjing & Kucing Anda</h1>
-          <p class="lead mb-4">
-            Hotel hewan terpercaya dengan fasilitas lengkap, perawatan profesional, 
-            dan kasih sayang seperti di rumah sendiri.
-          </p>
-          <div class="d-flex flex-wrap gap-3">
-            <a href="#register" class="btn btn-light text-primary btn-lg">Daftar Sekarang</a>
-            <a href="#services" class="btn btn-outline-light btn-lg">Lihat Paket</a>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <img src="https://images.unsplash.com/photo-1668522907255-62950845ff46?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" 
-               alt="Happy pets playing" 
-               class="img-fluid rounded shadow-lg">
-        </div>
+  <!-- Navbar -->
+  <nav class="bg-[#FEFBF7] shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-xl font-bold">Pet Hotel</h1>
+      <ul class="hidden md:flex space-x-6 font-medium">
+         <li><a href="{{ url('/') }}" class="hover:text-[#F2784B]">Beranda</a></li>
+         <li><a href="{{ url('/layanan') }}" class="hover:text-[#F2784B]">Layanan</a></li>
+         <li><a href="{{ url('/fasilitas') }}" class="hover:text-[#F2784B]">Fasilitas</a></li>
+         <li><a href="{{ url('/tentang') }}" class="hover:text-[#F2784B]">Tentang Kami</a></li>
+         <li><a href="{{ url('/kontak') }}" class="hover:text-[#F2784B]">Kontak</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Section Paket Layanan -->
+  <div class="py-20 bg-[#FEFBF7]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Judul Section -->
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold mb-4">PAKET LAYANAN KAMI</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          Pilih paket yang sesuai dengan kebutuhan hewan kesayangan Anda. 
+          Semua paket dilengkapi dengan perawatan profesional dan kasih sayang tulus.
+        </p>
       </div>
-    </div>
-  </section>
 
-  <!-- Features Section -->
-  <section class="py-5 bg-light">
-    <div class="container text-center">
-      <h2 class="mb-3">Mengapa Memilih PetHotel?</h2>
-      <p class="text-muted mb-5">
-        Kami menyediakan perawatan terbaik dengan fasilitas modern dan tim profesional 
-        yang berpengalaman dalam merawat hewan peliharaan.
-      </p>
-      <div class="row g-4">
-        <div class="col-md-6 col-lg-3">
-          <div class="card p-4 feature-card h-100 text-center">
-            <div class="fs-1 mb-3">🏨</div>
-            <h5>Fasilitas Mewah</h5>
-            <p class="text-muted">Kandang ber-AC dengan tempat tidur empuk dan mainan untuk kenyamanan hewan peliharaan Anda</p>
-          </div>
+      <!-- Paket Basic & Premium -->
+      <div class="flex flex-col lg:flex-row gap-8 mb-16">
+
+        <!-- Basic Package --> 
+        <div class="bg-white rounded-lg shadow-lg p-8 w-full lg:w-1/3 flex flex-col">
+          <h3 class="text-2xl font-bold mb-4">Basic</h3>
+          <ul class="text-left space-y-2 text-gray-600 mb-8 flex-grow">
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+              <span>Kamar Ber-AC</span>
+            </li>
+            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Makan 3x sehari</li>
+            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Area bermain indoor/outdoor</li>
+            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Laporan harian via WA (foto)</li>
+          </ul>
         </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card p-4 feature-card h-100 text-center">
-            <div class="fs-1 mb-3">👨‍⚕</div>
-            <h5>Dokter Hewan Standby</h5>
-            <p class="text-muted">Tim dokter hewan profesional siap 24/7 untuk memastikan kesehatan hewan kesayangan</p>
-          </div>
+
+        <!-- Premium Package -->
+        <div class="bg-white rounded-lg shadow-lg p-8 w-full lg:w-1/3 border-2 border-[#F2784B] flex flex-col">
+          <h3 class="text-2xl font-bold mb-4 text-[#F2784B]">Premium</h3>
+          <ul class="text-left space-y-2 text-gray-600 mb-8 flex-grow">
+            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Kamar Ber-AC</li>
+            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Makan 3x sehari</li>
+            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Area bermain indoor/outdoor</li>
+            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Laporan harian via WA + VC</li>
+            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Snack</li>
+            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Treats</li>
+          </ul>
         </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card p-4 feature-card h-100 text-center">
-            <div class="fs-1 mb-3">✨</div>
-            <h5>Grooming & Spa</h5>
-            <p class="text-muted">Layanan grooming lengkap dengan peralatan modern untuk perawatan bulu dan kuku</p>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card p-4 feature-card h-100 text-center">
-            <div class="fs-1 mb-3">🎾</div>
-            <h5>Area Bermain</h5>
-            <p class="text-muted">Ruang bermain luas untuk aktivitas fisik dan sosialisasi antar hewan</p>
-          </div>
-        </div>
+
       </div>
-    </div>
-  </section>
 
-  <!-- CTA Section -->
-  <section class="cta py-5 text-center">
-    <div class="container">
-      <h2 class="mb-3">Siap Memberikan Liburan untuk Hewan Kesayangan?</h2>
-      <p class="lead mb-4 text-light">Reservasi sekarang dan berikan pengalaman menginap terbaik untuk hewan peliharaan Anda.</p>
-      <a href="#reservation" class="btn btn-light text-primary btn-lg">Mulai Reservasi</a>
-    </div>
-  </section>
-
-  <!-- Testimonials -->
-  <section class="py-5">
-    <div class="container text-center">
-      <h2 class="mb-5">Apa Kata Pelanggan Kami</h2>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="card p-4 h-100">
-            <div class="mb-3">
-              <span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span>
-            </div>
-            <p class="text-muted">"PetHotel sangat memuaskan! Kucing saya Mimi terlihat bahagia dan sehat setelah menginap 1 minggu."</p>
-            <p class="fw-bold">Sarah Wijaya</p>
+      <!-- Add-on Section mirip "Layanan Tambahan" -->
+      <div>
+        <h3 class="text-2xl font-bold mb-6 text-center">Layanan Tambahan</h3>
+        <p class="text-gray-600 mb-12 text-center">
+          Tingkatkan pengalaman hewan peliharaan Anda dengan layanan tambahan kami
+        </p>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="bg-white rounded-lg shadow p-6 text-center">
+            <h4 class="font-semibold mb-2">Grooming Premium</h4>
+            <p class="text-[#F2784B] font-bold mb-2">Rp 150.000</p>
+            <p class="text-gray-600">Spa lengkap, potong kuku, bersih telinga, aromaterapi</p>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card p-4 h-100">
-            <div class="mb-3">
-              <span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span>
-            </div>
-            <p class="text-muted">"Fasilitas lengkap dan perawatan profesional. Anjing saya Max suka sekali dengan area bermainnya."</p>
-            <p class="fw-bold">Budi Santoso</p>
+          <div class="bg-white rounded-lg shadow p-6 text-center">
+            <h4 class="font-semibold mb-2">Boarding Asikk</h4>
+            <p class="text-[#F2784B] font-bold mb-2">Rp 200.000</p>
+            <p class="text-gray-600">Penitipan hewan dijamin aman dan nyaman</p>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card p-4 h-100">
-            <div class="mb-3">
-              <span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span>
-            </div>
-            <p class="text-muted">"Staff ramah dan berpengalaman. Sangat recommended untuk yang butuh penitipan hewan terpercaya."</p>
-            <p class="fw-bold">Diana Putri</p>
+          <div class="bg-white rounded-lg shadow p-6 text-center">
+            <h4 class="font-semibold mb-2">Pick-up & Delivery</h4>
+            <p class="text-[#F2784B] font-bold mb-2">Rp 100.000</p>
+            <p class="text-gray-600">Layanan antar jemput dalam radius 10km</p>
+          </div>
+          <div class="bg-white rounded-lg shadow p-6 text-center">
+            <h4 class="font-semibold mb-2">Kolam Renang</h4>
+            <p class="text-[#F2784B] font-bold mb-2">Rp 100.000</p>
+            <p class="text-gray-600">Pelatihan kepatuhan dan sosialisasi (per sesi)</p>
           </div>
         </div>
       </div>
+
     </div>
-  </section>
+  </div>
 
 </body>
 </html>

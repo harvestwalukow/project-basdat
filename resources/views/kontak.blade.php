@@ -2,151 +2,216 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>PetHotel</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body { font-family: Arial, sans-serif; }
-    .hero {
-      position: relative;
-      background: linear-gradient(to right, #2563eb, #7c3aed);
-      color: white;
-    }
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.2);
-    }
-    .hero-content {
-      position: relative;
-      z-index: 1;
-    }
-    .feature-card {
-      transition: box-shadow 0.2s ease;
-    }
-    .feature-card:hover {
-      box-shadow: 0px 4px 16px rgba(0,0,0,0.1);
-    }
-    .cta {
-      background: #2563eb;
-      color: white;
-    }
-    .star {
-      color: #facc15;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hubungi Kami | PetHotel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-
-  <!-- Hero Section -->
-  <section class="hero py-5">
-    <div class="container hero-content">
-      <div class="row align-items-center">
-        <div class="col-lg-6 mb-4">
-          <h1 class="display-4 fw-bold mb-3">Tempat Nyaman untuk Anjing & Kucing Anda</h1>
-          <p class="lead mb-4">
-            Hotel hewan terpercaya dengan fasilitas lengkap, perawatan profesional, 
-            dan kasih sayang seperti di rumah sendiri.
-          </p>
-          <div class="d-flex flex-wrap gap-3">
-            <a href="#register" class="btn btn-light text-primary btn-lg">Daftar Sekarang</a>
-            <a href="#services" class="btn btn-outline-light btn-lg">Lihat Paket</a>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <img src="https://images.unsplash.com/photo-1668522907255-62950845ff46?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080" 
-               alt="Happy pets playing" 
-               class="img-fluid rounded shadow-lg">
-        </div>
-      </div>
+<body class="bg-[#FEFBF7] text-[#333333]">
+<body class="min-h-screen py-12 bg-gray-50">
+<!-- Navbar -->
+  <nav class="bg-[#FEFBF7] shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-xl font-bold">Pet Hotel</h1>
+      <ul class="hidden md:flex space-x-6 font-medium">
+         <li><a href="{{ url('/') }}" class="hover:text-[#F2784B]">Beranda</a></li>
+         <li><a href="{{ url('/layanan') }}" class="hover:text-[#F2784B]">Layanan</a></li>
+         <li><a href="{{ url('/fasilitas') }}" class="hover:text-[#F2784B]">Fasilitas</a></li>
+         <li><a href="{{ url('/tentang') }}" class="hover:text-[#F2784B]">Tentang Kami</a></li>
+         <li><a href="{{ url('/kontak') }}" class="hover:text-[#F2784B]">Kontak</a></li>
+      </ul>
     </div>
-  </section>
+  </nav>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-  <!-- Features Section -->
-  <section class="py-5 bg-light">
-    <div class="container text-center">
-      <h2 class="mb-3">Mengapa Memilih PetHotel?</h2>
-      <p class="text-muted mb-5">
-        Kami menyediakan perawatan terbaik dengan fasilitas modern dan tim profesional 
-        yang berpengalaman dalam merawat hewan peliharaan.
+    <!-- Header -->
+    <div class="text-center mb-16">
+      <h1 class="text-4xl font-bold mb-6">Hubungi Kami</h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        Ada pertanyaan tentang layanan kami? Tim customer service siap membantu Anda 24/7
       </p>
-      <div class="row g-4">
-        <div class="col-md-6 col-lg-3">
-          <div class="card p-4 feature-card h-100 text-center">
-            <div class="fs-1 mb-3">🏨</div>
-            <h5>Fasilitas Mewah</h5>
-            <p class="text-muted">Kandang ber-AC dengan tempat tidur empuk dan mainan untuk kenyamanan hewan peliharaan Anda</p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-12">
+      <!-- Contact Form -->
+      <div class="bg-white shadow rounded-lg p-8">
+        <h2 class="text-2xl font-bold mb-4">Kirim Pesan</h2>
+        <p class="text-gray-600 mb-6">Isi form di bawah dan kami akan menghubungi Anda dalam 24 jam</p>
+
+        <form class="space-y-4">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label for="name" class="block text-sm font-medium mb-1">Nama Lengkap *</label>
+              <input id="name" type="text" class="w-full border rounded px-3 py-2" placeholder="Masukkan nama lengkap" required>
+            </div>
+            <div>
+              <label for="phone" class="block text-sm font-medium mb-1">Nomor Telepon</label>
+              <input id="phone" type="text" class="w-full border rounded px-3 py-2" placeholder="08xxxxxxxxxx">
+            </div>
+          </div>
+
+          <div>
+            <label for="email" class="block text-sm font-medium mb-1">Email *</label>
+            <input id="email" type="email" class="w-full border rounded px-3 py-2" placeholder="email@example.com" required>
+          </div>
+
+          <div>
+            <label for="subject" class="block text-sm font-medium mb-1">Subjek</label>
+            <input id="subject" type="text" class="w-full border rounded px-3 py-2" placeholder="Subjek pesan">
+          </div>
+
+          <div>
+            <label for="message" class="block text-sm font-medium mb-1">Pesan *</label>
+            <textarea id="message" rows="5" class="w-full border rounded px-3 py-2" placeholder="Tuliskan pesan Anda di sini..." required></textarea>
+          </div>
+
+          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded">
+            Kirim Pesan
+          </button>
+        </form>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="space-y-6">
+
+        <!-- Contact Details -->
+        <div class="space-y-4">
+          <div class="bg-white shadow rounded-lg p-6 flex items-start space-x-4">
+            <div class="text-2xl">📍</div>
+            <div>
+              <h3 class="font-semibold mb-2">Alamat</h3>
+              <p class="text-gray-600 text-sm">Jl. Raya Kebayoran No. 123</p>
+              <p class="text-gray-600 text-sm">Jakarta Selatan 12345</p>
+            </div>
+          </div>
+
+          <div class="bg-white shadow rounded-lg p-6 flex items-start space-x-4">
+            <div class="text-2xl">📞</div>
+            <div>
+              <h3 class="font-semibold mb-2">Telepon</h3>
+              <p class="text-gray-600 text-sm">+62 21 1234 5678</p>
+              <p class="text-gray-600 text-sm">+62 811 2345 6789</p>
+            </div>
+          </div>
+
+          <div class="bg-white shadow rounded-lg p-6 flex items-start space-x-4">
+            <div class="text-2xl">📧</div>
+            <div>
+              <h3 class="font-semibold mb-2">Email</h3>
+              <p class="text-gray-600 text-sm">info@pethotel.co.id</p>
+              <p class="text-gray-600 text-sm">booking@pethotel.co.id</p>
+            </div>
+          </div>
+
+          <div class="bg-white shadow rounded-lg p-6 flex items-start space-x-4">
+            <div class="text-2xl">🕒</div>
+            <div>
+              <h3 class="font-semibold mb-2">Jam Operasional</h3>
+              <p class="text-gray-600 text-sm">Senin - Jumat: 07:00 - 20:00</p>
+              <p class="text-gray-600 text-sm">Sabtu - Minggu: 08:00 - 18:00</p>
+            </div>
           </div>
         </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card p-4 feature-card h-100 text-center">
-            <div class="fs-1 mb-3">👨‍⚕️</div>
-            <h5>Dokter Hewan Standby</h5>
-            <p class="text-muted">Tim dokter hewan profesional siap 24/7 untuk memastikan kesehatan hewan kesayangan</p>
+
+        <!-- Social Media -->
+        <div class="bg-white shadow rounded-lg p-6">
+          <h3 class="font-semibold mb-2">Media Sosial</h3>
+          <p class="text-gray-600 mb-4">Ikuti kami untuk update terbaru</p>
+          <div class="space-y-3">
+            <a href="https://wa.me/6281123456789" target="_blank" class="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
+              <div class="flex items-center space-x-3">
+                <span class="text-xl">💬</span>
+                <div>
+                  <p class="text-sm">WhatsApp</p>
+                  <p class="text-xs text-gray-600">+62 811 2345 6789</p>
+                </div>
+              </div>
+              <span class="text-blue-600 text-sm">Follow</span>
+            </a>
+            <a href="#" class="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
+              <div class="flex items-center space-x-3">
+                <span class="text-xl">📷</span>
+                <div>
+                  <p class="text-sm">Instagram</p>
+                  <p class="text-xs text-gray-600">@pethotel_id</p>
+                </div>
+              </div>
+              <span class="text-blue-600 text-sm">Follow</span>
+            </a>
+            <a href="#" class="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
+              <div class="flex items-center space-x-3">
+                <span class="text-xl">📘</span>
+                <div>
+                  <p class="text-sm">Facebook</p>
+                  <p class="text-xs text-gray-600">PetHotel Indonesia</p>
+                </div>
+              </div>
+              <span class="text-blue-600 text-sm">Follow</span>
+            </a>
+            <a href="#" class="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
+              <div class="flex items-center space-x-3">
+                <span class="text-xl">🎵</span>
+                <div>
+                  <p class="text-sm">TikTok</p>
+                  <p class="text-xs text-gray-600">@pethotel.id</p>
+                </div>
+              </div>
+              <span class="text-blue-600 text-sm">Follow</span>
+            </a>
           </div>
         </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card p-4 feature-card h-100 text-center">
-            <div class="fs-1 mb-3">✨</div>
-            <h5>Grooming & Spa</h5>
-            <p class="text-muted">Layanan grooming lengkap dengan peralatan modern untuk perawatan bulu dan kuku</p>
+
+        <!-- Emergency Contact -->
+        <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+          <h3 class="text-red-800 font-semibold mb-2">Kontak Darurat</h3>
+          <p class="text-red-600 mb-3">Untuk situasi darurat di luar jam operasional</p>
+          <div class="flex items-center space-x-2 mb-2">
+            <span class="text-red-600">🚨</span>
+            <span>Emergency Hotline: +62 811 9999 8888</span>
           </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="card p-4 feature-card h-100 text-center">
-            <div class="fs-1 mb-3">🎾</div>
-            <h5>Area Bermain</h5>
-            <p class="text-muted">Ruang bermain luas untuk aktivitas fisik dan sosialisasi antar hewan</p>
-          </div>
+          <p class="text-sm text-red-600">Tersedia 24/7 untuk kasus medis darurat hewan peliharaan</p>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- CTA Section -->
-  <section class="cta py-5 text-center">
-    <div class="container">
-      <h2 class="mb-3">Siap Memberikan Liburan untuk Hewan Kesayangan?</h2>
-      <p class="lead mb-4 text-light">Reservasi sekarang dan berikan pengalaman menginap terbaik untuk hewan peliharaan Anda.</p>
-      <a href="#reservation" class="btn btn-light text-primary btn-lg">Mulai Reservasi</a>
-    </div>
-  </section>
-
-  <!-- Testimonials -->
-  <section class="py-5">
-    <div class="container text-center">
-      <h2 class="mb-5">Apa Kata Pelanggan Kami</h2>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="card p-4 h-100">
-            <div class="mb-3">
-              <span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span>
-            </div>
-            <p class="text-muted">"PetHotel sangat memuaskan! Kucing saya Mimi terlihat bahagia dan sehat setelah menginap 1 minggu."</p>
-            <p class="fw-bold">Sarah Wijaya</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card p-4 h-100">
-            <div class="mb-3">
-              <span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span>
-            </div>
-            <p class="text-muted">"Fasilitas lengkap dan perawatan profesional. Anjing saya Max suka sekali dengan area bermainnya."</p>
-            <p class="fw-bold">Budi Santoso</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card p-4 h-100">
-            <div class="mb-3">
-              <span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span>
-            </div>
-            <p class="text-muted">"Staff ramah dan berpengalaman. Sangat recommended untuk yang butuh penitipan hewan terpercaya."</p>
-            <p class="fw-bold">Diana Putri</p>
-          </div>
+    <!-- Map Section -->
+    <div class="mt-16 bg-white shadow rounded-lg p-8">
+      <h3 class="font-semibold mb-2">Lokasi Kami</h3>
+      <p class="text-gray-600 mb-6">Kunjungi hotel hewan kami di Jakarta Selatan</p>
+      <div class="aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
+        <div class="text-center text-gray-500">
+          <div class="text-4xl mb-2">🗺️</div>
+          <p>Google Maps Integration</p>
+          <p class="text-sm">Jl. Raya Kebayoran No. 123, Jakarta Selatan</p>
         </div>
       </div>
     </div>
-  </section>
 
+    <!-- FAQ Section -->
+    <div class="mt-16">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold mb-4">Pertanyaan Umum</h2>
+        <p class="text-gray-600">Berikut beberapa pertanyaan yang sering diajukan</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-white shadow rounded-lg p-6">
+          <h3 class="text-lg font-semibold mb-2">Jam berapa check-in dan check-out?</h3>
+          <p class="text-gray-600">Check-in mulai pukul 08:00 dan check-out hingga pukul 17:00. Untuk di luar jam tersebut, silakan hubungi kami.</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6">
+          <h3 class="text-lg font-semibold mb-2">Apa saja yang perlu dibawa saat check-in?</h3>
+          <p class="text-gray-600">Bawa surat vaksin terbaru, makanan khusus (jika ada), dan mainan favorit hewan peliharaan Anda.</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6">
+          <h3 class="text-lg font-semibold mb-2">Bisakah saya mengunjungi hewan saya?</h3>
+          <p class="text-gray-600">Ya, Anda bisa mengunjungi hewan peliharaan setiap hari dari pukul 10:00-16:00 dengan perjanjian.</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6">
+          <h3 class="text-lg font-semibold mb-2">Bagaimana jika hewan saya sakit?</h3>
+          <p class="text-gray-600">Kami memiliki dokter hewan standby 24/7. Biaya konsultasi dan pengobatan akan diinformasikan terlebih dahulu.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </body>
 </html>

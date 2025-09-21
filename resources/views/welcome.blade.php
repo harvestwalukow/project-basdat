@@ -20,11 +20,11 @@
         <header class="flex justify-between items-center py-6">
             <h1 class="text-3xl font-bold text-[#F2784B]">PawsHotel</h1>
             <nav class="hidden md:flex items-center space-x-8">
-                <a href="#" class="hover:text-[#F2784B]">Beranda</a>
-                <a href="#" class="hover:text-[#F2784B]">Layanan</a>
-                <a href="#" class="hover:text-[#F2784B]">Fasilitas</a>
-                <a href="#" class="hover:text-[#F2784B]">Tentang Kami</a>
-                <a href="#" class="hover:text-[#F2784B]">Kontak</a>
+                <a href="{{ url('/') }}" class="hover:text-[#F2784B]">Beranda</a>
+                <a href="{{ url('/layanan') }}" class="hover:text-[#F2784B]">Layanan</a>
+                <a href="{{ url('/fasilitas') }}" class="hover:text-[#F2784B]">Fasilitas</a>
+                <a href="{{ url('/about') }}" class="hover:text-[#F2784B]">Tentang Kami</a>
+                <a href="{{ url('/kontak') }}" class="hover:text-[#F2784B]">Kontak</a>
             </nav>
             <a href="#"
                 class="bg-[#F2784B] text-white px-6 py-2 rounded-lg font-bold hover:bg-orange-600">Reservasi
