@@ -39,9 +39,9 @@
             </p>
             <div class="flex justify-center space-x-4">
                 <a href="#"
-                    class="bg-[#F2784B] text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-orange-600">Reservasi
+                    class="bg-[#F2784B] text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-orange-600">Daftar
                     Sekarang</a>
-                <a href="#"
+                <a href="{{ url('/fasilitas') }}"
                     class="bg-white border border-gray-300 px-8 py-3 rounded-lg font-bold text-lg hover:bg-gray-100">Lihat
                     Fasilitas</a>
             </div>
@@ -141,6 +141,61 @@
                 </div>
             </div>
         </section>
+        <!-- Section CTA Oren -->
+        <section class="bg-[#F2784B] text-white py-16 text-center">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    Siap Memberikan Kenyamanan Terbaik?
+                </h2>
+                <p class="mb-8 text-lg">
+                    Reservasi sekarang dan rasakan layanan premium untuk hewan kesayangan Anda.
+                </p>
+                <a href="{{ url('/reservasi') }}" 
+                class="bg-white text-[#F2784B] px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                Mulai Reservasi
+            </a>
+        </div>
+    </section>
+    <!-- Section Testimoni -->
+     <section class="py-16 bg-[#FEFBF7]">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
+                Apa Kata Pelanggan Kami
+            </h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Card Testimoni 1 -->
+                 <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex text-yellow-400 mb-4">
+                        ★★★★★
+                    </div>
+                    <p class="text-gray-700 mb-4">
+                        "PetHotel sangat memuaskan! Kucing saya Mimi terlihat bahagia dan sehat setelah menginap 1 minggu."
+                    </p>
+                    <p class="font-semibold">Sarah Wijayanto</p>
+                </div>
+                <!-- Card Testimoni 2 -->
+                 <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex text-yellow-400 mb-4">
+                        ★★★★
+                    </div>
+                    <p class="text-gray-700 mb-4">
+                        "Fasilitas lengkap dan perawatan profesional. Anjing saya Max suka sekali dengan area bermainnya."
+                    </p>
+                    <p class="font-semibold">Max Verstappen</p>
+                </div>
+                <!-- Card Testimoni 3 -->
+                 <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex text-yellow-400 mb-4">
+                        ★★★★★
+                    </div>
+                    <p class="text-gray-700 mb-4">
+                        "Staff ramah, ganteng, dan berpengalaman. Sangat recommended untuk yang butuh penitipan hewan terpercaya."
+                    </p>
+                    <p class="font-semibold">Taylor Swift</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
         <section class="flex justify-center space-x-16 py-10">
             <div class="text-center">
