@@ -17,8 +17,7 @@
     </div>
 
     <form action="{{ route('reservasi.submit') }}" method="POST" class="space-y-8">
-  @csrf
-
+      @csrf
 
       <!-- Informasi Pemilik -->
       <div class="bg-white shadow-md rounded-lg border border-yellow-200">
@@ -91,67 +90,47 @@
             <label for="packageType" class="block text-sm font-medium text-gray-700">Pilih Paket *</label>
             <select id="packageType" name="packageType" class="mt-1 block w-full border rounded p-2" required>
               <option value="">Pilih paket layanan</option>
-              <option value="basic">Paket Basic - Rp 150.000</option>
-              <option value="premium">Paket Premium - Rp 250.000</option>
+              <option value="basic" data-harga="150000">Paket Basic - Rp 150.000</option>
+              <option value="premium" data-harga="250000">Paket Premium - Rp 250.000</option>
             </select>
           </div>
+
           <!-- Layanan Tambahan (Vertikal) -->
-           <div>
+          <div>
             <label class="block font-medium mb-2">Layanan Tambahan (Opsional)</label>
             <div class="flex flex-col space-y-2">
               <label class="flex items-center space-x-2">
-                <input type="checkbox" name="additionalServices" value="grooming" class="w-5 h-5">
+                <input type="checkbox" name="additionalServices" value="Grooming Premium" data-harga="150000" class="w-5 h-5">
                 <span>Grooming Premium (+Rp 150.000)</span>
               </label>
               <label class="flex items-center space-x-2">
-                <input type="checkbox" name="additionalServices" value="pickup" class="w-5 h-5">
+                <input type="checkbox" name="additionalServices" value="Pick-up & Delivery" data-harga="100000" class="w-5 h-5">
                 <span>Pick-up & Delivery (+Rp 100.000)</span>
               </label>
               <label class="flex items-center space-x-2">
-                <input type="checkbox" name="additionalServices" value="doctor" class="w-5 h-5">
+                <input type="checkbox" name="additionalServices" value="Kolam Renang" data-harga="100000" class="w-5 h-5">
                 <span>Kolam Renang (+Rp 100.000)</span>
               </label>
               <label class="flex items-center space-x-2">
-                <input type="checkbox" name="additionalServices" value="training" class="w-5 h-5">
+                <input type="checkbox" name="additionalServices" value="Boarding" data-harga="200000" class="w-5 h-5">
                 <span>Boarding (+Rp 200.000)</span>
               </label>
             </div>
           </div>
-          <title>Form Permintaan Khusus</title>
-          <style>
-        .form-group {
-          display: flex;
-          flex-direction: column; /* label di atas textarea */
-          margin-bottom: 1rem;
-        }
 
-        .form-group label {
-          font-weight: bold;
-          margin-bottom: 0.5rem;
-        }
+          <!-- Permintaan Khusus -->
+          <div class="form-group">
+            <label for="specialRequests">Permintaan Khusus</label>
+            <textarea 
+              id="specialRequests"
+              name="specialRequests"
+              placeholder="Catatan khusus untuk perawatan hewan (alergi, obat, dll)"
+              rows="3"
+              class="w-full p-2 rounded border border-gray-300 bg-gray-50"
+            ></textarea>
+          </div>
 
-        .form-group textarea {
-          width: 100%;              /* biar penuh */
-          padding: 10px;
-          border-radius: 8px;
-          border: 1px solid #ccc;
-          background-color: #f7f7f8; /* abu-abu lembut */
-          font-size: 14px;
-          resize: vertical;         /* hanya bisa tarik ke bawah */
-        }
-        </style>
-      </head>
-      <body>
-        <div class="form-group">
-          <label for="specialRequests">Permintaan Khusus</label>
-          <textarea 
-            id="specialRequests"
-            name="specialRequests"
-            placeholder="Catatan khusus untuk perawatan hewan (alergi, obat, dll)"
-            rows="3"
-          ></textarea>
-        </div>
-
+          <!-- Tanggal -->
           <div class="grid md:grid-cols-2 gap-4">
             <div>
               <label for="checkInDate" class="block text-sm font-medium text-gray-700">Tanggal Check-in *</label>
@@ -164,6 +143,9 @@
           </div>
         </div>
       </div>
+
+      <!-- Ringkasan Biaya -->
+      <div id="ringkasanBiaya" class="bg-white shadow-md rounded-lg border border-yellow-200 p-4"></div>
 
       <!-- Submit Navbar -->
       <div class="flex justify-end space-x-4 mt-6 border-t pt-4">
@@ -179,9 +161,60 @@
           Lanjut ke Pembayaran
         </button>
       </div>
-
     </form>
   </div>
 
+  <!-- Script untuk Ringkasan Biaya -->
+  <script>
+    const packageSelect = document.getElementById('packageType');
+    const serviceCheckboxes = document.querySelectorAll('input[name="additionalServices"]');
+    const ringkasan = document.getElementById('ringkasanBiaya');
+
+    function updateRingkasan() {
+      let total = 0;
+      let html = `<h3 class="text-lg font-semibold mb-2">Ringkasan Biaya</h3>`;
+
+      // Paket utama
+      if (packageSelect.value) {
+        const selectedOption = packageSelect.options[packageSelect.selectedIndex];
+        const harga = parseInt(selectedOption.dataset.harga);
+        total += harga;
+        html += `
+          <div class="flex justify-between mb-1">
+            <span>${selectedOption.text}</span>
+            <span>Rp ${harga.toLocaleString('id-ID')}</span>
+          </div>
+        `;
+      }
+
+      // Layanan tambahan
+      serviceCheckboxes.forEach(cb => {
+        if (cb.checked) {
+          const harga = parseInt(cb.dataset.harga);
+          total += harga;
+          html += `
+            <div class="flex justify-between mb-1">
+              <span>${cb.value}</span>
+              <span>Rp ${harga.toLocaleString('id-ID')}</span>
+            </div>
+          `;
+        }
+      });
+
+      // Divider + Total
+      if (total > 0) {
+        html += `<hr class="my-2">
+          <div class="flex justify-between font-bold text-lg">
+            <span>Total</span>
+            <span>Rp ${total.toLocaleString('id-ID')}</span>
+          </div>`;
+      }
+
+      ringkasan.innerHTML = html;
+    }
+
+    packageSelect.addEventListener('change', updateRingkasan);
+    serviceCheckboxes.forEach(cb => cb.addEventListener('change', updateRingkasan));
+  </script>
 </body>
 </html>
