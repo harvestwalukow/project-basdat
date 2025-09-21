@@ -36,7 +36,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <div class="text-center mb-16">
-        <h2 class="text-3xl font-bold mb-4">PAKET LAYANAN KAMI</h2>
+        <h2 class="text-3xl font-bold mb-4">Paket Layanan Paws Hotel</h2>
         <p class="text-gray-600 max-w-2xl mx-auto">
           Pilih paket yang sesuai dengan kebutuhan hewan kesayangan Anda.
           Semua paket dilengkapi dengan perawatan profesional dan kasih sayang tulus.
@@ -92,7 +92,7 @@
       <!-- CTA Reservasi -->
       <div class="text-center">
         <a href="{{ url('/reservasi') }}" class="inline-block rounded-lg border border-[#F2784B] px-6 py-3 hover:bg-[#fff0e9]">
-          Belum yakin paketnya? Mulai Reservasi dulu
+          Belum yakin paketnya? Ayo lihat detailnya!
         </a>
       </div>
 
