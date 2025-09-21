@@ -37,63 +37,61 @@ Route::post('/reservasi', function (Request $request) {
 
 // Auth Pages
 Route::get('/signin', function () {
-    return view('signin'); // buat file resources/views/auth/signin.blade.php
+    return view('signin');
 })->name('signin');
 
-// ✅ Proses Sign In (POST form login)
+Route::get('/signup', function () {
+    return view('signup');
+})->name('signup');
+
+// Proses Sign In
 Route::post('/signin', function (Request $request) {
     $email = trim($request->input('email'));
     $password = trim($request->input('password'));
 
-    // akun dummy (biar bisa login tanpa sign up)
-    $validEmail = 'admin@gmail.com';
-    $validPassword = '123456';
+    $users = [
+        'admin@gmail.com' => ['password' => '123456', 'role' => 'admin', 'redirect' => '/admin/'],
+        'owner@gmail.com' => ['password' => '123456', 'role' => 'owner', 'redirect' => '/owner'],
+        'user@gmail.com' => ['password' => '123456', 'role' => 'user', 'redirect' => '/dashboard'],
+    ];
 
-    if ($email === $validEmail && $password === $validPassword) {
-        return redirect('/dashboard')->with('success', 'Berhasil login!');
-    } else {
-        return back()->with('error', 'Email atau password salah');
+    if (isset($users[$email]) && $users[$email]['password'] === $password) {
+        session([
+            'user_email' => $email,
+            'user_role' => $users[$email]['role']
+        ]);
+        return redirect($users[$email]['redirect'])->with('success', 'Berhasil login!');
     }
+
+    return back()->with('error', 'Email atau password salah');
 })->name('signin.submit');
 
-// ✅ Dashboard (setelah login berhasil)
-Route::get('/dashboard', function () {
-    return view('dashboard'); // buat file resources/views/dashboard.blade.php
-})->name('dashboard');
+// Logout
+Route::get('/logout', function () {
+    session()->flush();
+    return redirect()->route('signin')->with('success', 'Anda telah berhasil logout.');
+})->name('logout');
 
-Route::get('/signup', function () {
-    return view('signup'); // buat file resources/views/auth/signup.blade.php
-})->name('signup');
 
-// Admin Routes
-Route::get('/admin/', function () {
-    return view('admin.dashboard');
-})->name('admin.dashboard');
+// Protected Routes - Admin
+Route::middleware('admin')->group(function () {
+    Route::get('/admin/', function () { return view('admin.dashboard'); })->name('admin.dashboard');
+    Route::get('/admin/penitipan', function () { return view('admin.booking'); })->name('admin.booking');
+    Route::get('/admin/pengguna', function () { return view('admin.customer'); })->name('admin.customer');
+    Route::get('/admin/hewan', function () { return view('admin.pets'); })->name('admin.pets');
+    Route::get('/admin/update-kondisi', function () { return view('admin.rooms'); })->name('admin.rooms');
+    Route::get('/admin/paket-layanan', function () { return view('admin.service'); })->name('admin.service');
+    Route::get('/admin/pembayaran', function () { return view('admin.payments'); })->name('admin.payments');
+});
 
-Route::get('/admin/penitipan', function () {
-    return view('admin.booking');
-})->name('admin.booking');
 
-Route::get('/admin/pengguna', function () {
-    return view('admin.customer');
-})->name('admin.customer');
+// Protected Routes - Owner
+Route::middleware('owner')->group(function () {
+    Route::get('/owner', function () { return view('owner.dashboard'); })->name('owner.dashboard');
+});
 
-Route::get('/admin/hewan', function () {
-    return view('admin.pets');
-})->name('admin.pets');
 
-Route::get('/admin/update-kondisi', function () {
-    return view('admin.rooms');
-})->name('admin.rooms');
-
-Route::get('/admin/paket-layanan', function () {
-    return view('admin.service');
-})->name('admin.service');
-
-Route::get('/admin/pembayaran', function () {
-    return view('admin.payments');
-})->name('admin.payments');
-
-Route::get('/owner', function () {
-    return view('owner.dashboard');
-})->name('owner.dashboard');
+// Protected Routes - User (Pelanggan)
+Route::middleware('user')->group(function () {
+    Route::get('/dashboard', function () { return view('reservasi'); })->name('dashboard');
+});
