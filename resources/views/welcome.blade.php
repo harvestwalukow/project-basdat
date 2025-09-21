@@ -26,7 +26,7 @@
                 <a href="{{ url('/about') }}" class="hover:text-[#F2784B]">Tentang Kami</a>
                 <a href="{{ url('/kontak') }}" class="hover:text-[#F2784B]">Kontak</a>
             </nav>
-            <a href="#"
+            <a href="{{ url('/reservasi') }}"
                 class="bg-[#F2784B] text-white px-6 py-2 rounded-lg font-bold hover:bg-orange-600">Reservasi
                 Sekarang</a>
         </header>

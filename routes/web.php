@@ -21,3 +21,7 @@ Route::get('/kontak', function () {
 Route::get('/layanan', function () {
     return view('layanan');
 });
+
+Route::get('/reservasi', function () {
+    return view('reservasi'); 
+})->name('reservasi');
