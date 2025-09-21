@@ -13,13 +13,9 @@
   </style>
 </head>
 
-<<<<<<< HEAD
 <body class="bg-cover bg-center bg-fixed text-[#333333] antialiased"
       style="background-image: url('/img/backround.png');">
 
-=======
-<body class="bg-[#FEFBF7] text-[#333] antialiased">
->>>>>>> d8f31d165d32bbb1d4fe2491863557ad8d32cfad
   <!-- NAVBAR -->
   <header class="sticky top-0 z-50 bg-[#FEFBF7]/90 backdrop-blur border-b border-orange-100/60">
     <div class="max-w-7xl mx-auto px-6 py-4 grid grid-cols-12 items-center gap-4">
@@ -115,21 +111,6 @@
     </div>
   </section>
 
-<<<<<<< HEAD
-  <!-- FASILITAS -->
-=======
-  <!-- IMAGE -->
-  <section class="py-10">
-    <div class="w-full max-w-4xl mx-auto px-6">
-      <img
-        src="https://images.pexels.com/photos/4587971/pexels-photo-4587971.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-        alt="Hewan peliharaan santai bersama pemilik"
-        class="rounded-lg shadow-lg w-full h-auto">
-    </div>
-  </section>
-
-  <!-- FASILITAS (di bagian bawah) -->
->>>>>>> d8f31d165d32bbb1d4fe2491863557ad8d32cfad
   <section id="fasilitas" class="scroll-mt-24 py-20 bg-[#FFF7F2]">
     <div class="max-w-7xl mx-auto px-6 text-center">
       <h2 class="text-4xl font-bold mb-3">Fasilitas Kami</h2>
