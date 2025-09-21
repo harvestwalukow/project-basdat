@@ -40,7 +40,7 @@
       </div>
 
       <!-- Form -->
-      <form action="{{ url('/login') }}" method="POST" class="space-y-4">
+      <form action="{{ route('signin.submit') }}" method="POST" class="space-y-4">
         @csrf
 
         <!-- Email -->
@@ -83,7 +83,7 @@
         <!-- Link Daftar -->
         <p class="text-center text-sm text-gray-600 mt-3">
           Belum punya akun?
-          <a href="{{ url('/register') }}" class="text-blue-600 hover:underline">Daftar sekarang</a>
+          <a href="{{ route('signup') }}" class="text-blue-600 hover:underline">Daftar sekarang</a>
         </p>
       </form>
 

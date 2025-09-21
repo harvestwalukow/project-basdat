@@ -42,8 +42,8 @@ Route::get('/signin', function () {
 
 // ✅ Proses Sign In (POST form login)
 Route::post('/signin', function (Request $request) {
-    $email = $request->input('email');
-    $password = $request->input('password');
+    $email = trim($request->input('email'));
+    $password = trim($request->input('password'));
 
     // akun dummy (biar bisa login tanpa sign up)
     $validEmail = 'admin@gmail.com';
