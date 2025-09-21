@@ -228,5 +228,25 @@
     packageSelect.addEventListener('change', updateRingkasan);
     serviceCheckboxes.forEach(cb => cb.addEventListener('change', updateRingkasan));
   </script>
+
+  <!-- Script untuk validasi tanggal -->
+  <script>
+    const checkInDateInput = document.getElementById('checkInDate');
+    const checkOutDateInput = document.getElementById('checkOutDate');
+
+    // Set tanggal minimal untuk check-in adalah hari ini
+    const today = new Date().toISOString().split('T')[0];
+    checkInDateInput.setAttribute('min', today);
+
+    checkInDateInput.addEventListener('change', function () {
+      // Set tanggal minimal untuk check-out adalah tanggal check-in
+      checkOutDateInput.min = this.value;
+      
+      // Jika tanggal check-out yang sudah dipilih lebih awal, reset
+      if (checkOutDateInput.value < this.value) {
+        checkOutDateInput.value = '';
+      }
+    });
+  </script>
 </body>
 </html>
