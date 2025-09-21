@@ -176,7 +176,7 @@
         </a>
       </div>
       <div class="flex justify-center">
-        <img src="/img/catdog-happy.png" alt="Happy Pets" class="max-h-80 drop-shadow-xl">
+        <img src="/img/rumah.jpeg" alt="Happy Pets" class="w-full h-48 overflow-hidden rounded-md mb-3" alt="Play">
       </div>
     </div>
   </section>
