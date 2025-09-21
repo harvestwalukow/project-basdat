@@ -24,6 +24,7 @@
       <!-- Nav -->
       <nav class="hidden md:flex col-span-6 md:col-span-6 justify-center gap-8 font-medium">
         <a href="{{ url('/') }}" class="hover:text-[#F2784B]">Beranda</a>
+        <a href="#layanan" class="hover:text-[#F2784B]">Layanan</a>
         <a href="#fasilitas" class="hover:text-[#F2784B]">Fasilitas</a>
         <a href="{{ url('/about') }}" class="hover:text-[#F2784B]">Tentang Kami</a>
         <a href="{{ url('/kontak') }}" class="hover:text-[#F2784B]">Kontak</a>
@@ -58,6 +59,58 @@
            class="rounded-xl bg-white border border-gray-300 px-8 py-3 font-bold hover:bg-gray-100">
           Lihat Fasilitas
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LAYANAN / PAKET ===== -->
+  <section id="layanan" class="scroll-mt-24 py-16">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-12">Paket Layanan Kami</h2>
+
+      <div class="flex flex-col lg:flex-row justify-center items-stretch gap-8">
+
+        <!-- Basic -->
+        <div class="bg-white rounded-lg shadow-lg p-8 w-full lg:w-1/3 flex flex-col">
+          <h3 class="text-2xl font-bold mb-4">Basic</h3>
+          <ul class="text-left space-y-2 text-gray-600 mb-8 flex-grow">
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              Kamar Ber-AC
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              Makan 3x sehari
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              Area bermain indoor/outdoor
+            </li>
+            <li class="flex items-center">
+              <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              Laporan harian via WA (foto)
+            </li>
+          </ul>
+          <a href="{{ url('/reservasi') }}" class="mt-auto inline-block rounded-lg bg-[#F2784B] px-4 py-2 text-white hover:bg-[#e0673d]">
+            Pilih Paket Basic
+          </a>
+        </div>
+
+        <!-- Premium -->
+        <div class="bg-white rounded-lg shadow-lg p-8 w-full lg:w-1/3 border-2 border-[#F2784B] flex flex-col">
+          <h3 class="text-2xl font-bold mb-4 text-[#F2784B]">Premium</h3>
+          <ul class="text-left space-y-2 text-gray-600 mb-8 flex-grow">
+            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Kamar Ber-AC</li>
+            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Makan 3x sehari</li>
+            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Area bermain indoor/outdoor</li>
+            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Laporan harian via WA + VC</li>
+            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Snack & Treats</li>
+          </ul>
+          <a href="{{ url('/reservasi') }}" class="mt-auto inline-block rounded-lg bg-[#F2784B] px-4 py-2 text-white hover:bg-[#e0673d]">
+            Pilih Paket Premium
+          </a>
+        </div>
+
       </div>
     </div>
   </section>
@@ -127,7 +180,7 @@
     </div>
   </section>
 
-  <!-- FASILITAS (dipindah ke bawah) -->
+  <!-- FASILITAS -->
   <section id="fasilitas" class="scroll-mt-24 py-20 bg-[#FFF7F2]">
     <div class="max-w-7xl mx-auto px-6 text-center">
       <h2 class="text-4xl font-bold mb-3">Fasilitas Kami</h2>
