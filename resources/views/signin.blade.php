@@ -76,7 +76,7 @@
 
         <!-- Tombol Login -->
         <button type="submit"
-          class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold">
+          class="w-full bg-[#F2784B] hover:bg-[#e0673d] text-white py-2 rounded-lg font-semibold">
           Masuk
         </button>
 
