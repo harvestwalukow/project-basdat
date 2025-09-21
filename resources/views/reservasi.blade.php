@@ -94,8 +94,6 @@
               <option value="">Pilih paket layanan</option>
               <option value="basic">Paket Basic - Rp 150.000</option>
               <option value="premium">Paket Premium - Rp 250.000</option>
-              <option value="vip">Paket VIP - Rp 400.000</option>
-              <option value="daycare">Daycare - Rp 80.000</option>
             </select>
           </div>
 
