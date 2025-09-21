@@ -52,10 +52,10 @@
 
       <!-- Tombol -->
       <div class="flex gap-4">
-        <a href="#about" class="px-6 py-3 rounded-full bg-orange-400 text-white font-semibold shadow hover:bg-orange-500">
+        <a href="{{ url('/reservasi') }}" class="px-6 py-3 rounded-full bg-orange-400 text-white font-semibold shadow hover:bg-orange-500">
           Daftar Sekarang
         </a>
-        <a href="#categories" class="px-6 py-3 rounded-full border border-sky-400 text-sky-500 font-semibold hover:bg-sky-50">
+        <a href="{{ url('/fasilitas') }}" class="px-6 py-3 rounded-full border border-sky-400 text-sky-500 font-semibold hover:bg-sky-50">
           Lihat Fasilitas →
         </a>
       </div>
