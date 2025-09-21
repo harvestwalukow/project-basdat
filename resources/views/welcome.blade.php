@@ -28,10 +28,17 @@
         <a href="{{ url('/about') }}" class="hover:text-[#F2784B]">Tentang Kami</a>
         <a href="{{ url('/kontak') }}" class="hover:text-[#F2784B]">Kontak</a>
       </nav>
-      <div class="col-span-6 md:col-span-3 flex justify-end">
-        <a href="{{ url('/reservasi') }}"
-           class="inline-block rounded-xl bg-[#F2784B] px-5 py-2.5 text-white font-semibold hover:bg-[#e0673d]">
-          Reservasi Sekarang
+      <!-- Tombol Sign In & Sign Up -->
+       <div class="col-span-6 md:col-span-3 flex justify-end space-x-3">
+        <!-- Sign In -->
+         <a href="{{ url('/signin') }}"
+         class="inline-block rounded-xl border border-[#F2784B] px-5 py-2.5 text-[#F2784B] font-semibold hover:bg-[#F2784B] hover:text-white">
+         Sign In
+        </a>
+        <!-- Sign Up (ganti dari Reservasi) -->
+         <a href="{{ url('/register') }}"
+         class="inline-block rounded-xl bg-[#F2784B] px-5 py-2.5 text-white font-semibold hover:bg-[#e0673d]">
+         Sign Up
         </a>
       </div>
     </div>
