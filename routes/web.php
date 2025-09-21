@@ -93,3 +93,7 @@ Route::get('/admin/paket-layanan', function () {
 Route::get('/admin/pembayaran', function () {
     return view('admin.payments');
 })->name('admin.payments');
+
+Route::get('/owner', function () {
+    return view('owner.dashboard');
+})->name('owner.dashboard');
