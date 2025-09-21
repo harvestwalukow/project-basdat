@@ -8,6 +8,7 @@
 </head>
 <body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex items-center justify-center p-4">
 
+
   <div class="w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center">
     
     <!-- Gambar Kiri -->
@@ -20,7 +21,7 @@
         <div class="absolute bottom-8 left-8 text-white">
           <h2 class="mb-2 text-2xl font-bold">Selamat Datang di PawsHotel</h2>
           <p class="text-lg opacity-90">
-            Tempat terbaik untuk hewan kesayangan Anda
+            Tempat terbaik untuk menitipkan hewan kesayangan Anda
           </p>
         </div>
       </div>
