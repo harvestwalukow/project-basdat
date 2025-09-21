@@ -37,7 +37,7 @@
             Didirikan pada tahun 2018, PetHotel adalah hotel hewan terpercaya yang telah melayani 
             ribuan hewan peliharaan dengan standar perawatan tertinggi di Indonesia.
         </p>
-        <img src="https://images.unsplash.com/photo-1729371768223-56e5ab96604e?ixlib=rb-4.1.0&q=80&w=1080" 
+        <img src="/img/pet hotelss.jpg" 
              alt="PetHotel facilities"
              class="rounded-lg shadow-xl w-full h-96 object-cover">
     </div>
