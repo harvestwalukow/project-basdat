@@ -25,5 +25,3 @@ Route::get('/layanan', function () {
 Route::get('/reservasi', function () {
     return view('reservasi'); 
 })->name('reservasi');
-
-Route::post('/reservasi', [ReservasiController::class, 'processReservasi']);
