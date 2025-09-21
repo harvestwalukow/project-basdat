@@ -6,7 +6,8 @@
   <title>Form Reservasi</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-[#FEFBF7] text-[#333333]"> <!-- 🟡 background pastel -->
+<body class="bg-cover bg-center bg-fixed text-[#333333] antialiased"
+      style="background-image: url('/img/backround.png');">
 
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-8">

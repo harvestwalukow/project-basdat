@@ -220,5 +220,31 @@
     </div>
 
   </div>
+  <!-- FOOTER -->
+  <footer id="kontak" class="bg-[#333] text-white py-10">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
+      <div>
+        <h3 class="text-xl font-bold mb-3">PawsHotel</h3>
+        <p class="text-gray-300">Penitipan hewan terpercaya dengan fasilitas lengkap dan staf berpengalaman.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-2">Kontak</h4>
+        <p>Email: info@pawshotel.com</p>
+        <p>Telp: +62 812-3456-7890</p>
+        <p>Alamat: Surabaya, Indonesia</p>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-2">Ikuti Kami</h4>
+        <div class="flex gap-4">
+          <a href="#" class="hover:text-orange-400">Facebook</a>
+          <a href="#" class="hover:text-orange-400">Instagram</a>
+          <a href="#" class="hover:text-orange-400">Twitter</a>
+        </div>
+      </div>
+    </div>
+    <p class="text-center text-gray-400 mt-6">© 2025 PawsHotel. All rights reserved.</p>
+  </footer>
+
+
 </body>
 </html>
