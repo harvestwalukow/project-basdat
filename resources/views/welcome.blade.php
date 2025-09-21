@@ -25,7 +25,6 @@
       <nav class="hidden md:flex col-span-6 md:col-span-6 justify-center gap-8 font-medium">
         <a href="{{ url('/') }}" class="hover:text-[#F2784B]">Beranda</a>
         <a href="{{ url('/layanan') }}" class="hover:text-[#F2784B]">Layanan</a>
-        <a href="#fasilitas" class="hover:text-[#F2784B]">Fasilitas</a>
         <a href="{{ url('/about') }}" class="hover:text-[#F2784B]">Tentang Kami</a>
         <a href="{{ url('/kontak') }}" class="hover:text-[#F2784B]">Kontak</a>
       </nav>
@@ -38,28 +37,40 @@
     </div>
   </header>
 
-  <!-- HERO -->
-  <section class="pt-14 pb-20">
-    <div class="max-w-5xl mx-auto px-6 text-center">
-      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-5">
-        Rumah untuk Sahabat Berbulu Anda
+ <!-- Hero Section Transparan -->
+<section class="relative px-8 py-20">
+  <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-10">
+    
+    <!-- Kiri: Teks -->
+    <div class="space-y-6 bg-white/60 p-6 rounded-2xl shadow-lg">
+      <h1 class="text-5xl font-extrabold text-gray-900 leading-tight">
+        Rumah <br> untuk Sahabat Berbulu Anda
       </h1>
-      <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-10">
-        Berikan kenyamanan terbaik untuk hewan kesayangan Anda dengan penitipan yang hangat,
-        area bermain seru, dan update harian yang bikin tenang.
+      <p class="text-lg text-gray-700">
+        Berikan kenyamanan terbaik untuk hewan kesayangan Anda dengan penitipan yang hangat, area bermain seru, dan update harian yang bikin tenang.
       </p>
-      <div class="flex justify-center gap-4">
-        <a href="{{ url('/reservasi') }}"
-           class="rounded-xl bg-[#F2784B] px-8 py-3 text-white font-bold hover:bg-[#e0673d]">
+
+      <!-- Tombol -->
+      <div class="flex gap-4">
+        <a href="#about" class="px-6 py-3 rounded-full bg-orange-400 text-white font-semibold shadow hover:bg-orange-500">
           Daftar Sekarang
         </a>
-        <a href="#fasilitas"
-           class="rounded-xl bg-white border border-gray-300 px-8 py-3 font-bold hover:bg-gray-100">
-          Lihat Fasilitas
+        <a href="#categories" class="px-6 py-3 rounded-full border border-sky-400 text-sky-500 font-semibold hover:bg-sky-50">
+          Lihat Fasilitas →
         </a>
       </div>
     </div>
-  </section>
+
+    <!-- Kanan: Gambar -->
+    <div class="flex justify-center">
+      <img src="/img/anjing.png" alt="Anjing dan Kucing" 
+           class="max-h-[500px] md:max-h-[600px] object-contain drop-shadow-lg">
+    </div>
+
+  </div>
+</section>
+
+
 
   <!-- TESTIMONI -->
   <section class="py-16 bg-[#FEFBF7]">
