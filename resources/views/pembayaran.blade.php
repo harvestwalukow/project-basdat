@@ -56,9 +56,9 @@
 
       <!-- Tombol Navigasi -->
       <div class="flex justify-end space-x-4 border-t pt-4">
-        <a href="{{ route('reservasi') }}" 
+        <a href="{{ url('/reservasi') }}" 
            class="px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100">
-          Kembali
+          edit
         </a>
         <button class="px-4 py-2 rounded bg-[#F2784B] hover:bg-[#e0673d] text-white">
           Bayar Sekarang
