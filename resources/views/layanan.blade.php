@@ -108,9 +108,9 @@
             <p class="text-gray-600">Spa lengkap, potong kuku, bersih telinga, aromaterapi</p>
           </div>
           <div class="bg-white rounded-lg shadow p-6 text-center">
-            <h4 class="font-semibold mb-2">Boarding Asikk</h4>
-            <p class="text-[#F2784B] font-bold mb-2">Rp 200.000</p>
-            <p class="text-gray-600">Penitipan hewan dijamin aman dan nyaman</p>
+            <h4 class="font-semibold mb-2">Kolam Renang</h4>
+            <p class="text-[#F2784B] font-bold mb-2">Rp 100.000</p>
+            <p class="text-gray-600">Layanan berenang bagi anabul</p>
           </div>
           <div class="bg-white rounded-lg shadow p-6 text-center">
             <h4 class="font-semibold mb-2">Pick-up & Delivery</h4>
@@ -118,9 +118,9 @@
             <p class="text-gray-600">Layanan antar jemput dalam radius 10km</p>
           </div>
           <div class="bg-white rounded-lg shadow p-6 text-center">
-            <h4 class="font-semibold mb-2">Kolam Renang</h4>
-            <p class="text-[#F2784B] font-bold mb-2">Rp 100.000</p>
-            <p class="text-gray-600">Pelatihan kepatuhan dan sosialisasi (per sesi)</p>
+            <h4 class="font-semibold mb-2">Enrichment Extra</h4>
+            <p class="text-[#F2784B] font-bold mb-2">Rp 45.000</p>
+            <p class="text-gray-600">Sesi stimulasi 15–20 menit (puzzle feeder, lick mat, sniffing)</p>
           </div>
         </div>
       </div>
