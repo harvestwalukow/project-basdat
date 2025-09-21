@@ -61,9 +61,6 @@
               <option value="">Pilih jenis hewan</option>
               <option value="dog">Anjing</option>
               <option value="cat">Kucing</option>
-              <option value="rabbit">Kelinci</option>
-              <option value="bird">Burung</option>
-              <option value="other">Lainnya</option>
             </select>
           </div>
           <div>
@@ -71,7 +68,7 @@
             <input type="text" id="petBreed" name="petBreed" class="mt-1 block w-full border rounded p-2">
           </div>
           <div>
-            <label for="petAge" class="block text-sm font-medium text-gray-700">Umur (tahun)</label>
+            <label for="petAge" class="block text-sm font-medium text-gray-700">Umur (bulan)</label>
             <input type="number" id="petAge" name="petAge" class="mt-1 block w-full border rounded p-2">
           </div>
           <div>
