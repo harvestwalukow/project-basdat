@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,5 +24,19 @@ Route::get('/layanan', function () {
 });
 
 Route::get('/reservasi', function () {
-    return view('reservasi'); 
+    return view('reservasi');
 })->name('reservasi');
+
+
+Route::get('/reservasi', function () {
+    return view('reservasi');
+})->name('reservasi.form');
+
+Route::post('/reservasi', function (Request $request) {
+    // Untuk uji coba, kita lempar semua input ke halaman pembayaran
+    return view('pembayaran', [
+        'data' => $request->all()
+    ]);
+})->name('reservasi.submit');
+
+

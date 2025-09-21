@@ -16,7 +16,9 @@
       </p>
     </div>
 
-    <form action="#" method="POST" class="space-y-8">
+    <form action="{{ route('reservasi.submit') }}" method="POST" class="space-y-8">
+  @csrf
+
 
       <!-- Informasi Pemilik -->
       <div class="bg-white shadow-md rounded-lg border border-yellow-200">
