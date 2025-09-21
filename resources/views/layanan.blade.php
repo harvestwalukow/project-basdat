@@ -36,7 +36,7 @@
       </div>
 
       <!-- Paket Basic & Premium -->
-      <div class="flex flex-col lg:flex-row gap-8 mb-16">
+      <div class="flex flex-col lg:flex-row justify-center items-stretch gap-8 mb-16">
 
         <!-- Basic Package --> 
         <div class="bg-white rounded-lg shadow-lg p-8 w-full lg:w-1/3 flex flex-col">
@@ -69,7 +69,7 @@
 
       </div>
 
-      <!-- Add-on Section mirip "Layanan Tambahan" -->
+      <!-- Add-on Section -->
       <div>
         <h3 class="text-2xl font-bold mb-6 text-center">Layanan Tambahan</h3>
         <p class="text-gray-600 mb-12 text-center">
