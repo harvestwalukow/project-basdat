@@ -2,10 +2,22 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 // Halaman Utama
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/tes-db', function () {
+    try {
+        $tables = DB::select('SHOW TABLES');
+        $tableNames = array_map('current', json_decode(json_encode($tables), true));
+        return 'Daftar tabel di er_basdat: ' . implode(', ', $tableNames);
+    } catch (\Exception $e) {
+        return 'Gagal terhubung ke database. Error: ' . $e->getMessage();
+    }
 });
 
 // Halaman Statis
