@@ -32,7 +32,7 @@
 
     <!-- Hero Section -->
     <div class="text-center py-16 max-w-4xl mx-auto">
-        <h1 class="text-4xl font-bold mb-6">Tentang PetHotel</h1>
+        <h1 class="text-4xl font-bold mb-6">Tentang PawsHotel</h1>
         <p class="text-xl text-gray-600 mb-8">
             Didirikan pada tahun 2018, PetHotel adalah hotel hewan terpercaya yang telah melayani 
             ribuan hewan peliharaan dengan standar perawatan tertinggi di Indonesia.
