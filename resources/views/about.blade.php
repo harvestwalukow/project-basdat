@@ -65,7 +65,7 @@
         <h2 class="text-3xl font-bold mb-6 text-center">Cerita Kami</h2>
         <p class="text-gray-600 mb-4">
             PetHotel bermula dari kecintaan mendalam terhadap hewan peliharaan. Didirikan oleh 
-            Dr. Amanda Sari pada tahun 2018, awalnya hanya sebagai klinik hewan kecil di Jakarta Selatan.
+            Kelompok C Basis Data SD-A2 pada tahun 2025, di Univeritas Airlangga, Surabaya.
         </p>
         <p class="text-gray-600 mb-4">
             Melihat kebutuhan pemilik hewan yang sering bepergian, kami kembangkan hotel hewan 
