@@ -103,21 +103,21 @@
 
       <!-- Card 4 -->
       <div class="facility-card bg-white rounded-2xl shadow p-6 hover:shadow-xl transition opacity-0 translate-y-10">
-        <img src="/img/icon-play.png" class="w-full h-48 overflow-hidden rounded-md mb-3" alt="Play">
+        <img src="/img/dapur.jpeg" class="w-full h-48 overflow-hidden rounded-md mb-3" alt="Play">
         <h3 class="text-xl font-semibold mb-1">Dapur Higienis</h3>
         <p class="text-gray-600">Menu bergizi & bisa disesuaikan diet.</p>
       </div>
 
       <!-- Card 5 -->
       <div class="facility-card bg-white rounded-2xl shadow p-6 hover:shadow-xl transition opacity-0 translate-y-10">
-        <img src="/img/icon-play.png" class="w-full h-48 overflow-hidden rounded-md mb-3" alt="Play">
+        <img src="/img/kandang.jpeg" class="w-full h-48 overflow-hidden rounded-md mb-3" alt="Play">
         <h3 class="text-xl font-semibold mb-1">Sterilisasi Rutin</h3>
         <p class="text-gray-600">Kandang & mainan disanitasi berkala.</p>
       </div>
 
       <!-- Card 6 -->
       <div class="facility-card bg-white rounded-2xl shadow p-6 hover:shadow-xl transition opacity-0 translate-y-10">
-        <img src="/img/icon-play.png" class="w-full h-48 overflow-hidden rounded-md mb-3" alt="Play">
+        <img src="/img/vc.jpeg" class="w-full h-48 overflow-hidden rounded-md mb-3" alt="Play">
         <h3 class="text-xl font-semibold mb-1">Update Harian</h3>
         <p class="text-gray-600">Foto/Video via WhatsApp; opsi VC sesuai paket.</p>
       </div>
@@ -183,7 +183,7 @@
         </a>
       </div>
       <div class="flex justify-center">
-        <img src="/img/rumah.jpeg" alt="Happy Pets" class="w-full h-48 overflow-hidden rounded-md mb-3" alt="Play">
+        <img src="/img/rumah.png" alt="Happy Pets" class="w-full h-50 overflow-hidden rounded-md mb-3" alt="Play">
       </div>
     </div>
   </section>
