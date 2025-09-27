@@ -35,9 +35,9 @@
 
     <!-- Search -->
     <div class="mb-6">
-      <input type="text" placeholder="Cari nama pengguna, email, atau ID" class="w-full px-4 py-2 border rounded-lg">
+      <input id="searchInput" type="text" placeholder="Cari nama pengguna, email, atau ID" class="w-full px-4 py-2 border rounded-lg">
     </div>
-
+    
     <!-- User Table -->
     <div class="flex-1 bg-white rounded-lg shadow-md overflow-hidden">
       <div class="px-6 py-4 border-b">
@@ -55,7 +55,7 @@
               <th class="p-4 text-center">Status</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="userTable">
             <tr class="border-b hover:bg-gray-50">
               <td class="p-4">
                 <div class="flex items-center gap-3">
@@ -137,4 +137,21 @@
       </div>
     </div>
   </div>
+  
 @endsection
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const searchInput = document.getElementById("searchInput");
+  const tableRows = document.querySelectorAll("#userTable tr");
+
+  searchInput.addEventListener("keyup", function () {
+    const filter = searchInput.value.toLowerCase();
+
+    tableRows.forEach(row => {
+      const text = row.innerText.toLowerCase();
+      row.style.display = text.includes(filter) ? "" : "none";
+    });
+  });
+});
+</script>
