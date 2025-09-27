@@ -35,17 +35,21 @@
   <!-- Filters -->
   <div class="mb-6">
     <div class="flex flex-wrap items-center gap-4">
-      <input type="text" placeholder="Cari nama hewan, pemilik, atau ID" class="flex-grow w-full sm:w-auto px-4 py-2 border rounded-lg">
-      <select class="px-4 py-2 border rounded-lg">
-        <option>Semua Jenis</option>
-        <option>Anjing</option>
-        <option>Kucing</option>
+      <input type="text" id="petSearch" 
+        placeholder="Cari nama hewan, pemilik, atau ID" 
+        class="flex-grow w-full sm:w-auto px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        onkeyup="searchFunction()">
+      <select id="jenisFilter" class="px-4 py-2 border rounded-lg" onchange="searchFunction()">
+        <option value="">Semua Jenis</option>
+        <option value="anjing">Anjing</option>
+        <option value="kucing">Kucing</option>
       </select>
-      <select class="px-4 py-2 border rounded-lg">
-        <option>Semua Status</option>
-        <option>Dalam Penitipan</option>
-        <option>Di Rumah</option>
+      <select id="statusFilter" class="px-4 py-2 border rounded-lg" onchange="searchFunction()">
+        <option value="">Semua Status</option>
+        <option value="dalam_penitipan">Dalam Penitipan</option>
+        <option value="di_rumah">Di Rumah</option>
       </select>
+
     </div>
   </div>
 
@@ -66,8 +70,8 @@
             <th class="p-4">Aksi</th>
           </tr>
         </thead>
-        <tbody>
-          <tr class="border-b hover:bg-gray-50">
+        <tbody id="tableBody">
+          <tr class="pet-row border-b hover:bg-gray-50" data-jenis="anjing" data-status="dalam_penitipan">
             <td class="p-4">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center font-bold text-xl">🐶</div>
@@ -88,7 +92,7 @@
               </div>
             </td>
           </tr>
-          <tr class="border-b hover:bg-gray-50">
+          <tr class="pet-row border-b hover:bg-gray-50" data-jenis="kucing" data-status="di_rumah">
             <td class="p-4">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center font-bold text-xl">🐱</div>
@@ -109,7 +113,7 @@
               </div>
             </td>
           </tr>
-          <tr class="border-b hover:bg-gray-50">
+          <tr class="pet-row border-b hover:bg-gray-50" data-jenis="anjing" data-status="dalam_penitipan">
             <td class="p-4">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center font-bold text-xl">🐶</div>
@@ -130,7 +134,7 @@
               </div>
             </td>
           </tr>
-          <tr class="border-b hover:bg-gray-50">
+          <tr class="pet-row border-b hover:bg-gray-50" data-jenis="kucing" data-status="di_rumah">
             <td class="p-4">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center font-bold text-xl">🐱</div>
@@ -153,7 +157,91 @@
           </tr>
         </tbody>
       </table>
+      <div id="noResults" class="p-4 text-center text-gray-500" style="display: none;">
+        Tidak ada hasil ditemukan
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+// Fungsi search yang sangat sederhana
+function searchFunction() {
+  console.log('Search function called!');
+  
+  // Ambil input values
+  var searchValue = document.getElementById('petSearch').value.toLowerCase();
+  var jenisValue = document.getElementById('jenisFilter').value.toLowerCase();
+  var statusValue = document.getElementById('statusFilter').value.toLowerCase();
+  
+  console.log('Search values:', {searchValue, jenisValue, statusValue});
+  
+  // Ambil semua rows
+  var rows = document.getElementsByClassName('pet-row');
+  var visibleCount = 0;
+  
+  console.log('Total rows found:', rows.length);
+  
+  // Loop setiap row
+  for (var i = 0; i < rows.length; i++) {
+    var row = rows[i];
+    
+    // Ambil teks dari row
+    var rowText = row.innerText.toLowerCase();
+    var rowJenis = row.getAttribute('data-jenis') || '';
+    var rowStatus = row.getAttribute('data-status') || '';
+    
+    // Check kondisi
+    var showRow = true;
+    
+    // Check search text
+    if (searchValue && !rowText.includes(searchValue)) {
+      showRow = false;
+    }
+    
+    // Check jenis filter
+    if (jenisValue && rowJenis !== jenisValue) {
+      showRow = false;
+    }
+    
+    // Check status filter (handle spasi)
+    if (statusValue && rowStatus.replace(' ', '_') !== statusValue) {
+      showRow = false;
+    }
+    
+    // Show/hide row
+    if (showRow) {
+      row.style.display = '';
+      visibleCount++;
+    } else {
+      row.style.display = 'none';
+    }
+    
+    // Debug first row
+    if (i === 0) {
+      console.log('First row debug:', {
+        rowText: rowText.substring(0, 50),
+        rowJenis,
+        rowStatus,
+        showRow
+      });
+    }
+  }
+  
+  // Show/hide no results
+  var noResults = document.getElementById('noResults');
+  if (noResults) {
+    if (visibleCount === 0) {
+      noResults.style.display = 'block';
+    } else {
+      noResults.style.display = 'none';
+    }
+  }
+  
+  console.log('Visible rows:', visibleCount);
+}
+
+// Test saat halaman dimuat
+console.log('Script loaded successfully!');
+</script>
 @endsection
