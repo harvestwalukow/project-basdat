@@ -45,13 +45,15 @@
 
       <div class="flex flex-col lg:flex-row justify-center items-stretch gap-8 mb-10">
 
-        <!-- Basic (tanpa border; ring saat hover = 1 garis) -->
+        <!-- Basic (dengan harga) -->
         <div
           class="bg-white rounded-lg shadow-lg p-8 w-full lg:w-1/3 flex flex-col
                  ring-0 ring-transparent transition-all duration-300 ease-out
                  hover:-translate-y-1 hover:ring-2 hover:ring-[#F2784B] hover:ring-offset-2 hover:ring-offset-[#FEFBF7]
                  hover:shadow-[0_20px_50px_-10px_rgba(242,120,75,0.35)]">
-          <h3 class="text-2xl font-bold mb-4">Basic</h3>
+          <h3 class="text-2xl font-bold mb-2">Basic</h3>
+          <!-- Harga Basic -->
+          <p class="text-[#F2784B] font-bold mb-4">Rp 150.000</p>
           <ul class="text-left space-y-2 text-gray-600 mb-8 flex-grow">
             <li class="flex items-center">
               <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
@@ -75,12 +77,14 @@
           </a>
         </div>
 
-        <!-- Premium -->
+        <!-- Premium (dengan harga) -->
         <div
           class="bg-white rounded-lg shadow-lg p-8 w-full lg:w-1/3 border-2 border-[#F2784B] flex flex-col
                  transition-all duration-300 ease-out
                  hover:-translate-y-1 hover:shadow-[0_20px_50px_-10px_rgba(242,120,75,0.45)]">
-          <h3 class="text-2xl font-bold mb-4 text-[#F2784B]">Premium</h3>
+          <h3 class="text-2xl font-bold mb-2 text-[#F2784B]">Premium</h3>
+          <!-- Harga Premium -->
+          <p class="text-[#F2784B] font-bold mb-4">Rp 250.000</p>
           <ul class="text-left space-y-2 text-gray-600 mb-8 flex-grow">
             <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Kamar Ber-AC</li>
             <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Makan 3x sehari</li>
@@ -151,6 +155,7 @@
       </div>
     </div>
     <p class="text-center text-gray-400 mt-6">© 2025 PawsHotel. All rights reserved.</p>
+  </footer>
 
 </body>
 </html>
