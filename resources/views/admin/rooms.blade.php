@@ -16,55 +16,50 @@
     </button>
   </header>
 
-  <!-- Stats -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+  <!-- Stats (hapus: Total Update Hari Ini & Staff Aktif) -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-6">
     <div class="bg-white p-6 rounded-lg shadow-md">
-        <h3 class="text-lg font-semibold text-gray-600">Total Update Hari Ini</h3>
-        <p class="text-3xl font-bold mt-2">15</p>
+      <h3 class="text-lg font-semibold text-gray-600">Kondisi Sehat</h3>
+      <p class="text-3xl font-bold mt-2">12</p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow-md">
-        <h3 class="text-lg font-semibold text-gray-600">Kondisi Sehat</h3>
-        <p class="text-3xl font-bold mt-2">12</p>
-    </div>
-    <div class="bg-white p-6 rounded-lg shadow-md">
-        <h3 class="text-lg font-semibold text-gray-600">Perlu Perhatian</h3>
-        <p class="text-3xl font-bold mt-2">3</p>
-    </div>
-    <div class="bg-white p-6 rounded-lg shadow-md">
-        <h3 class="text-lg font-semibold text-gray-600">Staff Aktif</h3>
-        <p class="text-3xl font-bold mt-2">7</p>
+      <h3 class="text-lg font-semibold text-gray-600">Perlu Perhatian</h3>
+      <p class="text-3xl font-bold mt-2">3</p>
     </div>
   </div>
 
   <!-- Search and Filters -->
   <div class="mb-6">
     <div class="flex flex-wrap items-center gap-4 mb-4">
-      <input type="text" id="updateSearch" 
-        placeholder="Cari ID update, nama hewan, atau staff" 
+      <input
+        type="text"
+        id="updateSearch"
+        placeholder="Cari ID update, nama hewan, atau staff"
         class="flex-grow w-full sm:w-auto px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        onkeyup="searchFunction()">
-      
+        onkeyup="searchFunction()"
+      >
+
       <select id="statusFilter" class="px-4 py-2 border rounded-lg" onchange="searchFunction()">
         <option value="">Semua Penitipan</option>
         <option value="aktif">Aktif</option>
         <option value="selesai">Selesai</option>
       </select>
-      
+
       <select id="staffFilter" class="px-4 py-2 border rounded-lg" onchange="searchFunction()">
         <option value="">Semua Staff</option>
         <option value="staff_a">Staff A</option>
         <option value="staff_b">Staff B</option>
       </select>
-      
+
       <select id="kondisiFilter" class="px-4 py-2 border rounded-lg" onchange="searchFunction()">
         <option value="">Semua Kondisi</option>
         <option value="sehat">Sehat</option>
         <option value="perlu_perhatian">Perlu Perhatian</option>
       </select>
-      
+
       <input type="date" id="dateFilter" class="px-4 py-2 border rounded-lg" onchange="searchFunction()">
     </div>
-    
+
     <!-- Search Status Info -->
     <div id="searchStatus" class="text-sm text-gray-600" style="display: none;"></div>
   </div>
@@ -88,9 +83,9 @@
           </tr>
         </thead>
         <tbody id="tableBody">
-          <tr class="update-row border-b hover:bg-gray-50" 
-              data-status="aktif" 
-              data-staff="staff_a" 
+          <tr class="update-row border-b hover:bg-gray-50"
+              data-status="aktif"
+              data-staff="staff_a"
               data-kondisi="sehat"
               data-date="2025-09-28">
             <td class="p-4 font-mono text-sm">UK-001</td>
@@ -101,9 +96,9 @@
             <td class="p-4 text-sm">Makan normal, bermain aktif</td>
             <td class="p-4">28 Sep 2025 14:30</td>
           </tr>
-          <tr class="update-row border-b hover:bg-gray-50" 
-              data-status="aktif" 
-              data-staff="staff_b" 
+          <tr class="update-row border-b hover:bg-gray-50"
+              data-status="aktif"
+              data-staff="staff_b"
               data-kondisi="perlu_perhatian"
               data-date="2025-09-28">
             <td class="p-4 font-mono text-sm">UK-002</td>
@@ -114,9 +109,9 @@
             <td class="p-4 text-sm">Kurang nafsu makan</td>
             <td class="p-4">28 Sep 2025 15:45</td>
           </tr>
-          <tr class="update-row border-b hover:bg-gray-50" 
-              data-status="aktif" 
-              data-staff="staff_a" 
+          <tr class="update-row border-b hover:bg-gray-50"
+              data-status="aktif"
+              data-staff="staff_a"
               data-kondisi="sehat"
               data-date="2025-09-28">
             <td class="p-4 font-mono text-sm">UK-003</td>
@@ -127,9 +122,9 @@
             <td class="p-4 text-sm">Tidur nyenyak, kondisi baik</td>
             <td class="p-4">28 Sep 2025 16:20</td>
           </tr>
-          <tr class="update-row border-b hover:bg-gray-50" 
-              data-status="aktif" 
-              data-staff="staff_b" 
+          <tr class="update-row border-b hover:bg-gray-50"
+              data-status="aktif"
+              data-staff="staff_b"
               data-kondisi="sehat"
               data-date="2025-09-27">
             <td class="p-4 font-mono text-sm">UK-004</td>
@@ -140,9 +135,9 @@
             <td class="p-4 text-sm">Kondisi prima, sangat aktif</td>
             <td class="p-4">27 Sep 2025 18:15</td>
           </tr>
-          <tr class="update-row border-b hover:bg-gray-50" 
-              data-status="selesai" 
-              data-staff="staff_a" 
+          <tr class="update-row border-b hover:bg-gray-50"
+              data-status="selesai"
+              data-staff="staff_a"
               data-kondisi="sehat"
               data-date="2025-09-26">
             <td class="p-4 font-mono text-sm">UK-005</td>
@@ -166,92 +161,46 @@
 // Fungsi search untuk halaman update kondisi
 function searchFunction() {
   console.log('Search function called for updates!');
-  
+
   // Ambil input values
-  var searchValue = document.getElementById('updateSearch').value.toLowerCase();
-  var statusValue = document.getElementById('statusFilter').value.toLowerCase();
-  var staffValue = document.getElementById('staffFilter').value.toLowerCase();
+  var searchValue  = document.getElementById('updateSearch').value.toLowerCase();
+  var statusValue  = document.getElementById('statusFilter').value.toLowerCase();
+  var staffValue   = document.getElementById('staffFilter').value.toLowerCase();
   var kondisiValue = document.getElementById('kondisiFilter').value.toLowerCase();
-  var dateValue = document.getElementById('dateFilter').value;
-  
-  console.log('Search values:', {searchValue, statusValue, staffValue, kondisiValue, dateValue});
-  
+  var dateValue    = document.getElementById('dateFilter').value;
+
   // Ambil semua rows
   var rows = document.getElementsByClassName('update-row');
   var visibleCount = 0;
-  
-  console.log('Total rows found:', rows.length);
-  
+
   // Loop setiap row
   for (var i = 0; i < rows.length; i++) {
     var row = rows[i];
-    
+
     // Ambil teks dari row dan data attributes
-    var rowText = row.innerText.toLowerCase();
-    var rowStatus = row.getAttribute('data-status') || '';
-    var rowStaff = row.getAttribute('data-staff') || '';
-    var rowKondisi = row.getAttribute('data-kondisi') || '';
-    var rowDate = row.getAttribute('data-date') || '';
-    
+    var rowText   = row.innerText.toLowerCase();
+    var rowStatus = row.getAttribute('data-status')  || '';
+    var rowStaff  = row.getAttribute('data-staff')   || '';
+    var rowKondisi= row.getAttribute('data-kondisi') || '';
+    var rowDate   = row.getAttribute('data-date')    || '';
+
     // Check kondisi
     var showRow = true;
-    
-    // Check search text (ID update, nama hewan, staff)
-    if (searchValue && !rowText.includes(searchValue)) {
-      showRow = false;
-    }
-    
-    // Check status filter
-    if (statusValue && rowStatus !== statusValue) {
-      showRow = false;
-    }
-    
-    // Check staff filter
-    if (staffValue && rowStaff !== staffValue) {
-      showRow = false;
-    }
-    
-    // Check kondisi filter
-    if (kondisiValue && rowKondisi !== kondisiValue) {
-      showRow = false;
-    }
-    
-    // Check date filter
-    if (dateValue && rowDate !== dateValue) {
-      showRow = false;
-    }
-    
-    // Show/hide row
-    if (showRow) {
-      row.style.display = '';
-      visibleCount++;
-    } else {
-      row.style.display = 'none';
-    }
-    
-    // Debug first row
-    if (i === 0) {
-      console.log('First row debug:', {
-        rowText: rowText.substring(0, 50),
-        rowStatus,
-        rowStaff,
-        rowKondisi,
-        rowDate,
-        showRow
-      });
-    }
+
+    if (searchValue && !rowText.includes(searchValue)) showRow = false;
+    if (statusValue && rowStatus !== statusValue)      showRow = false;
+    if (staffValue && rowStaff !== staffValue)         showRow = false;
+    if (kondisiValue && rowKondisi !== kondisiValue)   showRow = false;
+    if (dateValue && rowDate !== dateValue)            showRow = false;
+
+    row.style.display = showRow ? '' : 'none';
+    if (showRow) visibleCount++;
   }
-  
+
   // Show/hide no results
   var noResults = document.getElementById('noResults');
-  if (noResults) {
-    if (visibleCount === 0) {
-      noResults.style.display = 'block';
-    } else {
-      noResults.style.display = 'none';
-    }
-  }
-  
+  if (noResults) noResults.style.display = (visibleCount === 0) ? 'block' : 'none';
+
   // Update search status
   var searchStatus = document.getElementById('searchStatus');
   if (searchStatus) {
@@ -262,8 +211,6 @@ function searchFunction() {
       searchStatus.style.display = 'none';
     }
   }
-  
-  console.log('Visible rows:', visibleCount);
 }
 
 // Test saat halaman dimuat
