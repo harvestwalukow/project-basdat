@@ -100,7 +100,8 @@ Route::middleware('admin')->group(function () {
 // Protected Routes - Owner
 Route::middleware('owner')->prefix('owner')->name('owner.')->group(function () {
     Route::get('/', function () { return view('owner.dashboard'); })->name('dashboard');
-    Route::get('/reservations', function () { return view('owner.reservations'); })->name('reservations');
+    // 🔹 Satu route untuk semua tab
+    Route::get('/reservations/{tab?}', function ($tab = 'semua') { return view('owner.reservations', compact('tab')); })->name('reservations');
     Route::get('/finance', function () { return view('owner.finance'); })->name('finance');
     Route::get('/pets', function () { return view('owner.pets'); })->name('pets');
     Route::get('/services', function () { return view('owner.services'); })->name('services');

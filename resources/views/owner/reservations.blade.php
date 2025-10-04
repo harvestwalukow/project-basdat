@@ -20,17 +20,17 @@
   <div class="bg-white rounded-lg shadow">
     <div class="border-b border-gray-200">
       <nav class="flex space-x-8 px-6">
-        <a href="#" class="border-b-2 border-blue-500 py-4 px-1 text-sm font-medium text-blue-600">
+        <a href="{{ route('owner.reservations', 'semua') }}" class="border-b-2 border-blue-500 py-4 px-1 text-sm font-medium text-blue-600">
           Semua Reservasi
         </a>
-        <a href="#" class="border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+        <a href="{{ route('owner.reservations', 'today') }}" class="border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
           Hari Ini
         </a>
-        <a href="#" class="border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+        <a href="{{ route('owner.reservations', 'upcoming') }}" class="border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
           Akan Datang
         </a>
-        <a href="#" class="border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
-          Sedang Berlangsung
+        <a href="{{ route('owner.reservations', 'selesai') }}" class="border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+          Selesai
         </a>
       </nav>
     </div>
@@ -66,6 +66,7 @@
 
     <!-- Reservations List -->
     <div class="p-6 space-y-4" id="reservationsList">
+      @if ($tab === 'semua')
       <!-- Sample Reservation Cards -->
       <div class="border border-gray-200 rounded-lg p-4 reservation-card" data-status="confirmed">
         <div class="flex flex-col md:flex-row justify-between gap-4">
@@ -227,7 +228,24 @@
             </div>
           </div>
         </div>
+      </div>
+        
+      @elseif ($tab === 'today')
+        <h2 class="text-xl font-bold">Reservasi Hari Ini</h2>
+        <p class="text-gray-500">Daftar reservasi untuk hari ini.</p>
       
+      @elseif ($tab === 'upcoming')
+        <h2 class="text-xl font-bold">Reservasi Akan Datang</h2>
+        <p class="text-gray-500">Daftar reservasi 7 hari ke depan.</p>
+        
+      @elseif ($tab === 'selesai')
+        <h2 class="text-xl font-bold">Reservasi Selesai</h2>
+        <p class="text-gray-500">Daftar reservasi yang sudah selesai.</p>
+      @endif
+    </div>
+  </div>
+</div>
+   
 @endsection
 
 @push('scripts')
