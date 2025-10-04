@@ -45,52 +45,38 @@
 
       <div class="flex flex-col lg:flex-row justify-center items-stretch gap-8 mb-10">
 
-        <!-- Basic (dengan harga) -->
+        <!-- Basic -->
         <div
           class="bg-white rounded-lg shadow-lg p-8 w-full lg:w-1/3 flex flex-col
                  ring-0 ring-transparent transition-all duration-300 ease-out
                  hover:-translate-y-1 hover:ring-2 hover:ring-[#F2784B] hover:ring-offset-2 hover:ring-offset-[#FEFBF7]
                  hover:shadow-[0_20px_50px_-10px_rgba(242,120,75,0.35)]">
           <h3 class="text-2xl font-bold mb-2">Basic</h3>
-          <!-- Harga Basic -->
           <p class="text-[#F2784B] font-bold mb-4">Rp 150.000</p>
           <ul class="text-left space-y-2 text-gray-600 mb-8 flex-grow">
-            <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              Kamar Ber-AC
-            </li>
-            <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              Makan 3x sehari
-            </li>
-            <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              Area bermain indoor/outdoor
-            </li>
-            <li class="flex items-center">
-              <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              Laporan harian via WA (foto)
-            </li>
+            <li class="flex items-center">Kamar Ber-AC</li>
+            <li class="flex items-center">Makan 3x sehari</li>
+            <li class="flex items-center">Area bermain indoor/outdoor</li>
+            <li class="flex items-center">Laporan harian via WA (foto)</li>
           </ul>
           <a href="{{ url('/reservasi') }}" class="mt-auto inline-block text-center rounded-lg bg-[#F2784B] px-4 py-2 text-white hover:bg-[#e0673d]">
             Pilih Paket Basic
           </a>
         </div>
 
-        <!-- Premium (dengan harga) -->
+        <!-- Premium -->
         <div
           class="bg-white rounded-lg shadow-lg p-8 w-full lg:w-1/3 border-2 border-[#F2784B] flex flex-col
                  transition-all duration-300 ease-out
                  hover:-translate-y-1 hover:shadow-[0_20px_50px_-10px_rgba(242,120,75,0.45)]">
           <h3 class="text-2xl font-bold mb-2 text-[#F2784B]">Premium</h3>
-          <!-- Harga Premium -->
           <p class="text-[#F2784B] font-bold mb-4">Rp 250.000</p>
           <ul class="text-left space-y-2 text-gray-600 mb-8 flex-grow">
-            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Kamar Ber-AC</li>
-            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Makan 3x sehari</li>
-            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Area bermain indoor/outdoor</li>
-            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Laporan harian via WA + VC</li>
-            <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Snack & Treats</li>
+            <li class="flex items-center">Kamar Ber-AC</li>
+            <li class="flex items-center">Makan 3x sehari</li>
+            <li class="flex items-center">Area bermain indoor/outdoor</li>
+            <li class="flex items-center">Laporan harian via WA + VC</li>
+            <li class="flex items-center">Snack & Treats</li>
           </ul>
           <a href="{{ url('/reservasi') }}" class="mt-auto inline-block text-center rounded-lg bg-[#F2784B] px-4 py-2 text-white hover:bg-[#e0673d]">
             Pilih Paket Premium
@@ -106,26 +92,39 @@
           Tingkatkan pengalaman hewan peliharaan Anda dengan layanan tambahan kami
         </p>
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="bg-white rounded-lg shadow p-6 text-center">
+          
+          <div class="bg-white rounded-lg shadow p-6 text-center 
+                      transition duration-300 ease-out 
+                      hover:-translate-y-1 hover:shadow-2xl">
             <h4 class="font-semibold mb-2">Grooming Premium</h4>
             <p class="text-[#F2784B] font-bold mb-2">Rp 150.000</p>
             <p class="text-gray-600">Spa lengkap, potong kuku, bersih telinga, aromaterapi</p>
           </div>
-          <div class="bg-white rounded-lg shadow p-6 text-center">
+
+          <div class="bg-white rounded-lg shadow p-6 text-center 
+                      transition duration-300 ease-out 
+                      hover:-translate-y-1 hover:shadow-2xl">
             <h4 class="font-semibold mb-2">Kolam Renang</h4>
             <p class="text-[#F2784B] font-bold mb-2">Rp 100.000</p>
             <p class="text-gray-600">Layanan berenang bagi anabul</p>
           </div>
-          <div class="bg-white rounded-lg shadow p-6 text-center">
+
+          <div class="bg-white rounded-lg shadow p-6 text-center 
+                      transition duration-300 ease-out 
+                      hover:-translate-y-1 hover:shadow-2xl">
             <h4 class="font-semibold mb-2">Pick-up & Delivery</h4>
             <p class="text-[#F2784B] font-bold mb-2">Rp 100.000</p>
             <p class="text-gray-600">Layanan antar jemput dalam radius 10km</p>
           </div>
-          <div class="bg-white rounded-lg shadow p-6 text-center">
+
+          <div class="bg-white rounded-lg shadow p-6 text-center 
+                      transition duration-300 ease-out 
+                      hover:-translate-y-1 hover:shadow-2xl">
             <h4 class="font-semibold mb-2">Enrichment Extra</h4>
             <p class="text-[#F2784B] font-bold mb-2">Rp 45.000</p>
             <p class="text-gray-600">Sesi stimulasi 15–20 menit (puzzle feeder, lick mat, sniffing)</p>
           </div>
+
         </div>
       </div>
 
