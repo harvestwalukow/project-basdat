@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Models\User;
+use App\Http\Controllers\PenitipanController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -40,14 +41,10 @@ Route::get('/layanan', function () {
 
 // Reservasi
 Route::get('/reservasi', function () {
-    $user = User::where('email', session('user_email'))->first();
-    return view('reservasi', ['user' => $user]);
-})->name('reservasi.form')->middleware('user');
+    return view('reservasi', ['user' => auth()->user()]);
+})->name('reservasi');
 
-Route::post('/reservasi', function (Request $request) {
-    $data = $request->all(); // ambil semua input
-    return view('pembayaran', compact('data'));
-})->name('reservasi.submit')->middleware('user');
+Route::post('/reservasi', [PenitipanController::class, 'store'])->name('reservasi.submit');
 
 // Auth Pages
 Route::get('/signin', function () {
@@ -103,10 +100,13 @@ Route::middleware('admin')->group(function () {
 Route::middleware('owner')->prefix('owner')->name('owner.')->group(function () {
     Route::get('/', function () { return view('owner.dashboard'); })->name('dashboard');
 
-    // BENAR → jangan ada "owner/" lagi di sini
-    Route::get('/reservations/{tab?}', [OwnerReservationController::class, 'index'])
-        ->name('reservations');
-    
+    Route::get('/reservations/{tab?}', function ($tab = 'semua') {
+    $validTabs = ['semua', 'today', 'upcoming', 'selesai'];
+    if (!in_array($tab, $validTabs)) {
+        $tab = 'semua';
+    }
+    return view('owner.reservations', compact('tab')); // BUKAN owner.reservations.index
+})->name('reservations');
     Route::get('/finance', function () { return view('owner.finance'); })->name('finance');
     Route::get('/pets', function () { return view('owner.pets'); })->name('pets');
     Route::get('/services', function () { return view('owner.services'); })->name('services');
