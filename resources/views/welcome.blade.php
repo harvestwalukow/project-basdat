@@ -36,10 +36,11 @@
          Sign In
         </a>
         <!-- Sign Up (ganti dari Reservasi) -->
-         <a href="{{ url('/register') }}"
-         class="inline-block rounded-xl bg-[#F2784B] px-5 py-2.5 text-white font-semibold hover:bg-[#e0673d]">
-         Sign Up
+         <a href="{{ route('signup') }}"
+          class="inline-block rounded-xl bg-[#F2784B] px-5 py-2.5 text-white font-semibold hover:bg-[#e0673d]">
+          Sign Up
         </a>
+
       </div>
     </div>
   </header>

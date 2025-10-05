@@ -118,3 +118,29 @@ Route::middleware('user')->group(function () {
         return view('reservasi', ['user' => $user]);
     })->name('dashboard');
 });
+
+// Proses Sign Up
+Route::post('/signup', function (Request $request) {
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|string|min:6|confirmed',
+    ]);
+
+    // Simpan ke database (pastikan tabel 'users' ada)
+    DB::table('users')->insert([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => bcrypt($request->password),
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    // Setelah daftar, langsung login manual ke sesi
+    session([
+        'user_email' => $request->email,
+        'user_role' => 'user',
+    ]);
+
+    return redirect('/dashboard')->with('success', 'Akun berhasil dibuat dan Anda telah login!');
+})->name('signup.submit');
