@@ -102,8 +102,7 @@ Route::middleware('admin')->group(function () {
 // Protected Routes - Owner
 Route::middleware('owner')->prefix('owner')->name('owner.')->group(function () {
     Route::get('/', function () { return view('owner.dashboard'); })->name('dashboard');
-    // 🔹 Satu route untuk semua tab
-    Route::get('/reservations/{tab?}', function ($tab = 'semua') { return view('owner.reservations', compact('tab')); })->name('reservations');
+    Route::get('/reservations', function () { return view('owner.reservations'); })->name('reservations');
     Route::get('/finance', function () { return view('owner.finance'); })->name('finance');
     Route::get('/pets', function () { return view('owner.pets'); })->name('pets');
     Route::get('/services', function () { return view('owner.services'); })->name('services');
@@ -119,3 +118,29 @@ Route::middleware('user')->group(function () {
         return view('reservasi', ['user' => $user]);
     })->name('dashboard');
 });
+
+// Proses Sign Up
+Route::post('/signup', function (Request $request) {
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|string|min:6|confirmed',
+    ]);
+
+    // Simpan ke database (pastikan tabel 'users' ada)
+    DB::table('users')->insert([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => bcrypt($request->password),
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    // Setelah daftar, langsung login manual ke sesi
+    session([
+        'user_email' => $request->email,
+        'user_role' => 'user',
+    ]);
+
+    return redirect('/dashboard')->with('success', 'Akun berhasil dibuat dan Anda telah login!');
+})->name('signup.submit');
