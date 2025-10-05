@@ -58,25 +58,51 @@ Route::get('/signup', function () {
     return view('signup');
 })->name('signup');
 
-// Proses Sign In
+// Proses Sign In (Gabungan: Manual + Database)
 Route::post('/signin', function (Request $request) {
     $email = trim($request->input('email'));
     $password = trim($request->input('password'));
 
-    $users = [
-        'admin@gmail.com' => ['password' => '123456', 'role' => 'admin', 'redirect' => '/admin/'],
-        'owner@gmail.com' => ['password' => '123456', 'role' => 'owner', 'redirect' => '/owner'],
-        'user@gmail.com' => ['password' => '123456', 'role' => 'user', 'redirect' => '/dashboard'],
+    // --- LOGIN MANUAL: ADMIN, OWNER, USER ---
+    $manualUsers = [
+        'admin@gmail.com' => [
+            'password' => '123456',
+            'role' => 'admin',
+            'redirect' => '/admin/',
+        ],
+        'owner@gmail.com' => [
+            'password' => '123456',
+            'role' => 'owner',
+            'redirect' => '/owner',
+        ],
+        'user@gmail.com' => [
+            'password' => '123456',
+            'role' => 'user',
+            'redirect' => '/dashboard',
+        ],
     ];
 
-    if (isset($users[$email]) && $users[$email]['password'] === $password) {
+    // Cek dulu apakah email cocok dengan manual user
+    if (isset($manualUsers[$email]) && $manualUsers[$email]['password'] === $password) {
         session([
             'user_email' => $email,
-            'user_role' => $users[$email]['role']
+            'user_role' => $manualUsers[$email]['role'],
         ]);
-        return redirect($users[$email]['redirect'])->with('success', 'Berhasil login!');
+        return redirect($manualUsers[$email]['redirect'])->with('success', 'Berhasil login!');
     }
 
+    // --- LOGIN VIA DATABASE (untuk akun yang daftar lewat signup) ---
+    $user = DB::table('users')->where('email', $email)->first();
+
+    if ($user && password_verify($password, $user->password)) {
+        session([
+            'user_email' => $user->email,
+            'user_role' => 'user',
+        ]);
+        return redirect('/dashboard')->with('success', 'Berhasil login!');
+    }
+
+    // Kalau dua-duanya gagal
     return back()->with('error', 'Email atau password salah');
 })->name('signin.submit');
 
