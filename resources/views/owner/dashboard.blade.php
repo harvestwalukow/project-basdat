@@ -75,7 +75,7 @@
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
       datasets: [{
         label: 'Pendapatan',
-        data: [45000000, 52000000, 48000000, 61000000, 58000000, 67000000],
+        data: [0, 0, 0, 0, 0, 0],
         borderColor: '#8884d8',
         borderWidth: 2
       }]
@@ -98,9 +98,9 @@
   new Chart(ctxService, {
     type: 'pie',
     data: {
-      labels: ['Penitipan', 'Grooming', 'Training', 'Konsultasi'],
+      labels: ['Pick-up & Delivery', 'Grooming', 'Kolam Renang', 'Boarding'],
       datasets: [{
-        data: [60, 25, 10, 5],
+        data: [0, 0, 0, 0],
         backgroundColor: ['#8884d8', '#82ca9d', '#ffc658', '#ff7300']
       }]
     },

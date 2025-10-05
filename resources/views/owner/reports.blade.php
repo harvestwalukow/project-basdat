@@ -60,33 +60,33 @@
         <div class="bg-white p-4 rounded-xl shadow flex items-center justify-between">
           <div>
             <p class="text-sm text-gray-500">Total Revenue</p>
-            <p class="text-2xl font-bold text-green-600">Rp 91M</p>
+            <p class="text-2xl font-bold text-green-600">Rp {{ number_format(($totalRevenue ?? 0) / 1000000, 0) }}M</p>
           </div>
-          <span class="text-green-600 text-sm">+15.2%</span>
+          <span class="text-green-600 text-sm">{{ $revenueGrowth ?? '0%' }}</span>
         </div>
 
         <div class="bg-white p-4 rounded-xl shadow flex items-center justify-between">
           <div>
             <p class="text-sm text-gray-500">Total Bookings</p>
-            <p class="text-2xl font-bold text-blue-600">284</p>
+            <p class="text-2xl font-bold text-blue-600">{{ $totalBookings ?? 0 }}</p>
           </div>
-          <span class="text-green-600 text-sm">+12.5%</span>
+          <span class="text-green-600 text-sm">{{ $bookingsGrowth ?? '0%' }}</span>
         </div>
 
         <div class="bg-white p-4 rounded-xl shadow flex items-center justify-between">
           <div>
             <p class="text-sm text-gray-500">Active Customers</p>
-            <p class="text-2xl font-bold text-purple-600">212</p>
+            <p class="text-2xl font-bold text-purple-600">{{ $activeCustomers ?? 0 }}</p>
           </div>
-          <span class="text-green-600 text-sm">+8.7%</span>
+          <span class="text-green-600 text-sm">{{ $customersGrowth ?? '0%' }}</span>
         </div>
 
         <div class="bg-white p-4 rounded-xl shadow flex items-center justify-between">
           <div>
             <p class="text-sm text-gray-500">Avg Rating</p>
-            <p class="text-2xl font-bold text-orange-600">4.8</p>
+            <p class="text-2xl font-bold text-orange-600">{{ number_format($avgRating ?? 0, 1) }}</p>
           </div>
-          <span class="text-green-600 text-sm">+0.2</span>
+          <span class="text-green-600 text-sm">{{ $ratingChange ?? '0' }}</span>
         </div>
       </div>
 
@@ -113,20 +113,19 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="border-t">
-              <td class="px-4 py-2">Penitipan Premium</td>
-              <td class="px-4 py-2">Rp 54.6M</td>
-              <td class="px-4 py-2">218</td>
-              <td class="px-4 py-2">4.9 ⭐</td>
-              <td class="px-4 py-2 text-green-600">+15.2%</td>
-            </tr>
-            <tr class="border-t">
-              <td class="px-4 py-2">Penitipan Standard</td>
-              <td class="px-4 py-2">Rp 32.4M</td>
-              <td class="px-4 py-2">216</td>
-              <td class="px-4 py-2">4.7 ⭐</td>
-              <td class="px-4 py-2 text-green-600">+8.5%</td>
-            </tr>
+            @forelse($servicePerformance ?? [] as $service)
+              <tr class="border-t">
+                <td class="px-4 py-2">{{ $service->name }}</td>
+                <td class="px-4 py-2">Rp {{ number_format($service->revenue / 1000000, 1) }}M</td>
+                <td class="px-4 py-2">{{ $service->bookings }}</td>
+                <td class="px-4 py-2">{{ number_format($service->rating, 1) }} ★</td>
+                <td class="px-4 py-2 text-green-600">{{ $service->growth }}</td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="5" class="px-4 py-8 text-center text-gray-500">Belum ada data performa layanan</td>
+              </tr>
+            @endforelse
           </tbody>
         </table>
       </div>
@@ -140,14 +139,16 @@
 <!-- Chart Script -->
 <script>
   // Revenue Trend (Line Chart)
+  const revenueData = @json($revenueChartData ?? ['labels' => [], 'data' => []]);
+  
   const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
   const revenueChart = new Chart(ctxRevenue, {
     type: 'line',
     data: {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+      labels: revenueData.labels,
       datasets: [{
-        label: 'Revenue (Miliar)',
-        data: [50, 60, 70, 65, 80, 91],
+        label: 'Revenue (Juta)',
+        data: revenueData.data,
         backgroundColor: 'rgba(59, 130, 246, 0.2)',
         borderColor: 'rgba(59, 130, 246, 1)',
         borderWidth: 2,
@@ -157,6 +158,7 @@
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: { display: true },
       },
@@ -167,18 +169,21 @@
   });
 
   // Booking vs Customer (Bar Chart)
+  const bookingData = @json($bookingChartData ?? ['labels' => [], 'bookings' => [], 'customers' => []]);
+  
   const ctxBooking = document.getElementById('bookingChart').getContext('2d');
   const bookingChart = new Chart(ctxBooking, {
     type: 'bar',
     data: {
-      labels: ['Premium', 'Standard', 'Economy'],
+      labels: bookingData.labels,
       datasets: [
-        { label: 'Bookings', data: [218, 216, 120], backgroundColor: '#3b82f6' },
-        { label: 'Active Customers', data: [212, 200, 100], backgroundColor: '#a855f7' }
+        { label: 'Bookings', data: bookingData.bookings, backgroundColor: '#3b82f6' },
+        { label: 'Active Customers', data: bookingData.customers, backgroundColor: '#a855f7' }
       ]
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: { display: true },
       },

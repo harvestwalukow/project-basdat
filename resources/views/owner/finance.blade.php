@@ -28,22 +28,22 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
     <div class="p-4 border rounded-lg shadow">
       <p class="text-sm font-medium">Total Pendapatan</p>
-      <div class="text-2xl font-bold text-green-600">Rp 91.000.000</div>
-      <p class="text-xs text-gray-500">+15.2% dari bulan lalu</p>
+      <div class="text-2xl font-bold text-green-600">Rp {{ number_format($totalIncome ?? 0, 0, ',', '.') }}</div>
+      <p class="text-xs text-gray-500">{{ $incomeChange ?? '0%' }} dari bulan lalu</p>
     </div>
     <div class="p-4 border rounded-lg shadow">
       <p class="text-sm font-medium">Total Pengeluaran</p>
-      <div class="text-2xl font-bold text-red-600">Rp 41.000.000</div>
-      <p class="text-xs text-gray-500">+8.3% dari bulan lalu</p>
+      <div class="text-2xl font-bold text-red-600">Rp {{ number_format($totalExpense ?? 0, 0, ',', '.') }}</div>
+      <p class="text-xs text-gray-500">{{ $expenseChange ?? '0%' }} dari bulan lalu</p>
     </div>
     <div class="p-4 border rounded-lg shadow">
       <p class="text-sm font-medium">Profit Bersih</p>
-      <div class="text-2xl font-bold text-blue-600">Rp 50.000.000</div>
-      <p class="text-xs text-gray-500">+23.1% dari bulan lalu</p>
+      <div class="text-2xl font-bold text-blue-600">Rp {{ number_format($netProfit ?? 0, 0, ',', '.') }}</div>
+      <p class="text-xs text-gray-500">{{ $profitChange ?? '0%' }} dari bulan lalu</p>
     </div>
     <div class="p-4 border rounded-lg shadow">
       <p class="text-sm font-medium">Margin Profit</p>
-      <div class="text-2xl font-bold text-purple-600">54.9%</div>
+      <div class="text-2xl font-bold text-purple-600">{{ $profitMargin ?? '0' }}%</div>
       <p class="text-xs text-gray-500">Target: 50%</p>
     </div>
   </div>
@@ -77,20 +77,27 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="border-t">
-          <td class="p-2">TRX001</td>
-          <td class="p-2">Pembayaran Penitipan - Sarah Johnson</td>
-          <td class="p-2">2024-01-15</td>
-          <td class="p-2"><span class="px-2 py-1 border rounded text-xs">Transfer Bank</span></td>
-          <td class="p-2 text-green-600 font-medium">+Rp 2.500.000</td>
-        </tr>
-        <tr class="border-t">
-          <td class="p-2">TRX002</td>
-          <td class="p-2">Pembelian Makanan Hewan</td>
-          <td class="p-2">2024-01-15</td>
-          <td class="p-2"><span class="px-2 py-1 border rounded text-xs">Cash</span></td>
-          <td class="p-2 text-red-600 font-medium">-Rp 1.200.000</td>
-        </tr>
+        @forelse($transactions ?? [] as $transaction)
+          <tr class="border-t">
+            <td class="p-2">{{ $transaction->id }}</td>
+            <td class="p-2">{{ $transaction->description }}</td>
+            <td class="p-2">{{ $transaction->date }}</td>
+            <td class="p-2"><span class="px-2 py-1 border rounded text-xs">{{ $transaction->method }}</span></td>
+            <td class="p-2 {{ $transaction->type == 'income' ? 'text-green-600' : 'text-red-600' }} font-medium">
+              {{ $transaction->type == 'income' ? '+' : '-' }}Rp {{ number_format($transaction->amount, 0, ',', '.') }}
+            </td>
+          </tr>
+        @empty
+          <tr class="border-t">
+            <td colspan="5" class="p-8 text-center text-gray-500">
+              <svg class="mx-auto h-12 w-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              <p class="text-lg font-medium">Belum ada transaksi</p>
+              <p class="text-sm">Transaksi akan muncul di sini setelah ada data</p>
+            </td>
+          </tr>
+        @endforelse
       </tbody>
     </table>
   </div>
