@@ -1,7 +1,7 @@
 <!-- Sidebar -->
 <aside class="w-64 bg-gray-800 text-white flex flex-col">
   <div class="p-6 text-2xl font-bold border-b border-gray-700">
-    PET HOTEL OWNER
+    PAWS HOTEL OWNER
   </div>
   <nav class="flex-1 px-4 py-6 space-y-2">
     {{-- Dashboard --}}
