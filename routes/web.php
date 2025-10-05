@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Models\User;
+use App\Http\Controllers\PenitipanController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -40,14 +41,10 @@ Route::get('/layanan', function () {
 
 // Reservasi
 Route::get('/reservasi', function () {
-    $user = User::where('email', session('user_email'))->first();
-    return view('reservasi', ['user' => $user]);
-})->name('reservasi.form')->middleware('user');
+    return view('reservasi', ['user' => auth()->user()]);
+})->name('reservasi');
 
-Route::post('/reservasi', function (Request $request) {
-    $data = $request->all(); // ambil semua input
-    return view('pembayaran', compact('data'));
-})->name('reservasi.submit')->middleware('user');
+Route::post('/reservasi', [PenitipanController::class, 'store'])->name('reservasi.submit');
 
 // Auth Pages
 Route::get('/signin', function () {
@@ -58,25 +55,51 @@ Route::get('/signup', function () {
     return view('signup');
 })->name('signup');
 
-// Proses Sign In
+// Proses Sign In (Gabungan: Manual + Database)
 Route::post('/signin', function (Request $request) {
     $email = trim($request->input('email'));
     $password = trim($request->input('password'));
 
-    $users = [
-        'admin@gmail.com' => ['password' => '123456', 'role' => 'admin', 'redirect' => '/admin/'],
-        'owner@gmail.com' => ['password' => '123456', 'role' => 'owner', 'redirect' => '/owner'],
-        'user@gmail.com' => ['password' => '123456', 'role' => 'user', 'redirect' => '/dashboard'],
+    // --- LOGIN MANUAL: ADMIN, OWNER, USER ---
+    $manualUsers = [
+        'admin@gmail.com' => [
+            'password' => '123456',
+            'role' => 'admin',
+            'redirect' => '/admin/',
+        ],
+        'owner@gmail.com' => [
+            'password' => '123456',
+            'role' => 'owner',
+            'redirect' => '/owner',
+        ],
+        'user@gmail.com' => [
+            'password' => '123456',
+            'role' => 'user',
+            'redirect' => '/dashboard',
+        ],
     ];
 
-    if (isset($users[$email]) && $users[$email]['password'] === $password) {
+    // Cek dulu apakah email cocok dengan manual user
+    if (isset($manualUsers[$email]) && $manualUsers[$email]['password'] === $password) {
         session([
             'user_email' => $email,
-            'user_role' => $users[$email]['role']
+            'user_role' => $manualUsers[$email]['role'],
         ]);
-        return redirect($users[$email]['redirect'])->with('success', 'Berhasil login!');
+        return redirect($manualUsers[$email]['redirect'])->with('success', 'Berhasil login!');
     }
 
+    // --- LOGIN VIA DATABASE (untuk akun yang daftar lewat signup) ---
+    $user = DB::table('users')->where('email', $email)->first();
+
+    if ($user && password_verify($password, $user->password)) {
+        session([
+            'user_email' => $user->email,
+            'user_role' => 'user',
+        ]);
+        return redirect('/dashboard')->with('success', 'Berhasil login!');
+    }
+
+    // Kalau dua-duanya gagal
     return back()->with('error', 'Email atau password salah');
 })->name('signin.submit');
 
@@ -101,13 +124,21 @@ Route::middleware('admin')->group(function () {
 // Protected Routes - Owner
 Route::middleware('owner')->prefix('owner')->name('owner.')->group(function () {
     Route::get('/', function () { return view('owner.dashboard'); })->name('dashboard');
-    Route::get('/reservations', function () { return view('owner.reservations'); })->name('reservations');
+
+    Route::get('/reservations/{tab?}', function ($tab = 'semua') {
+    $validTabs = ['semua', 'today', 'upcoming', 'selesai'];
+    if (!in_array($tab, $validTabs)) {
+        $tab = 'semua';
+    }
+    return view('owner.reservations', compact('tab')); // BUKAN owner.reservations.index
+})->name('reservations');
     Route::get('/finance', function () { return view('owner.finance'); })->name('finance');
     Route::get('/pets', function () { return view('owner.pets'); })->name('pets');
     Route::get('/services', function () { return view('owner.services'); })->name('services');
     Route::get('/staff', function () { return view('owner.staff'); })->name('staff');
     Route::get('/reports', function () { return view('owner.reports'); })->name('reports');
 });
+
 
 
 // Protected Routes - User (Pelanggan)

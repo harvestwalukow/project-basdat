@@ -53,7 +53,7 @@
           Rumah Hangat <br> untuk Sahabat Berbulu 🐾
         </h1>
         <p class="text-lg text-gray-700">
-          Tempat penitipan khusus anjing dan kucing dengan kamar nyaman, area bermain seru, dan update harian yang bikin tenang.
+          Tempat penitipan <strong>khusus anjing dan kucing</strong> dengan kamar nyaman, area bermain seru, dan update harian yang bikin tenang.
         </p>
         <div class="flex gap-4">
           <a href="{{ url('/reservasi') }}" class="px-6 py-3 rounded-full bg-orange-400 text-white font-semibold shadow hover:bg-orange-500">

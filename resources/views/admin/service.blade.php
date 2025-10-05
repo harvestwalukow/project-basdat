@@ -28,7 +28,7 @@
     </div>
     <div class="bg-white p-6 rounded-lg shadow-md">
       <h3 class="text-lg font-semibold text-gray-600">Total Pemesanan</h3>
-      <p class="text-3xl font-bold mt-2">45</p>
+      <p class="text-3xl font-bold mt-2">0</p>
     </div>
   </div>
 
@@ -70,9 +70,8 @@
       <h3 class="font-semibold">DAFTAR PAKET LAYANAN</h3>
     </div>
 
-    <!-- TABLE (top scroller) -->
-    <div id="tableScroll" class="overflow-x-auto">
-      <!-- Paksa lebih lebar dari container agar overflow pasti terjadi -->
+    <!-- TABLE (hidden native scrollbar) -->
+    <div id="tableScroll" class="overflow-x-auto hide-scrollbar">
       <table class="w-full min-w-[1200px]">
         <thead class="bg-gray-50 text-left text-sm text-gray-600">
           <tr>
@@ -90,7 +89,7 @@
             <td class="p-4 font-medium">Paket Basic</td>
             <td class="p-4">Penitipan standar dengan fasilitas dasar</td>
             <td class="p-4">Rp 150.000</td>
-            <td class="p-4 text-center">25</td>
+            <td class="p-4 text-center">0</td>
             <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
             <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
           </tr>
@@ -99,7 +98,7 @@
             <td class="p-4 font-medium">Paket Premium</td>
             <td class="p-4">Penitipan premium dengan fasilitas lengkap dan grooming</td>
             <td class="p-4">Rp 250.000</td>
-            <td class="p-4 text-center">15</td>
+            <td class="p-4 text-center">0</td>
             <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
             <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
           </tr>
@@ -108,7 +107,7 @@
             <td class="p-4 font-medium">Paket Deluxe</td>
             <td class="p-4">Penitipan mewah dengan layanan eksklusif dan spa</td>
             <td class="p-4">Rp 350.000</td>
-            <td class="p-4 text-center">5</td>
+            <td class="p-4 text-center">0</td>
             <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-gray-700 bg-gray-100 rounded-full">Non-Aktif</span></td>
             <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
           </tr>
@@ -118,7 +117,7 @@
             <td class="p-4 font-medium">Grooming Premium</td>
             <td class="p-4">Spa lengkap, potong kuku, bersih telinga, aromaterapi</td>
             <td class="p-4">Rp 150.000</td>
-            <td class="p-4 text-center">30</td>
+            <td class="p-4 text-center">0</td>
             <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
             <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
           </tr>
@@ -127,7 +126,7 @@
             <td class="p-4 font-medium">Kolam Renang</td>
             <td class="p-4">Layanan berenang bagi anabul</td>
             <td class="p-4">Rp 100.000</td>
-            <td class="p-4 text-center">22</td>
+            <td class="p-4 text-center">0</td>
             <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
             <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
           </tr>
@@ -136,7 +135,7 @@
             <td class="p-4 font-medium">Pick-up & Delivery</td>
             <td class="p-4">Layanan antar jemput dalam radius 10km</td>
             <td class="p-4">Rp 100.000</td>
-            <td class="p-4 text-center">18</td>
+            <td class="p-4 text-center">0</td>
             <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
             <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
           </tr>
@@ -145,7 +144,7 @@
             <td class="p-4 font-medium">Enrichment Extra</td>
             <td class="p-4">Sesi stimulasi 15–20 menit (puzzle feeder, lick mat, sniffing)</td>
             <td class="p-4">Rp 45.000</td>
-            <td class="p-4 text-center">12</td>
+            <td class="p-4 text-center">0</td>
             <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
             <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
           </tr>
@@ -153,8 +152,8 @@
       </table>
     </div>
 
-    <!-- BOTTOM SCROLLER -->
-    <div id="tableScrollBar" class="overflow-x-auto h-6 mt-2">
+    <!-- BOTTOM CUSTOM SCROLLER -->
+    <div id="tableScrollBar" class="overflow-x-auto px-6 pb-4 custom-scrollbar">
       <div id="tableScrollBarInner" class="h-1"></div>
     </div>
 
@@ -163,6 +162,42 @@
     </div>
   </div>
 </div>
+
+<style>
+/* Sembunyikan scrollbar native tapi tetap bisa scroll */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
+
+/* Custom scrollbar untuk bottom scroller */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+</style>
 
 <script>
 // ================= Filter & Stats =================
@@ -244,7 +279,7 @@ function initBottomScroller() {
   if (!top || !bottom || !inner) return;
 
   function resizeBar() {
-    inner.style.width = top.scrollWidth + 'px'; // match konten tabel
+    inner.style.width = top.scrollWidth + 'px';
   }
 
   // Sinkron dua arah
