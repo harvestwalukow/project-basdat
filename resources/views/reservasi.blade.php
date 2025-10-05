@@ -27,7 +27,7 @@
         <div class="p-4 grid md:grid-cols-2 gap-4">
           <div>
             <label for="ownerName" class="block text-sm font-medium text-gray-700">Nama Lengkap *</label>
-            <input type="text" id="ownerName" name="ownerName" class="mt-1 block w-full border rounded p-2" required>
+            <input type="text" id="ownerName" name="ownerName" value="{{ $user?->name ?? '' }}" class="mt-1 block w-full border rounded p-2" required>
           </div>
           <div>
             <label for="phone" class="block text-sm font-medium text-gray-700">Nomor Telepon *</label>
@@ -35,7 +35,7 @@
           </div>
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-            <input type="email" id="email" name="email" class="mt-1 block w-full border rounded p-2">
+            <input type="email" id="email" name="email" value="{{ $user?->email ?? session('user_email') ?? '' }}" class="mt-1 block w-full border rounded p-2">
           </div>
           <div>
             <label for="address" class="block text-sm font-medium text-gray-700">Alamat</label>

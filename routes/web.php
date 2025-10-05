@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use App\Models\User;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -39,13 +40,14 @@ Route::get('/layanan', function () {
 
 // Reservasi
 Route::get('/reservasi', function () {
-    return view('reservasi');
-})->name('reservasi.form');
+    $user = User::where('email', session('user_email'))->first();
+    return view('reservasi', ['user' => $user]);
+})->name('reservasi.form')->middleware('user');
 
 Route::post('/reservasi', function (Request $request) {
     $data = $request->all(); // ambil semua input
     return view('pembayaran', compact('data'));
-})->name('reservasi.submit');
+})->name('reservasi.submit')->middleware('user');
 
 // Auth Pages
 Route::get('/signin', function () {
@@ -112,5 +114,8 @@ Route::middleware('owner')->prefix('owner')->name('owner.')->group(function () {
 
 // Protected Routes - User (Pelanggan)
 Route::middleware('user')->group(function () {
-    Route::get('/dashboard', function () { return view('reservasi'); })->name('dashboard');
+    Route::get('/dashboard', function () {
+        $user = User::where('email', session('user_email'))->first();
+        return view('reservasi', ['user' => $user]);
+    })->name('dashboard');
 });
