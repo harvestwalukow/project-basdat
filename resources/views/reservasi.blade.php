@@ -84,15 +84,40 @@
           <h2 class="font-semibold text-gray-800">Detail Reservasi</h2>
           <p class="text-sm text-gray-500">Pilih paket dan tanggal menginap</p>
         </div>
-        <div class="p-4 space-y-4">
+
+        <div class="p-6 space-y-6">
+          <!-- Paket Layanan -->
           <div>
-            <label for="packageType" class="block text-sm font-medium text-gray-700">Pilih Paket *</label>
-            <select id="packageType" name="packageType" class="mt-1 block w-full border rounded p-2" required>
-              <option value="">Pilih paket layanan</option>
-              <option value="basic" data-harga="150000">Paket Basic - Rp 150.000</option>
-              <option value="premium" data-harga="250000">Paket Premium - Rp 250.000</option>
-            </select>
+            <h3 class="text-lg font-semibold mb-2">Paket Layanan</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="bg-white rounded-lg border border-[#F2784B] shadow p-6 flex flex-col cursor-pointer hover:bg-orange-50 transition"
+                   data-harga="150000" data-nama="Paket Basic" onclick="pilihPaket(this)">
+                <h3 class="text-2xl font-bold mb-2 text-gray-800">Basic</h3>
+                <p class="text-[#F2784B] font-bold mb-4">Rp 150.000</p>
+                <ul class="text-left space-y-2 text-gray-600 mb-6">
+                  <li>Kamar Ber-AC</li>
+                  <li>Makan 3x sehari</li>
+                  <li>Area bermain indoor/outdoor</li>
+                  <li>Laporan harian via WA (foto)</li>
+                </ul>
+              </div>
+
+              <div class="bg-white rounded-lg border border-[#F2784B] shadow p-6 flex flex-col cursor-pointer hover:bg-orange-50 transition"
+                   data-harga="250000" data-nama="Paket Premium" onclick="pilihPaket(this)">
+                <h3 class="text-2xl font-bold mb-2 text-gray-800">Premium</h3>
+                <p class="text-[#F2784B] font-bold mb-4">Rp 250.000</p>
+                <ul class="text-left space-y-2 text-gray-600 mb-6">
+                  <li>Kamar Ber-AC</li>
+                  <li>Makan 3x sehari</li>
+                  <li>Area bermain indoor/outdoor</li>
+                  <li>Laporan harian via WA + VC</li>
+                  <li>Snack & Treats</li>
+                </ul>
+              </div>
+            </div>
           </div>
+
+          <input type="hidden" id="packageType" name="packageType">
 
           <!-- Layanan Tambahan -->
           <div>
@@ -172,13 +197,25 @@
       }
     }
 
-    const packageSelect = document.getElementById('packageType');
     const ringkasan = document.getElementById('ringkasanBiaya');
     const checkInDateInput = document.getElementById('checkInDate');
     const checkOutDateInput = document.getElementById('checkOutDate');
     const jumlahInputs = document.querySelectorAll('.jumlah');
     const incrementBtns = document.querySelectorAll('.increment');
     const decrementBtns = document.querySelectorAll('.decrement');
+    const packageTypeInput = document.getElementById('packageType');
+    let selectedPaket = null;
+
+    function pilihPaket(el) {
+      document.querySelectorAll('[data-harga]').forEach(card => card.classList.remove('border-4', 'border-orange-400'));
+      el.classList.add('border-4', 'border-orange-400');
+      selectedPaket = {
+        nama: el.dataset.nama,
+        harga: parseInt(el.dataset.harga)
+      };
+      packageTypeInput.value = selectedPaket.nama;
+      updateRingkasan();
+    }
 
     function hitungSelisihHari(checkIn, checkOut) {
       const tglMasuk = new Date(checkIn);
@@ -194,19 +231,17 @@
       const checkOut = checkOutDateInput.value;
       const jumlahHari = (checkIn && checkOut) ? hitungSelisihHari(checkIn, checkOut) : 1;
 
-      // Paket utama (dikalikan hari)
-      if (packageSelect.value) {
-        const selectedOption = packageSelect.options[packageSelect.selectedIndex];
-        const harga = parseInt(selectedOption.dataset.harga);
-        const subtotal = harga * jumlahHari;
+      // Paket utama
+      if (selectedPaket) {
+        const subtotal = selectedPaket.harga * jumlahHari;
         total += subtotal;
         html += `<div class="flex justify-between mb-1">
-          <span>${selectedOption.text} (x${jumlahHari} hari)</span>
+          <span>${selectedPaket.nama} (x${jumlahHari} hari)</span>
           <span>Rp ${subtotal.toLocaleString('id-ID')}</span>
         </div>`;
       }
 
-      // Add-on (tidak dikalikan hari)
+      // Add-on
       jumlahInputs.forEach(input => {
         const jumlah = parseInt(input.value);
         const harga = parseInt(input.dataset.harga);
@@ -251,7 +286,6 @@
     });
 
     jumlahInputs.forEach(input => input.addEventListener('change', updateRingkasan));
-    packageSelect.addEventListener('change', updateRingkasan);
     checkInDateInput.addEventListener('change', updateRingkasan);
     checkOutDateInput.addEventListener('change', updateRingkasan);
 

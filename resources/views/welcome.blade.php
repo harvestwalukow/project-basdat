@@ -14,10 +14,10 @@
 </head>
 
 <body class="bg-cover bg-center bg-fixed text-[#333333] antialiased"
-      style="background-image: url('/img/backround.png');">
+      style="background-image: url('/img/bg2.png');">
 
 <!-- NAVBAR -->
-  <header class="sticky top-0 z-50 bg-[#FEFBF7]/90 backdrop-blur border-b border-orange-100/60">
+  <header class="sticky top-0 z-50 bg-[#fff2de]/90 backdrop-blur border-b border-orange-100/60">
     <div class="max-w-7xl mx-auto px-6 py-4 grid grid-cols-12 items-center gap-4">
       <a href="{{ url('/') }}" class="col-span-6 md:col-span-3 text-2xl font-extrabold text-[#F2784B]">
         PawsHotel

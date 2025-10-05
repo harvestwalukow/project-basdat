@@ -34,8 +34,8 @@
     <div class="text-center py-16 max-w-4xl mx-auto">
         <h1 class="text-4xl font-bold mb-6">Tentang PawsHotel</h1>
         <p class="text-xl text-gray-600 mb-8">
-            Didirikan pada tahun 2018, PetHotel adalah hotel hewan terpercaya yang telah melayani 
-            ribuan hewan peliharaan dengan standar perawatan tertinggi di Indonesia.
+            PawsHotel berdiri pada tahun 2025, merupakan hotel khusus anjing dan kucing terpercaya di Indonesia
+            yang telah memberikan layanan perawatan berkualitas tinggi bagi ribuan hewan peliharaan dengan standar terbaik.
         </p>
         <img src="/img/pet hotelss.jpg" 
              alt="PetHotel facilities"
@@ -45,14 +45,14 @@
     <!-- Misi & Visi -->
     <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 mb-20 px-6">
         <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-2xl font-bold mb-4">🎯 Misi Kami</h2>
+            <h2 class="text-2xl font-bold mb-4">Misi:</h2>
             <p class="text-gray-600">
                 Memberikan layanan perawatan hewan terbaik dengan fasilitas modern, tim profesional 
                 berpengalaman, dan kasih sayang seperti di rumah sendiri.
             </p>
         </div>
         <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-2xl font-bold mb-4">👁️ Visi Kami</h2>
+            <h2 class="text-2xl font-bold mb-4">Visi:</h2>
             <p class="text-gray-600">
                 Menjadi hotel hewan terdepan di Indonesia yang diakui karena standar perawatan tinggi 
                 dan dedikasi terhadap kesejahteraan hewan peliharaan.
@@ -64,15 +64,15 @@
     <div class="max-w-4xl mx-auto bg-white rounded-lg shadow p-8 mb-20">
         <h2 class="text-3xl font-bold mb-6 text-center">Cerita Kami</h2>
         <p class="text-gray-600 mb-4">
-            PetHotel bermula dari kecintaan mendalam terhadap hewan peliharaan. Didirikan oleh 
+            PawsHotel bermula dari kecintaan terhadap hewan peliharaan. Didirikan oleh 
             Kelompok C Basis Data SD-A2 pada tahun 2025, di Univeritas Airlangga, Surabaya.
         </p>
         <p class="text-gray-600 mb-4">
-            Melihat kebutuhan pemilik hewan yang sering bepergian, kami kembangkan hotel hewan 
+            Melihat kebutuhan pemilik hewan yang sering bepergian, kami mengembangkan hotel hewan 
             dengan standar setara hotel bintang lima.
         </p>
         <p class="text-gray-600">
-            Hingga kini, kami telah melayani lebih dari 5.000 hewan peliharaan dan terus berinovasi.
+            Hingga kini, PawsHotel telah melayani lebih dari 5.000 hewan peliharaan dan terus berinovasi.
         </p>
     </div>
 
@@ -124,8 +124,8 @@
     <div class="bg-[#F2784B] text-white rounded-lg p-12 max-w-6xl mx-auto mb-20">
         <h2 class="text-3xl mb-8 text-center font-bold">Pencapaian Kami</h2>
         <div class="grid md:grid-cols-4 gap-8 text-center">
-            <div><div class="text-4xl font-bold">5000+</div><p>Hewan Dilayani</p></div>
-            <div><div class="text-4xl font-bold">6</div><p>Tahun Pengalaman</p></div>
+            <div><div class="text-4xl font-bold">1000+</div><p>Hewan Dilayani</p></div>
+            <div><div class="text-4xl font-bold">5</div><p>Bulan Pengalaman</p></div>
             <div><div class="text-4xl font-bold">24/7</div><p>Layanan Darurat</p></div>
             <div><div class="text-4xl font-bold">98%</div><p>Kepuasan Pelanggan</p></div>
         </div>
