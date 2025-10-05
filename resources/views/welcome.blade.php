@@ -14,7 +14,7 @@
 </head>
 
 <body class="bg-cover bg-center bg-fixed text-[#333333] antialiased"
-      style="background-image: url('/img/backround.png');">
+      style="background-image: url('/img/bg2.png');">
 
 <!-- NAVBAR -->
   <header class="sticky top-0 z-50 bg-[#FEFBF7]/90 backdrop-blur border-b border-orange-100/60">
