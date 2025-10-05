@@ -70,9 +70,8 @@
       <h3 class="font-semibold">DAFTAR PAKET LAYANAN</h3>
     </div>
 
-    <!-- TABLE (top scroller) -->
-    <div id="tableScroll" class="overflow-x-auto">
-      <!-- Paksa lebih lebar dari container agar overflow pasti terjadi -->
+    <!-- TABLE (hidden native scrollbar) -->
+    <div id="tableScroll" class="overflow-x-auto hide-scrollbar">
       <table class="w-full min-w-[1200px]">
         <thead class="bg-gray-50 text-left text-sm text-gray-600">
           <tr>
@@ -153,8 +152,8 @@
       </table>
     </div>
 
-    <!-- BOTTOM SCROLLER -->
-    <div id="tableScrollBar" class="overflow-x-auto h-6 mt-2">
+    <!-- BOTTOM CUSTOM SCROLLER -->
+    <div id="tableScrollBar" class="overflow-x-auto px-6 pb-4 custom-scrollbar">
       <div id="tableScrollBarInner" class="h-1"></div>
     </div>
 
@@ -163,6 +162,42 @@
     </div>
   </div>
 </div>
+
+<style>
+/* Sembunyikan scrollbar native tapi tetap bisa scroll */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
+
+/* Custom scrollbar untuk bottom scroller */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+</style>
 
 <script>
 // ================= Filter & Stats =================
@@ -244,7 +279,7 @@ function initBottomScroller() {
   if (!top || !bottom || !inner) return;
 
   function resizeBar() {
-    inner.style.width = top.scrollWidth + 'px'; // match konten tabel
+    inner.style.width = top.scrollWidth + 'px';
   }
 
   // Sinkron dua arah
