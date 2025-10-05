@@ -12,15 +12,15 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <div class="bg-white p-4 rounded-xl shadow">
       <h4 class="text-sm text-gray-500">Total Penitipan</h4>
-      <p class="text-2xl font-bold text-gray-800">128</p>
+      <p class="text-2xl font-bold text-gray-800">0</p>
     </div>
     <div class="bg-white p-4 rounded-xl shadow">
       <h4 class="text-sm text-gray-500">Aktif</h4>
-      <p class="text-2xl font-bold text-green-600">34</p>
+      <p class="text-2xl font-bold text-green-600">0</p>
     </div>
     <div class="bg-white p-4 rounded-xl shadow">
       <h4 class="text-sm text-gray-500">Selesai</h4>
-      <p class="text-2xl font-bold text-blue-500">82</p>
+      <p class="text-2xl font-bold text-blue-500">0</p>
     </div>
   </div>
 
@@ -75,55 +75,7 @@
         </thead>
 
         <tbody id="bookingTable">
-          <tr data-status="Aktif">
-            <td class="p-4">#PT-001</td>
-            <td class="p-4 font-medium">Budi Santoso</td>
-            <td class="p-4">Buddy (Anjing)</td>
-            <td class="p-4">25 Sep 2025</td>
-            <td class="p-4">28 Sep 2025</td>
-            <td class="p-4">
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold text-green-700 bg-green-100">Aktif</span>
-            </td>
-            <td class="p-4 space-x-3">
-              <a href="#" class="text-blue-600 hover:underline">Detail</a>
-              <a href="#" class="text-yellow-600 hover:underline">Edit</a>
-            </td>
-          </tr>
-
-          {{-- Baris Pending dihapus --}}
-          {{-- 
-          <tr data-status="Pending"> ... </tr>
-          --}}
-
-          <tr data-status="Selesai">
-            <td class="p-4">#PT-003</td>
-            <td class="p-4 font-medium">Doni Setiawan</td>
-            <td class="p-4">Leo (Anjing)</td>
-            <td class="p-4">20 Sep 2025</td>
-            <td class="p-4">23 Sep 2025</td>
-            <td class="p-4">
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold text-gray-700 bg-gray-100">Selesai</span>
-            </td>
-            <td class="p-4 space-x-3">
-              <a href="#" class="text-blue-600 hover:underline">Detail</a>
-              <a href="#" class="text-yellow-600 hover:underline">Edit</a>
-            </td>
-          </tr>
-
-          <tr data-status="Dibatalkan">
-            <td class="p-4">#PT-004</td>
-            <td class="p-4 font-medium">Eka Putri</td>
-            <td class="p-4">Coco (Kucing)</td>
-            <td class="p-4">22 Sep 2025</td>
-            <td class="p-4">24 Sep 2025</td>
-            <td class="p-4">
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold text-red-700 bg-red-100">Dibatalkan</span>
-            </td>
-            <td class="p-4 space-x-3">
-              <a href="#" class="text-blue-600 hover:underline">Detail</a>
-              <a href="#" class="text-yellow-600 hover:underline">Edit</a>
-            </td>
-          </tr>
+          <!-- Data penitipan akan muncul di sini -->
         </tbody>
       </table>
     </div>
@@ -134,34 +86,7 @@
 <div id="calendarView" class="hidden bg-white rounded-lg shadow-md p-6">
   <h3 class="font-semibold mb-4">Calendar View</h3>
   <div class="grid grid-cols-7 gap-4 text-center">
-    <div>
-      <p class="font-medium">Sen (22)</p>
-      <div class="bg-gray-100 rounded-lg p-2 mt-2">Coco</div>
-    </div>
-    <div>
-      <p class="font-medium">Rab (23)</p>
-      <div class="bg-gray-100 rounded-lg p-2 mt-2">Leo</div>
-    </div>
-    <div>
-      <p class="font-medium">Kam (24)</p>
-      <div class="bg-gray-100 rounded-lg p-2 mt-2">Coco</div>
-    </div>
-    <div>
-      <p class="font-medium">Jum (25)</p>
-      <div class="bg-gray-100 rounded-lg p-2 mt-2">Buddy</div>
-    </div>
-    <div>
-      <p class="font-medium">Sab (26)</p>
-      <div class="bg-gray-100 rounded-lg p-2 mt-2">Milo</div>
-    </div>
-    <div>
-      <p class="font-medium">Min (27)</p>
-      <div class="bg-gray-100 rounded-lg p-2 mt-2">Milo</div>
-    </div>
-    <div>
-      <p class="font-medium">Sen (28)</p>
-      <div class="bg-gray-100 rounded-lg p-2 mt-2">Buddy</div>
-    </div>
+    <!-- Data calendar akan muncul di sini -->
   </div>
 </div>
 @endsection

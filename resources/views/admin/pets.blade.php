@@ -20,15 +20,15 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
     <div class="bg-white p-6 rounded-lg shadow-md">
       <h3 class="text-lg font-semibold text-gray-600">Total Hewan</h3>
-      <p class="text-3xl font-bold mt-2">26</p>
+      <p class="text-3xl font-bold mt-2">0</p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow-md">
       <h3 class="text-lg font-semibold text-gray-600">Anjing</h3>
-      <p class="text-3xl font-bold mt-2">18</p>
+      <p class="text-3xl font-bold mt-2">0</p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow-md">
       <h3 class="text-lg font-semibold text-gray-600">Kucing</h3>
-      <p class="text-3xl font-bold mt-2">8</p>
+      <p class="text-3xl font-bold mt-2">0</p>
     </div>
   </div>
 
@@ -74,189 +74,7 @@
             </tr>
           </thead>
           <tbody id="tableBody" class="text-sm">
-            <!-- ROW 1 -->
-            <tr class="pet-row border-b hover:bg-gray-50" data-jenis="anjing" data-status="dalam_penitipan">
-              <td class="p-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-xl">🐶</div>
-                  <div>
-                    <p class="font-medium">Buddy</p>
-                    <p class="text-xs text-gray-500">Golden Retriever</p>
-                  </div>
-                </div>
-              </td>
-              <td class="p-4 font-medium">Siti Indah</td>
-              <td class="p-4">Jantan, 2 thn, 25kg</td>
-              <td class="p-4">15 Jan 2025</td>
-              <td class="p-4">5 kali</td>
-              <td class="p-4">
-                <div class="flex items-center gap-2">
-                  <button class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">Lihat</button>
-                  <button class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">Edit</button>
-                </div>
-              </td>
-            </tr>
-
-            <!-- ROW 2 -->
-            <tr class="pet-row border-b hover:bg-gray-50" data-jenis="kucing" data-status="di_rumah">
-              <td class="p-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-xl">🐱</div>
-                  <div>
-                    <p class="font-medium">Milo</p>
-                    <p class="text-xs text-gray-500">Persian</p>
-                  </div>
-                </div>
-              </td>
-              <td class="p-4 font-medium">Fajar Hidayat</td>
-              <td class="p-4">Betina, 3 thn, 4kg</td>
-              <td class="p-4">20 Mar 2025</td>
-              <td class="p-4">2 kali</td>
-              <td class="p-4">
-                <div class="flex items-center gap-2">
-                  <button class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">Lihat</button>
-                  <button class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">Edit</button>
-                </div>
-              </td>
-            </tr>
-
-            <!-- ROW 3 -->
-            <tr class="pet-row border-b hover:bg-gray-50" data-jenis="anjing" data-status="dalam_penitipan">
-              <td class="p-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-xl">🐶</div>
-                  <div>
-                    <p class="font-medium">Leo</p>
-                    <p class="text-xs text-gray-500">Beagle</p>
-                  </div>
-                </div>
-              </td>
-              <td class="p-4 font-medium">Heru Wasesa</td>
-              <td class="p-4">Jantan, 1 thn, 12kg</td>
-              <td class="p-4">05 Feb 2025</td>
-              <td class="p-4">8 kali</td>
-              <td class="p-4">
-                <div class="flex items-center gap-2">
-                  <button class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">Lihat</button>
-                  <button class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">Edit</button>
-                </div>
-              </td>
-            </tr>
-
-            <!-- ROW 4 -->
-            <tr class="pet-row border-b hover:bg-gray-50" data-jenis="kucing" data-status="di_rumah">
-              <td class="p-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-xl">🐱</div>
-                  <div>
-                    <p class="font-medium">Coco</p>
-                    <p class="text-xs text-gray-500">Siberian</p>
-                  </div>
-                </div>
-              </td>
-              <td class="p-4 font-medium">Mega Lestari</td>
-              <td class="p-4">Betina, 5 thn, 5kg</td>
-              <td class="p-4">11 Nov 2024</td>
-              <td class="p-4">12 kali</td>
-              <td class="p-4">
-                <div class="flex items-center gap-2">
-                  <button class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">Lihat</button>
-                  <button class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">Edit</button>
-                </div>
-              </td>
-            </tr>
-
-            <!-- ROW 5 -->
-            <tr class="pet-row border-b hover:bg-gray-50" data-jenis="anjing" data-status="dalam_penitipan">
-              <td class="p-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-xl">🐶</div>
-                  <div>
-                    <p class="font-medium">Max</p>
-                    <p class="text-xs text-gray-500">Labrador</p>
-                  </div>
-                </div>
-              </td>
-              <td class="p-4 font-medium">Andi Pratama</td>
-              <td class="p-4">Jantan, 4 thn, 30kg</td>
-              <td class="p-4">10 Apr 2025</td>
-              <td class="p-4">3 kali</td>
-              <td class="p-4">
-                <div class="flex items-center gap-2">
-                  <button class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">Lihat</button>
-                  <button class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">Edit</button>
-                </div>
-              </td>
-            </tr>
-
-            <!-- ROW 6 -->
-            <tr class="pet-row border-b hover:bg-gray-50" data-jenis="kucing" data-status="di_rumah">
-              <td class="p-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-xl">🐱</div>
-                  <div>
-                    <p class="font-medium">Luna</p>
-                    <p class="text-xs text-gray-500">Maine Coon</p>
-                  </div>
-                </div>
-              </td>
-              <td class="p-4 font-medium">Dewi Sartika</td>
-              <td class="p-4">Betina, 2 thn, 6kg</td>
-              <td class="p-4">25 Jun 2025</td>
-              <td class="p-4">1 kali</td>
-              <td class="p-4">
-                <div class="flex items-center gap-2">
-                  <button class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">Lihat</button>
-                  <button class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">Edit</button>
-                </div>
-              </td>
-            </tr>
-
-            <!-- ROW 7 -->
-            <tr class="pet-row border-b hover:bg-gray-50" data-jenis="anjing" data-status="dalam_penitipan">
-              <td class="p-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-xl">🐶</div>
-                  <div>
-                    <p class="font-medium">Rocky</p>
-                    <p class="text-xs text-gray-500">Bulldog</p>
-                  </div>
-                </div>
-              </td>
-              <td class="p-4 font-medium">Budi Santoso</td>
-              <td class="p-4">Jantan, 3 thn, 22kg</td>
-              <td class="p-4">18 Aug 2025</td>
-              <td class="p-4">6 kali</td>
-              <td class="p-4">
-                <div class="flex items-center gap-2">
-                  <button class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">Lihat</button>
-                  <button class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">Edit</button>
-                </div>
-              </td>
-            </tr>
-
-            <!-- ROW 8 -->
-            <tr class="pet-row border-b hover:bg-gray-50" data-jenis="kucing" data-status="di_rumah">
-              <td class="p-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-xl">🐱</div>
-                  <div>
-                    <p class="font-medium">Bella</p>
-                    <p class="text-xs text-gray-500">British Shorthair</p>
-                  </div>
-                </div>
-              </td>
-              <td class="p-4 font-medium">Rina Wijaya</td>
-              <td class="p-4">Betina, 1 thn, 3kg</td>
-              <td class="p-4">05 Sep 2025</td>
-              <td class="p-4">4 kali</td>
-              <td class="p-4">
-                <div class="flex items-center gap-2">
-                  <button class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">Lihat</button>
-                  <button class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">Edit</button>
-                </div>
-              </td>
-            </tr>
+            <!-- Data hewan akan muncul di sini -->
           </tbody>
         </table>
 

@@ -28,7 +28,7 @@
     </div>
     <div class="bg-white p-6 rounded-lg shadow-md">
       <h3 class="text-lg font-semibold text-gray-600">Total Pemesanan</h3>
-      <p class="text-3xl font-bold mt-2">45</p>
+      <p class="text-3xl font-bold mt-2">0</p>
     </div>
   </div>
 
@@ -89,7 +89,7 @@
             <td class="p-4 font-medium">Paket Basic</td>
             <td class="p-4">Penitipan standar dengan fasilitas dasar</td>
             <td class="p-4">Rp 150.000</td>
-            <td class="p-4 text-center">25</td>
+            <td class="p-4 text-center">0</td>
             <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
             <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
           </tr>
@@ -98,7 +98,7 @@
             <td class="p-4 font-medium">Paket Premium</td>
             <td class="p-4">Penitipan premium dengan fasilitas lengkap dan grooming</td>
             <td class="p-4">Rp 250.000</td>
-            <td class="p-4 text-center">15</td>
+            <td class="p-4 text-center">0</td>
             <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
             <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
           </tr>
@@ -107,7 +107,7 @@
             <td class="p-4 font-medium">Paket Deluxe</td>
             <td class="p-4">Penitipan mewah dengan layanan eksklusif dan spa</td>
             <td class="p-4">Rp 350.000</td>
-            <td class="p-4 text-center">5</td>
+            <td class="p-4 text-center">0</td>
             <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-gray-700 bg-gray-100 rounded-full">Non-Aktif</span></td>
             <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
           </tr>
@@ -117,7 +117,7 @@
             <td class="p-4 font-medium">Grooming Premium</td>
             <td class="p-4">Spa lengkap, potong kuku, bersih telinga, aromaterapi</td>
             <td class="p-4">Rp 150.000</td>
-            <td class="p-4 text-center">30</td>
+            <td class="p-4 text-center">0</td>
             <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
             <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
           </tr>
@@ -126,7 +126,7 @@
             <td class="p-4 font-medium">Kolam Renang</td>
             <td class="p-4">Layanan berenang bagi anabul</td>
             <td class="p-4">Rp 100.000</td>
-            <td class="p-4 text-center">22</td>
+            <td class="p-4 text-center">0</td>
             <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
             <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
           </tr>
@@ -135,7 +135,7 @@
             <td class="p-4 font-medium">Pick-up & Delivery</td>
             <td class="p-4">Layanan antar jemput dalam radius 10km</td>
             <td class="p-4">Rp 100.000</td>
-            <td class="p-4 text-center">18</td>
+            <td class="p-4 text-center">0</td>
             <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
             <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
           </tr>
@@ -144,7 +144,7 @@
             <td class="p-4 font-medium">Enrichment Extra</td>
             <td class="p-4">Sesi stimulasi 15–20 menit (puzzle feeder, lick mat, sniffing)</td>
             <td class="p-4">Rp 45.000</td>
-            <td class="p-4 text-center">12</td>
+            <td class="p-4 text-center">0</td>
             <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
             <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
           </tr>

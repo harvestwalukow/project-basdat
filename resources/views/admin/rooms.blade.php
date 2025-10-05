@@ -20,11 +20,11 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-6">
     <div class="bg-white p-6 rounded-lg shadow-md">
       <h3 class="text-lg font-semibold text-gray-600">Kondisi Sehat</h3>
-      <p class="text-3xl font-bold mt-2">12</p>
+      <p class="text-3xl font-bold mt-2">0</p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow-md">
       <h3 class="text-lg font-semibold text-gray-600">Perlu Perhatian</h3>
-      <p class="text-3xl font-bold mt-2">3</p>
+      <p class="text-3xl font-bold mt-2">0</p>
     </div>
   </div>
 
@@ -86,110 +86,7 @@
             </tr>
           </thead>
           <tbody id="tableBody">
-            <tr class="update-row border-b hover:bg-gray-50"
-                data-status="aktif"
-                data-staff="staff_a"
-                data-kondisi="sehat"
-                data-date="2025-09-28">
-              <td class="p-4 font-mono text-sm">UK-001</td>
-              <td class="p-4 font-mono text-sm">PT-001</td>
-              <td class="p-4 font-medium">Buddy (Anjing)</td>
-              <td class="p-4">Staff A</td>
-              <td class="p-4"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Sehat</span></td>
-              <td class="p-4 text-sm">Makan normal, bermain aktif</td>
-              <td class="p-4">28 Sep 2025 14:30</td>
-            </tr>
-            <tr class="update-row border-b hover:bg-gray-50"
-                data-status="aktif"
-                data-staff="staff_b"
-                data-kondisi="perlu_perhatian"
-                data-date="2025-09-28">
-              <td class="p-4 font-mono text-sm">UK-002</td>
-              <td class="p-4 font-mono text-sm">PT-002</td>
-              <td class="p-4 font-medium">Milo (Kucing)</td>
-              <td class="p-4">Staff B</td>
-              <td class="p-4"><span class="px-2 py-1 text-xs font-semibold text-yellow-700 bg-yellow-100 rounded-full">Perlu Perhatian</span></td>
-              <td class="p-4 text-sm">Kurang nafsu makan</td>
-              <td class="p-4">28 Sep 2025 15:45</td>
-            </tr>
-            <tr class="update-row border-b hover:bg-gray-50"
-                data-status="aktif"
-                data-staff="staff_a"
-                data-kondisi="sehat"
-                data-date="2025-09-28">
-              <td class="p-4 font-mono text-sm">UK-003</td>
-              <td class="p-4 font-mono text-sm">PT-003</td>
-              <td class="p-4 font-medium">Leo (Anjing)</td>
-              <td class="p-4">Staff A</td>
-              <td class="p-4"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Sehat</span></td>
-              <td class="p-4 text-sm">Tidur nyenyak, kondisi baik</td>
-              <td class="p-4">28 Sep 2025 16:20</td>
-            </tr>
-            <tr class="update-row border-b hover:bg-gray-50"
-                data-status="aktif"
-                data-staff="staff_b"
-                data-kondisi="sehat"
-                data-date="2025-09-27">
-              <td class="p-4 font-mono text-sm">UK-004</td>
-              <td class="p-4 font-mono text-sm">PT-004</td>
-              <td class="p-4 font-medium">Coco (Kucing)</td>
-              <td class="p-4">Staff B</td>
-              <td class="p-4"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Sehat</span></td>
-              <td class="p-4 text-sm">Kondisi prima, sangat aktif</td>
-              <td class="p-4">27 Sep 2025 18:15</td>
-            </tr>
-            <tr class="update-row border-b hover:bg-gray-50"
-                data-status="selesai"
-                data-staff="staff_a"
-                data-kondisi="sehat"
-                data-date="2025-09-26">
-              <td class="p-4 font-mono text-sm">UK-005</td>
-              <td class="p-4 font-mono text-sm">PT-005</td>
-              <td class="p-4 font-medium">Max (Anjing)</td>
-              <td class="p-4">Staff A</td>
-              <td class="p-4"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Sehat</span></td>
-              <td class="p-4 text-sm">Siap dipulangkan ke pemilik</td>
-              <td class="p-4">26 Sep 2025 10:00</td>
-            </tr>
-            <tr class="update-row border-b hover:bg-gray-50"
-                data-status="aktif"
-                data-staff="staff_a"
-                data-kondisi="sehat"
-                data-date="2025-09-26">
-              <td class="p-4 font-mono text-sm">UK-006</td>
-              <td class="p-4 font-mono text-sm">PT-006</td>
-              <td class="p-4 font-medium">Luna (Kucing)</td>
-              <td class="p-4">Staff A</td>
-              <td class="p-4"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Sehat</span></td>
-              <td class="p-4 text-sm">Makan lahap, bermain ceria</td>
-              <td class="p-4">26 Sep 2025 09:15</td>
-            </tr>
-            <tr class="update-row border-b hover:bg-gray-50"
-                data-status="aktif"
-                data-staff="staff_b"
-                data-kondisi="perlu_perhatian"
-                data-date="2025-09-25">
-              <td class="p-4 font-mono text-sm">UK-007</td>
-              <td class="p-4 font-mono text-sm">PT-007</td>
-              <td class="p-4 font-medium">Rocky (Anjing)</td>
-              <td class="p-4">Staff B</td>
-              <td class="p-4"><span class="px-2 py-1 text-xs font-semibold text-yellow-700 bg-yellow-100 rounded-full">Perlu Perhatian</span></td>
-              <td class="p-4 text-sm">Sedikit lemas, perlu observasi</td>
-              <td class="p-4">25 Sep 2025 17:30</td>
-            </tr>
-            <tr class="update-row border-b hover:bg-gray-50"
-                data-status="aktif"
-                data-staff="staff_a"
-                data-kondisi="sehat"
-                data-date="2025-09-25">
-              <td class="p-4 font-mono text-sm">UK-008</td>
-              <td class="p-4 font-mono text-sm">PT-008</td>
-              <td class="p-4 font-medium">Bella (Kucing)</td>
-              <td class="p-4">Staff A</td>
-              <td class="p-4"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Sehat</span></td>
-              <td class="p-4 text-sm">Grooming selesai, bersih dan wangi</td>
-              <td class="p-4">25 Sep 2025 14:00</td>
-            </tr>
+            <!-- Data update kondisi akan muncul di sini -->
           </tbody>
         </table>
 
