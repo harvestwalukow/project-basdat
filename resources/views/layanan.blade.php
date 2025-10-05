@@ -36,7 +36,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <div class="text-center mb-16">
-        <h2 class="text-3xl font-bold mb-4">Paket Layanan Paws Hotel</h2>
+        <h2 class="text-3xl font-bold mb-4">Paket Layanan PawsHotel</h2>
         <p class="text-gray-600 max-w-2xl mx-auto">
           Pilih paket yang sesuai dengan kebutuhan hewan kesayangan Anda.
           Semua paket dilengkapi dengan perawatan profesional dan kasih sayang tulus.
@@ -47,10 +47,9 @@
 
         <!-- Basic -->
         <div
-          class="bg-white rounded-lg shadow-lg p-8 w-full lg:w-1/3 flex flex-col
-                 ring-0 ring-transparent transition-all duration-300 ease-out
-                 hover:-translate-y-1 hover:ring-2 hover:ring-[#F2784B] hover:ring-offset-2 hover:ring-offset-[#FEFBF7]
-                 hover:shadow-[0_20px_50px_-10px_rgba(242,120,75,0.35)]">
+          class="bg-white rounded-lg shadow-lg p-8 w-full lg:w-1/3 border-2 border-[#F2784B] flex flex-col
+                 transition-all duration-300 ease-out
+                 hover:-translate-y-1 hover:shadow-[0_20px_50px_-10px_rgba(242,120,75,0.45)]">
           <h3 class="text-2xl font-bold mb-2">Basic</h3>
           <p class="text-[#F2784B] font-bold mb-4">Rp 150.000</p>
           <ul class="text-left space-y-2 text-gray-600 mb-8 flex-grow">
@@ -69,7 +68,7 @@
           class="bg-white rounded-lg shadow-lg p-8 w-full lg:w-1/3 border-2 border-[#F2784B] flex flex-col
                  transition-all duration-300 ease-out
                  hover:-translate-y-1 hover:shadow-[0_20px_50px_-10px_rgba(242,120,75,0.45)]">
-          <h3 class="text-2xl font-bold mb-2 text-[#F2784B]">Premium</h3>
+          <h3 class="text-2xl font-bold mb-2">Premium</h3>
           <p class="text-[#F2784B] font-bold mb-4">Rp 250.000</p>
           <ul class="text-left space-y-2 text-gray-600 mb-8 flex-grow">
             <li class="flex items-center">Kamar Ber-AC</li>
