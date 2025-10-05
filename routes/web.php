@@ -102,14 +102,18 @@ Route::middleware('admin')->group(function () {
 // Protected Routes - Owner
 Route::middleware('owner')->prefix('owner')->name('owner.')->group(function () {
     Route::get('/', function () { return view('owner.dashboard'); })->name('dashboard');
-    Route::get('/owner/reservations/{tab?}', [OwnerReservationController::class, 'index'])
-    ->name('owner.reservations');
+
+    // BENAR → jangan ada "owner/" lagi di sini
+    Route::get('/reservations/{tab?}', [OwnerReservationController::class, 'index'])
+        ->name('reservations');
+    
     Route::get('/finance', function () { return view('owner.finance'); })->name('finance');
     Route::get('/pets', function () { return view('owner.pets'); })->name('pets');
     Route::get('/services', function () { return view('owner.services'); })->name('services');
     Route::get('/staff', function () { return view('owner.staff'); })->name('staff');
     Route::get('/reports', function () { return view('owner.reports'); })->name('reports');
 });
+
 
 
 // Protected Routes - User (Pelanggan)
