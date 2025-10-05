@@ -51,7 +51,7 @@
   <!-- Transaksi Terbaru -->
   <div class="p-4 border rounded-lg shadow">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-lg font-bold">Transaksi Terbaru</h2>
+      <h2 class="text-lg font-bold">Transaksi</h2>
       <div class="flex gap-2">
         <select class="border rounded-md px-2 py-1 text-sm">
           <option>Semua</option>
