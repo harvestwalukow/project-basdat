@@ -12,9 +12,7 @@
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-8">
       <h1 class="text-4xl mb-4 font-bold text-gray-800">Form Reservasi</h1>
-      <p class="text-gray-700">
-        Isi form di bawah untuk melakukan reservasi hotel hewan
-      </p>
+      <p class="text-gray-700">Isi form di bawah untuk melakukan reservasi hotel hewan</p>
     </div>
 
     <form action="{{ route('reservasi.submit') }}" method="POST" class="space-y-8">
@@ -96,42 +94,55 @@
             </select>
           </div>
 
-          <!-- Layanan Tambahan (Vertikal) -->
+          <!-- Layanan Tambahan -->
           <div>
             <label class="block font-medium mb-2">Layanan Tambahan (Opsional)</label>
             <div class="flex flex-col space-y-2">
-              <label class="flex items-center space-x-2">
-                <input type="checkbox" name="additionalServices" value="Grooming Premium" data-harga="150000" class="w-5 h-5">
+              <div class="flex items-center justify-between space-x-2">
                 <span>Grooming Premium (+Rp 150.000)</span>
-              </label>
-              <label class="flex items-center space-x-2">
-                <input type="checkbox" name="additionalServices" value="Pick-up & Delivery" data-harga="100000" class="w-5 h-5">
+                <div class="flex items-center space-x-2">
+                  <button type="button" class="decrement bg-gray-200 px-2 rounded">-</button>
+                  <input type="number" value="0" min="0" class="jumlah w-12 text-center border rounded" data-harga="150000">
+                  <button type="button" class="increment bg-gray-200 px-2 rounded">+</button>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between space-x-2">
                 <span>Pick-up & Delivery (+Rp 100.000)</span>
-              </label>
-              <label class="flex items-center space-x-2">
-                <input type="checkbox" name="additionalServices" value="Kolam Renang" data-harga="100000" class="w-5 h-5">
+                <div class="flex items-center space-x-2">
+                  <button type="button" class="decrement bg-gray-200 px-2 rounded">-</button>
+                  <input type="number" value="0" min="0" class="jumlah w-12 text-center border rounded" data-harga="100000">
+                  <button type="button" class="increment bg-gray-200 px-2 rounded">+</button>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between space-x-2">
                 <span>Kolam Renang (+Rp 100.000)</span>
-              </label>
-              <label class="flex items-center space-x-2">
-                <input type="checkbox" name="additionalServices" value="Boarding" data-harga="200000" class="w-5 h-5">
+                <div class="flex items-center space-x-2">
+                  <button type="button" class="decrement bg-gray-200 px-2 rounded">-</button>
+                  <input type="number" value="0" min="0" class="jumlah w-12 text-center border rounded" data-harga="100000">
+                  <button type="button" class="increment bg-gray-200 px-2 rounded">+</button>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between space-x-2">
                 <span>Boarding (+Rp 200.000)</span>
-              </label>
+                <div class="flex items-center space-x-2">
+                  <button type="button" class="decrement bg-gray-200 px-2 rounded">-</button>
+                  <input type="number" value="0" min="0" class="jumlah w-12 text-center border rounded" data-harga="200000">
+                  <button type="button" class="increment bg-gray-200 px-2 rounded">+</button>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Permintaan Khusus -->
           <div class="form-group">
             <label for="specialRequests">Permintaan Khusus</label>
-            <textarea 
-              id="specialRequests"
-              name="specialRequests"
+            <textarea id="specialRequests" name="specialRequests"
               placeholder="Catatan khusus untuk perawatan hewan (alergi, obat, dll)"
-              rows="3"
-              class="w-full p-2 rounded border border-gray-300 bg-gray-50"
-            ></textarea>
+              rows="3" class="w-full p-2 rounded border border-gray-300 bg-gray-50"></textarea>
           </div>
 
-          <!-- Tanggal -->
           <div class="grid md:grid-cols-2 gap-4">
             <div>
               <label for="checkInDate" class="block text-sm font-medium text-gray-700">Tanggal Check-in *</label>
@@ -145,77 +156,76 @@
         </div>
       </div>
 
-      <!-- Ringkasan Biaya -->
       <div id="ringkasanBiaya" class="bg-white shadow-md rounded-lg border border-yellow-200 p-4"></div>
 
-      <!-- Submit Navbar -->
       <div class="flex justify-end space-x-4 mt-6 border-t pt-4">
-        <!-- 🔹 Tombol kembali dengan konfirmasi -->
-        <button 
-          type="button" 
-          class="px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100"
-          onclick="konfirmasiKembali()">
-          Kembali
-        </button>
-
-        <button 
-          type="submit" 
-          class="px-4 py-2 rounded bg-[#F2784B] hover:bg-[#e0673d] text-white">
-          Lanjut ke Pembayaran
-        </button>
+        <button type="button" class="px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100" onclick="konfirmasiKembali()">Kembali</button>
+        <button type="submit" class="px-4 py-2 rounded bg-[#F2784B] hover:bg-[#e0673d] text-white">Lanjut ke Pembayaran</button>
       </div>
     </form>
   </div>
 
-  <!-- Script Konfirmasi -->
   <script>
     function konfirmasiKembali() {
       if (confirm('Yakin mau kembali? Data reservasi yang sudah diisi bisa hilang.')) {
-        window.location.href = '/'; // arahkan ke halaman tujuan
+        window.location.href = '/';
       }
     }
-  </script>
 
-  <!-- Script untuk Ringkasan Biaya -->
-  <script>
     const packageSelect = document.getElementById('packageType');
-    const serviceCheckboxes = document.querySelectorAll('input[name="additionalServices"]');
     const ringkasan = document.getElementById('ringkasanBiaya');
+    const checkInDateInput = document.getElementById('checkInDate');
+    const checkOutDateInput = document.getElementById('checkOutDate');
+    const jumlahInputs = document.querySelectorAll('.jumlah');
+    const incrementBtns = document.querySelectorAll('.increment');
+    const decrementBtns = document.querySelectorAll('.decrement');
+
+    function hitungSelisihHari(checkIn, checkOut) {
+      const tglMasuk = new Date(checkIn);
+      const tglKeluar = new Date(checkOut);
+      const selisih = (tglKeluar - tglMasuk) / (1000 * 60 * 60 * 24);
+      return selisih >= 1 ? selisih : 1;
+    }
 
     function updateRingkasan() {
       let total = 0;
       let html = `<h3 class="text-lg font-semibold mb-2">Ringkasan Biaya</h3>`;
+      const checkIn = checkInDateInput.value;
+      const checkOut = checkOutDateInput.value;
+      const jumlahHari = (checkIn && checkOut) ? hitungSelisihHari(checkIn, checkOut) : 1;
 
-      // Paket utama
+      // Paket utama (dikalikan hari)
       if (packageSelect.value) {
         const selectedOption = packageSelect.options[packageSelect.selectedIndex];
         const harga = parseInt(selectedOption.dataset.harga);
-        total += harga;
-        html += `
-          <div class="flex justify-between mb-1">
-            <span>${selectedOption.text}</span>
-            <span>Rp ${harga.toLocaleString('id-ID')}</span>
-          </div>
-        `;
+        const subtotal = harga * jumlahHari;
+        total += subtotal;
+        html += `<div class="flex justify-between mb-1">
+          <span>${selectedOption.text} (x${jumlahHari} hari)</span>
+          <span>Rp ${subtotal.toLocaleString('id-ID')}</span>
+        </div>`;
       }
 
-      // Layanan tambahan
-      serviceCheckboxes.forEach(cb => {
-        if (cb.checked) {
-          const harga = parseInt(cb.dataset.harga);
-          total += harga;
-          html += `
-            <div class="flex justify-between mb-1">
-              <span>${cb.value}</span>
-              <span>Rp ${harga.toLocaleString('id-ID')}</span>
-            </div>
-          `;
+      // Add-on (tidak dikalikan hari)
+      jumlahInputs.forEach(input => {
+        const jumlah = parseInt(input.value);
+        const harga = parseInt(input.dataset.harga);
+        if (jumlah > 0) {
+          const subtotal = harga * jumlah;
+          total += subtotal;
+          html += `<div class="flex justify-between mb-1">
+            <span>${input.closest('div.flex.justify-between').querySelector('span').textContent} (x${jumlah})</span>
+            <span>Rp ${subtotal.toLocaleString('id-ID')}</span>
+          </div>`;
         }
       });
 
-      // Divider + Total
       if (total > 0) {
         html += `<hr class="my-2">
+          <div class="flex justify-between text-sm text-gray-500 mb-1">
+            <span>Lama Menginap</span>
+            <span>${jumlahHari} hari</span>
+          </div>
           <div class="flex justify-between font-bold text-lg">
             <span>Total</span>
             <span>Rp ${total.toLocaleString('id-ID')}</span>
@@ -225,27 +235,35 @@
       ringkasan.innerHTML = html;
     }
 
+    incrementBtns.forEach((btn, i) => {
+      btn.addEventListener('click', () => {
+        jumlahInputs[i].value = parseInt(jumlahInputs[i].value) + 1;
+        updateRingkasan();
+      });
+    });
+
+    decrementBtns.forEach((btn, i) => {
+      btn.addEventListener('click', () => {
+        const val = parseInt(jumlahInputs[i].value);
+        if (val > 0) jumlahInputs[i].value = val - 1;
+        updateRingkasan();
+      });
+    });
+
+    jumlahInputs.forEach(input => input.addEventListener('change', updateRingkasan));
     packageSelect.addEventListener('change', updateRingkasan);
-    serviceCheckboxes.forEach(cb => cb.addEventListener('change', updateRingkasan));
-  </script>
+    checkInDateInput.addEventListener('change', updateRingkasan);
+    checkOutDateInput.addEventListener('change', updateRingkasan);
 
-  <!-- Script untuk validasi tanggal -->
-  <script>
-    const checkInDateInput = document.getElementById('checkInDate');
-    const checkOutDateInput = document.getElementById('checkOutDate');
-
-    // Set tanggal minimal untuk check-in adalah hari ini
     const today = new Date().toISOString().split('T')[0];
     checkInDateInput.setAttribute('min', today);
 
     checkInDateInput.addEventListener('change', function () {
-      // Set tanggal minimal untuk check-out adalah tanggal check-in
       checkOutDateInput.min = this.value;
-      
-      // Jika tanggal check-out yang sudah dipilih lebih awal, reset
       if (checkOutDateInput.value < this.value) {
         checkOutDateInput.value = '';
       }
+      updateRingkasan();
     });
   </script>
 </body>
