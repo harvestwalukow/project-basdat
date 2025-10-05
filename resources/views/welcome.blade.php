@@ -52,11 +52,11 @@
           Rumah Hangat <br> untuk Sahabat Berbulu 🐾
         </h1>
         <p class="text-lg text-gray-700">
-          Tempat penitipan hewan dengan kamar nyaman, area bermain seru, dan update harian yang bikin tenang.
+          Tempat penitipan khusus anjing dan kucing dengan kamar nyaman, area bermain seru, dan update harian yang bikin tenang.
         </p>
         <div class="flex gap-4">
           <a href="{{ url('/reservasi') }}" class="px-6 py-3 rounded-full bg-orange-400 text-white font-semibold shadow hover:bg-orange-500">
-            Daftar Sekarang
+            Reservasi Sekarang
           </a>
           <a href="#fasilitas" class="px-6 py-3 rounded-full border border-orange-400 text-orange-500 font-semibold hover:bg-orange-50">
             Lihat Fasilitas →
@@ -69,6 +69,27 @@
       </div>
     </div>
   </section>
+
+<!-- SYARAT & KETENTUAN -->
+<section id="syarat" class="relative py-16 bg-[#FEFBF7] border-t border-orange-100">
+  <div class="max-w-6xl mx-auto px-6 text-center">
+    <h2 class="text-4xl font-bold text-gray-800 mb-6">Syarat & Ketentuan Penitipan</h2>
+    <p class="text-gray-600 mb-10 max-w-3xl mx-auto">
+      Sebelum menitipkan anjing atau kucing kesayanganmu, pastikan kamu sudah membaca dan menyetujui ketentuan berikut ya 🐾
+    </p>
+    <div class="text-left bg-white shadow-md rounded-2xl p-8 max-w-4xl mx-auto space-y-4 text-gray-700">
+      <ul class="list-disc list-inside space-y-3">
+        <li>🐶 <strong>Hanya menerima anjing dan kucing</strong> dengan kondisi sehat (tidak sakit menular atau luka terbuka).</li>
+        <li>💉 Hewan wajib sudah <strong>vaksin lengkap</strong> (bukti kartu vaksin ditunjukkan saat check-in).</li>
+        <li>🧴 Disarankan membawa <strong>makanan, obat rutin, atau perlengkapan pribadi</strong> agar hewan tetap nyaman.</li>
+        <li>🕓 Waktu check-in & check-out maksimal pukul <strong>10.00–20.00 WIB</strong>.</li>
+        <li>📸 Pihak PawsHotel akan mengirimkan <strong>update foto/video harian</strong> sesuai paket yang dipilih.</li>
+        <li>💰 Pembatalan mendadak (<24 jam sebelum jadwal) akan dikenakan <strong>biaya 50%</strong> dari total reservasi.</li>
+        <li>⚠️ Pihak PawsHotel tidak bertanggung jawab atas kondisi bawaan atau penyakit yang tidak diinformasikan sebelumnya.</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
 <!-- FASILITAS -->
 <section id="fasilitas" class="relative py-20 bg-[#FFF7F2]">
