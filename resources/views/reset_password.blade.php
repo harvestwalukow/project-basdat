@@ -1,12 +1,12 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>Reset Password - PawsHotel</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-blue-50 min-h-screen flex items-center justify-center p-4">
-  <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+@extends('layouts.app')
+
+@section('title', 'Reset Password - PawsHotel')
+
+@section('body-class', 'bg-blue-50 min-h-screen')
+
+@section('content')
+  <div class="flex items-center justify-center p-4 py-16">
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
     <h1 class="text-2xl font-semibold text-center mb-6">Reset Password</h1>
 
     <!-- Pesan sukses atau error -->
@@ -46,5 +46,5 @@
       </p>
     </form>
   </div>
-</body>
-</html>
+  </div>
+@endsection

@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign In - PawsHotel</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex items-center justify-center p-4">
+@extends('layouts.app')
 
+@section('title', 'Sign In - PawsHotel')
 
-  <div class="w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center">
+@section('body-class', 'min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50')
+
+@section('content')
+  <div class="flex items-center justify-center p-4 py-16">
+    <div class="w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center">
     
     <!-- Gambar Kiri -->
     <div class="hidden lg:block">
@@ -119,7 +116,6 @@
       </div>
     </div>
   </div>
-
-</body>
-</html>
+  </div>
+@endsection
 

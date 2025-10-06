@@ -1,35 +1,10 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tentang Kami</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-cover bg-center bg-fixed text-[#333333] antialiased"
-      style="background-image: url('/img/backround.png');">
+@extends('layouts.app')
 
-  <!-- NAVBAR -->
-  <header class="sticky top-0 z-50 bg-[#FEFBF7]/90 backdrop-blur border-b border-orange-100/60">
-    <div class="max-w-7xl mx-auto px-6 py-4 grid grid-cols-12 items-center gap-4">
-      <a href="{{ url('/') }}" class="col-span-6 md:col-span-3 text-2xl font-extrabold text-[#F2784B]">
-        PawsHotel
-      </a>
-      <nav class="hidden md:flex col-span-6 md:col-span-6 justify-center gap-8 font-medium">
-        <a href="{{ url('/') }}" class="hover:text-[#F2784B]">Beranda</a>
-        <a href="{{ url('/layanan') }}" class="hover:text-[#F2784B]">Layanan</a>
-        <a href="{{ url('/about') }}" class="hover:text-[#F2784B]">Tentang Kami</a>
-        <a href="{{ url('/kontak') }}" class="hover:text-[#F2784B]">Kontak</a>
-      </nav>
-      <div class="col-span-6 md:col-span-3 flex justify-end">
-        <a href="{{ url('/reservasi') }}"
-           class="inline-block rounded-xl bg-[#F2784B] px-5 py-2.5 text-white font-semibold hover:bg-[#e0673d]">
-          Reservasi Sekarang
-        </a>
-      </div>
-    </div>
-  </header>
+@section('title', 'Tentang Kami - PawsHotel')
 
+@section('body-style', 'style="background-image: url(\'/img/backround.png\');"')
+
+@section('content')
     <!-- Hero Section -->
     <div class="text-center py-16 max-w-4xl mx-auto">
         <h1 class="text-4xl font-bold mb-6">Tentang PawsHotel</h1>
@@ -130,6 +105,4 @@
             <div><div class="text-4xl font-bold">98%</div><p>Kepuasan Pelanggan</p></div>
         </div>
     </div>
-
-</body>
-</html>
+@endsection

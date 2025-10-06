@@ -1,35 +1,11 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hubungi Kami | PetHotel</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-cover bg-center bg-fixed text-[#333333] antialiased"
-      style="background-image: url('/img/backround.png');">
+@extends('layouts.app')
 
-  <!-- NAVBAR -->
-  <header class="sticky top-0 z-50 bg-[#FEFBF7]/90 backdrop-blur border-b border-orange-100/60">
-    <div class="max-w-7xl mx-auto px-6 py-4 grid grid-cols-12 items-center gap-4">
-      <a href="{{ url('/') }}" class="col-span-6 md:col-span-3 text-2xl font-extrabold text-[#F2784B]">
-        PawsHotel
-      </a>
-      <nav class="hidden md:flex col-span-6 md:col-span-6 justify-center gap-8 font-medium">
-        <a href="{{ url('/') }}" class="hover:text-[#F2784B]">Beranda</a>
-        <a href="{{ url('/layanan') }}" class="hover:text-[#F2784B]">Layanan</a>
-        <a href="{{ url('/about') }}" class="hover:text-[#F2784B]">Tentang Kami</a>
-        <a href="{{ url('/kontak') }}" class="hover:text-[#F2784B]">Kontak</a>
-      </nav>
-      <div class="col-span-6 md:col-span-3 flex justify-end">
-        <a href="{{ url('/reservasi') }}"
-           class="inline-block rounded-xl bg-[#F2784B] px-5 py-2.5 text-white font-semibold hover:bg-[#e0673d]">
-          Reservasi Sekarang
-        </a>
-      </div>
-    </div>
-  </header>
+@section('title', 'Hubungi Kami | PawsHotel')
 
+@section('body-style', 'style="background-image: url(\'/img/backround.png\');"')
+
+@section('content')
+  <div class="max-w-6xl mx-auto px-6 py-16">
     <!-- Header -->
     <div class="text-center mb-16">
       <h1 class="text-4xl font-bold mb-6">Hubungi Kami</h1>
@@ -218,33 +194,5 @@
         </div>
       </div>
     </div>
-
   </div>
-  <!-- FOOTER -->
-  <footer id="kontak" class="bg-[#333] text-white py-10">
-    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
-      <div>
-        <h3 class="text-xl font-bold mb-3">PawsHotel</h3>
-        <p class="text-gray-300">Penitipan hewan terpercaya dengan fasilitas lengkap dan staf berpengalaman.</p>
-      </div>
-      <div>
-        <h4 class="font-semibold mb-2">Kontak</h4>
-        <p>Email: info@pawshotel.com</p>
-        <p>Telp: +62 812-3456-7890</p>
-        <p>Alamat: Surabaya, Indonesia</p>
-      </div>
-      <div>
-        <h4 class="font-semibold mb-2">Ikuti Kami</h4>
-        <div class="flex gap-4">
-          <a href="#" class="hover:text-orange-400">Facebook</a>
-          <a href="#" class="hover:text-orange-400">Instagram</a>
-          <a href="#" class="hover:text-orange-400">Twitter</a>
-        </div>
-      </div>
-    </div>
-    <p class="text-center text-gray-400 mt-6">© 2025 PawsHotel. All rights reserved.</p>
-  </footer>
-
-
-</body>
-</html>
+@endsection

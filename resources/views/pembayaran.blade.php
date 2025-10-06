@@ -1,16 +1,16 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pembayaran Reservasi</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+@extends('layouts.app')
+
+@section('title', 'Pembayaran Reservasi - PawsHotel')
+
+@section('body-class', 'bg-[#FEFBF7] text-[#333333]')
+
+@push('styles')
   <!-- SweetAlert2 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-<body class="bg-[#FEFBF7] text-[#333333]">
+@endpush
 
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+@section('content')
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <div class="bg-white shadow-lg rounded-lg p-6 border border-yellow-200">
       <h1 class="text-3xl font-bold mb-4 text-center text-gray-800">Detail Reservasi</h1>
       <p class="text-center text-gray-600 mb-6">Silakan cek kembali data reservasi sebelum melakukan pembayaran</p>
@@ -99,7 +99,7 @@
     </div>
   </div>
 
-  <!-- Script Popup -->
+@push('scripts')
   <script>
     document.getElementById('btnBayar').addEventListener('click', function() {
       let metode = document.querySelector('input[name="metode_pembayaran"]:checked');
@@ -129,6 +129,5 @@
       });
     });
   </script>
-
-</body>
-</html>
+@endpush
+@endsection

@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Form Reservasi</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-cover bg-center bg-fixed text-[#333333] antialiased"
-      style="background-image: url('/img/backround.png');">
+@extends('layouts.app')
 
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+@section('title', 'Form Reservasi - PawsHotel')
+
+@section('body-style', 'style="background-image: url(\'/img/backround.png\');"')
+
+@section('content')
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="text-center mb-8">
       <h1 class="text-4xl mb-4 font-bold text-gray-800">Form Reservasi</h1>
       <p class="text-gray-700">Isi form di bawah untuk melakukan reservasi hotel hewan</p>
@@ -190,6 +186,7 @@
     </form>
   </div>
 
+@push('scripts')
   <script>
     function konfirmasiKembali() {
       if (confirm('Yakin mau kembali? Data reservasi yang sudah diisi bisa hilang.')) {
@@ -300,5 +297,5 @@
       updateRingkasan();
     });
   </script>
-</body>
-</html>
+@endpush
+@endsection

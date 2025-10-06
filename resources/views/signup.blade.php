@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up - PawsHotel</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex items-center justify-center p-4">
+@extends('layouts.app')
 
-  <div class="w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center">
+@section('title', 'Sign Up - PawsHotel')
+
+@section('body-class', 'min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50')
+
+@section('content')
+  <div class="flex items-center justify-center p-4 py-16">
+    <div class="w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center">
 
     <!-- Gambar Kiri -->
     <div class="hidden lg:block">
@@ -105,6 +103,7 @@
     </div>
   </div>
 
+@push('scripts')
   <script>
     function togglePassword(id, btn) {
       const input = document.getElementById(id);
@@ -117,6 +116,6 @@
       }
     }
   </script>
-
-</body>
-</html>
+@endpush
+  </div>
+@endsection
