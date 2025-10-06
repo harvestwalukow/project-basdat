@@ -2,13 +2,26 @@
 
 @section('content')
 <div class="flex flex-col h-full">
+  <!-- Flash Messages -->
+  @if(session('success'))
+    <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+      <span class="block sm:inline">{{ session('success') }}</span>
+    </div>
+  @endif
+
+  @if(session('error'))
+    <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <span class="block sm:inline">{{ session('error') }}</span>
+    </div>
+  @endif
+
   <!-- Header -->
   <header class="flex items-center justify-between mb-6">
     <div>
       <h1 class="text-3xl font-bold">PAKET LAYANAN</h1>
       <p class="text-gray-600">Kelola semua paket layanan yang ditawarkan</p>
     </div>
-    <button class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+    <button onclick="openAddModal()" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
       </svg>
@@ -106,8 +119,12 @@
               </td>
               <td class="p-4">
                 <div class="flex items-center gap-2">
-                  <a href="#" class="text-blue-600 hover:underline text-sm">Edit</a>
-                  <a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a>
+                  <button onclick="openEditModal({{ $paket->id_paket }})" class="text-blue-600 hover:underline text-sm">Edit</button>
+                  <button onclick="openViewModal({{ $paket->id_paket }})" class="text-gray-600 hover:underline text-sm">Lihat</button>
+                  <button onclick="toggleStatus({{ $paket->id_paket }}, {{ $paket->is_active ? 'false' : 'true' }})" 
+                    class="text-{{ $paket->is_active ? 'red' : 'green' }}-600 hover:underline text-sm">
+                    {{ $paket->is_active ? 'Nonaktifkan' : 'Aktifkan' }}
+                  </button>
                 </div>
               </td>
             </tr>
@@ -129,6 +146,182 @@
 
     <div id="noResults" class="p-4 text-center text-gray-500" style="display:none;">
       Tidak ada paket layanan yang ditemukan
+    </div>
+  </div>
+</div>
+
+<!-- Modal Tambah Paket -->
+<div id="addModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold">Tambah Paket Layanan</h2>
+      <button onclick="closeAddModal()" class="text-gray-500 hover:text-gray-700">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <form action="{{ route('admin.service.store') }}" method="POST">
+      @csrf
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Nama Paket *</label>
+          <input type="text" name="nama_paket" required 
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Contoh: Paket Standard">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi *</label>
+          <textarea name="deskripsi" required rows="3" 
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Deskripsi paket layanan"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Harga per Hari *</label>
+          <input type="number" name="harga_per_hari" required min="0" step="1000"
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="150000">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Fasilitas</label>
+          <textarea name="fasilitas" rows="3" 
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Fasilitas yang disediakan (opsional)"></textarea>
+        </div>
+
+        <div>
+          <label class="flex items-center">
+            <input type="checkbox" name="is_active" value="1" checked class="mr-2">
+            <span class="text-sm text-gray-700">Paket Aktif</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="flex gap-4 mt-6">
+        <button type="submit" class="flex-1 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+          Simpan Paket
+        </button>
+        <button type="button" onclick="closeAddModal()" class="flex-1 bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300">
+          Batal
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Edit Paket -->
+<div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold">Edit Paket Layanan</h2>
+      <button onclick="closeEditModal()" class="text-gray-500 hover:text-gray-700">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <form id="editForm" method="POST">
+      @csrf
+      @method('PUT')
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Nama Paket *</label>
+          <input type="text" id="edit_nama_paket" name="nama_paket" required 
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi *</label>
+          <textarea id="edit_deskripsi" name="deskripsi" required rows="3" 
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Harga per Hari *</label>
+          <input type="number" id="edit_harga_per_hari" name="harga_per_hari" required min="0" step="1000"
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Fasilitas</label>
+          <textarea id="edit_fasilitas" name="fasilitas" rows="3" 
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+        </div>
+
+        <div>
+          <label class="flex items-center">
+            <input type="checkbox" id="edit_is_active" name="is_active" value="1" class="mr-2">
+            <span class="text-sm text-gray-700">Paket Aktif</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="flex gap-4 mt-6">
+        <button type="submit" class="flex-1 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+          Update Paket
+        </button>
+        <button type="button" onclick="closeEditModal()" class="flex-1 bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300">
+          Batal
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Lihat Detail -->
+<div id="viewModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold">Detail Paket Layanan</h2>
+      <button onclick="closeViewModal()" class="text-gray-500 hover:text-gray-700">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-500 mb-1">Nama Paket</label>
+        <p id="view_nama_paket" class="text-lg font-semibold"></p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-500 mb-1">Deskripsi</label>
+        <p id="view_deskripsi" class="text-gray-700"></p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-500 mb-1">Harga per Hari</label>
+          <p id="view_harga_per_hari" class="text-lg font-semibold text-green-600"></p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-500 mb-1">Status</label>
+          <p id="view_status"></p>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-500 mb-1">Fasilitas</label>
+        <p id="view_fasilitas" class="text-gray-700"></p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-500 mb-1">Total Pemesanan</label>
+        <p id="view_pemesanan" class="text-lg font-semibold"></p>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <button onclick="closeViewModal()" class="w-full bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300">
+        Tutup
+      </button>
     </div>
   </div>
 </div>
@@ -170,6 +363,112 @@
 </style>
 
 <script>
+// ================= Modal Functions =================
+function openAddModal() {
+  document.getElementById('addModal').classList.remove('hidden');
+  document.getElementById('addModal').classList.add('flex');
+}
+
+function closeAddModal() {
+  document.getElementById('addModal').classList.remove('flex');
+  document.getElementById('addModal').classList.add('hidden');
+}
+
+function openEditModal(id) {
+  // Fetch data paket dan populate form
+  fetch(`/admin/paket-layanan/${id}`)
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('edit_nama_paket').value = data.nama_paket;
+      document.getElementById('edit_deskripsi').value = data.deskripsi;
+      document.getElementById('edit_harga_per_hari').value = data.harga_per_hari;
+      document.getElementById('edit_fasilitas').value = data.fasilitas || '';
+      document.getElementById('edit_is_active').checked = data.is_active;
+      document.getElementById('editForm').action = `/admin/paket-layanan/${id}`;
+      
+      document.getElementById('editModal').classList.remove('hidden');
+      document.getElementById('editModal').classList.add('flex');
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Gagal memuat data paket');
+    });
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').classList.remove('flex');
+  document.getElementById('editModal').classList.add('hidden');
+}
+
+function openViewModal(id) {
+  // Fetch data paket dan display
+  fetch(`/admin/paket-layanan/${id}`)
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('view_nama_paket').textContent = data.nama_paket;
+      document.getElementById('view_deskripsi').textContent = data.deskripsi;
+      document.getElementById('view_harga_per_hari').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(data.harga_per_hari);
+      document.getElementById('view_status').innerHTML = data.is_active 
+        ? '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">Aktif</span>'
+        : '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-700">Non-Aktif</span>';
+      document.getElementById('view_fasilitas').textContent = data.fasilitas || '-';
+      document.getElementById('view_pemesanan').textContent = data.detail_penitipan_count + ' kali';
+      
+      document.getElementById('viewModal').classList.remove('hidden');
+      document.getElementById('viewModal').classList.add('flex');
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Gagal memuat data paket');
+    });
+}
+
+function closeViewModal() {
+  document.getElementById('viewModal').classList.remove('flex');
+  document.getElementById('viewModal').classList.add('hidden');
+}
+
+function toggleStatus(id, newStatus) {
+  if (confirm('Apakah Anda yakin ingin mengubah status paket ini?')) {
+    fetch(`/admin/paket-layanan/${id}/toggle`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({ is_active: newStatus })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      } else {
+        alert('Gagal mengubah status');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Terjadi kesalahan');
+    });
+  }
+}
+
+// Close modal when clicking outside
+document.addEventListener('DOMContentLoaded', function() {
+  const modals = ['addModal', 'editModal', 'viewModal'];
+  modals.forEach(modalId => {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.classList.remove('flex');
+          modal.classList.add('hidden');
+        }
+      });
+    }
+  });
+});
+
 // ================= Filter & Stats =================
 function filterServices() {
   var searchValue = document.getElementById('serviceSearch').value.toLowerCase();

@@ -369,5 +369,99 @@ class AdminController extends Controller
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Store New Paket Layanan
+     */
+    public function storePaket(Request $request)
+    {
+        try {
+            // Validate input
+            $validated = $request->validate([
+                'nama_paket' => 'required|string|max:100',
+                'deskripsi' => 'required|string',
+                'harga_per_hari' => 'required|numeric|min:0',
+                'fasilitas' => 'nullable|string',
+                'is_active' => 'nullable|boolean',
+            ]);
+
+            // Create new paket layanan
+            PaketLayanan::create([
+                'nama_paket' => $validated['nama_paket'],
+                'deskripsi' => $validated['deskripsi'],
+                'harga_per_hari' => $validated['harga_per_hari'],
+                'fasilitas' => $validated['fasilitas'] ?? null,
+                'is_active' => $request->has('is_active') ? 1 : 0,
+            ]);
+
+            return redirect()->route('admin.service')->with('success', 'Paket layanan berhasil ditambahkan!');
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Show Paket Layanan (JSON)
+     */
+    public function showPaket($id)
+    {
+        try {
+            $paket = PaketLayanan::withCount('detailPenitipan')->findOrFail($id);
+            return response()->json($paket);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Paket tidak ditemukan'], 404);
+        }
+    }
+
+    /**
+     * Update Paket Layanan
+     */
+    public function updatePaket(Request $request, $id)
+    {
+        try {
+            // Validate input
+            $validated = $request->validate([
+                'nama_paket' => 'required|string|max:100',
+                'deskripsi' => 'required|string',
+                'harga_per_hari' => 'required|numeric|min:0',
+                'fasilitas' => 'nullable|string',
+                'is_active' => 'nullable|boolean',
+            ]);
+
+            // Find paket
+            $paket = PaketLayanan::findOrFail($id);
+
+            // Update paket data
+            $paket->update([
+                'nama_paket' => $validated['nama_paket'],
+                'deskripsi' => $validated['deskripsi'],
+                'harga_per_hari' => $validated['harga_per_hari'],
+                'fasilitas' => $validated['fasilitas'] ?? null,
+                'is_active' => $request->has('is_active') ? 1 : 0,
+            ]);
+
+            return redirect()->route('admin.service')->with('success', 'Paket layanan berhasil diperbarui!');
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Toggle Paket Status (AJAX)
+     */
+    public function togglePaketStatus(Request $request, $id)
+    {
+        try {
+            $paket = PaketLayanan::findOrFail($id);
+            $paket->is_active = $request->input('is_active', false);
+            $paket->save();
+
+            return response()->json(['success' => true, 'message' => 'Status berhasil diubah']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
 }
 

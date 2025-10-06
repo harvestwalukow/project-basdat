@@ -86,74 +86,57 @@
           <div>
             <h3 class="text-lg font-semibold mb-2">Paket Layanan</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="bg-white rounded-lg border border-[#F2784B] shadow p-6 flex flex-col cursor-pointer hover:bg-orange-50 transition"
-                   data-harga="150000" data-nama="Paket Basic" onclick="pilihPaket(this)">
-                <h3 class="text-2xl font-bold mb-2 text-gray-800">Basic</h3>
-                <p class="text-[#F2784B] font-bold mb-4">Rp 150.000</p>
-                <ul class="text-left space-y-2 text-gray-600 mb-6">
-                  <li>Kamar Ber-AC</li>
-                  <li>Makan 3x sehari</li>
-                  <li>Area bermain indoor/outdoor</li>
-                  <li>Laporan harian via WA (foto)</li>
-                </ul>
-              </div>
-
-              <div class="bg-white rounded-lg border border-[#F2784B] shadow p-6 flex flex-col cursor-pointer hover:bg-orange-50 transition"
-                   data-harga="250000" data-nama="Paket Premium" onclick="pilihPaket(this)">
-                <h3 class="text-2xl font-bold mb-2 text-gray-800">Premium</h3>
-                <p class="text-[#F2784B] font-bold mb-4">Rp 250.000</p>
-                <ul class="text-left space-y-2 text-gray-600 mb-6">
-                  <li>Kamar Ber-AC</li>
-                  <li>Makan 3x sehari</li>
-                  <li>Area bermain indoor/outdoor</li>
-                  <li>Laporan harian via WA + VC</li>
-                  <li>Snack & Treats</li>
-                </ul>
-              </div>
+              @forelse($paketLayanans as $paket)
+                <div class="bg-white rounded-lg border border-[#F2784B] shadow p-6 flex flex-col cursor-pointer hover:bg-orange-50 transition"
+                     data-harga="{{ $paket->harga_per_hari }}" 
+                     data-nama="{{ $paket->nama_paket }}" 
+                     data-id="{{ $paket->id_paket }}"
+                     onclick="pilihPaket(this)">
+                  <h3 class="text-2xl font-bold mb-2 text-gray-800">{{ $paket->nama_paket }}</h3>
+                  <p class="text-[#F2784B] font-bold mb-4">Rp {{ number_format($paket->harga_per_hari, 0, ',', '.') }}</p>
+                  <p class="text-left text-gray-600 mb-4">{{ $paket->deskripsi }}</p>
+                  @if($paket->fasilitas)
+                    <ul class="text-left space-y-2 text-gray-600 mb-6">
+                      @foreach(explode("\n", $paket->fasilitas) as $fasilitas)
+                        @if(trim($fasilitas))
+                          <li>{{ trim($fasilitas) }}</li>
+                        @endif
+                      @endforeach
+                    </ul>
+                  @endif
+                </div>
+              @empty
+                <div class="col-span-2 text-center text-gray-500 p-6">
+                  <p>Belum ada paket layanan tersedia</p>
+                </div>
+              @endforelse
             </div>
           </div>
 
           <input type="hidden" id="packageType" name="packageType">
+          <input type="hidden" id="packageId" name="packageId">
 
           <!-- Layanan Tambahan -->
           <div>
             <label class="block font-medium mb-2">Layanan Tambahan (Opsional)</label>
             <div class="flex flex-col space-y-2">
-              <div class="flex items-center justify-between space-x-2">
-                <span>Grooming Premium (+Rp 150.000)</span>
-                <div class="flex items-center space-x-2">
-                  <button type="button" class="decrement bg-gray-200 px-2 rounded">-</button>
-                  <input type="number" value="0" min="0" class="jumlah w-12 text-center border rounded" data-harga="150000">
-                  <button type="button" class="increment bg-gray-200 px-2 rounded">+</button>
+              @forelse($layananTambahan as $layanan)
+                <div class="flex items-center justify-between space-x-2">
+                  <span>{{ $layanan->nama_paket }} (+Rp {{ number_format($layanan->harga_per_hari, 0, ',', '.') }})</span>
+                  <div class="flex items-center space-x-2">
+                    <button type="button" class="decrement bg-gray-200 px-2 rounded">-</button>
+                    <input type="number" value="0" min="0" 
+                      class="jumlah w-12 text-center border rounded" 
+                      data-harga="{{ $layanan->harga_per_hari }}"
+                      data-id="{{ $layanan->id_paket }}"
+                      data-nama="{{ $layanan->nama_paket }}"
+                      name="addon_{{ $layanan->id_paket }}">
+                    <button type="button" class="increment bg-gray-200 px-2 rounded">+</button>
+                  </div>
                 </div>
-              </div>
-
-              <div class="flex items-center justify-between space-x-2">
-                <span>Pick-up & Delivery (+Rp 100.000)</span>
-                <div class="flex items-center space-x-2">
-                  <button type="button" class="decrement bg-gray-200 px-2 rounded">-</button>
-                  <input type="number" value="0" min="0" class="jumlah w-12 text-center border rounded" data-harga="100000">
-                  <button type="button" class="increment bg-gray-200 px-2 rounded">+</button>
-                </div>
-              </div>
-
-              <div class="flex items-center justify-between space-x-2">
-                <span>Kolam Renang (+Rp 100.000)</span>
-                <div class="flex items-center space-x-2">
-                  <button type="button" class="decrement bg-gray-200 px-2 rounded">-</button>
-                  <input type="number" value="0" min="0" class="jumlah w-12 text-center border rounded" data-harga="100000">
-                  <button type="button" class="increment bg-gray-200 px-2 rounded">+</button>
-                </div>
-              </div>
-
-              <div class="flex items-center justify-between space-x-2">
-                <span>Boarding (+Rp 200.000)</span>
-                <div class="flex items-center space-x-2">
-                  <button type="button" class="decrement bg-gray-200 px-2 rounded">-</button>
-                  <input type="number" value="0" min="0" class="jumlah w-12 text-center border rounded" data-harga="200000">
-                  <button type="button" class="increment bg-gray-200 px-2 rounded">+</button>
-                </div>
-              </div>
+              @empty
+                <p class="text-gray-500 text-sm">Tidak ada layanan tambahan tersedia</p>
+              @endforelse
             </div>
           </div>
 
@@ -195,16 +178,19 @@
     const incrementBtns = document.querySelectorAll('.increment');
     const decrementBtns = document.querySelectorAll('.decrement');
     const packageTypeInput = document.getElementById('packageType');
+    const packageIdInput = document.getElementById('packageId');
     let selectedPaket = null;
 
     function pilihPaket(el) {
       document.querySelectorAll('[data-harga]').forEach(card => card.classList.remove('border-4', 'border-orange-400'));
       el.classList.add('border-4', 'border-orange-400');
       selectedPaket = {
+        id: el.dataset.id,
         nama: el.dataset.nama,
         harga: parseInt(el.dataset.harga)
       };
       packageTypeInput.value = selectedPaket.nama;
+      packageIdInput.value = selectedPaket.id;
       updateRingkasan();
     }
 
@@ -236,11 +222,12 @@
       jumlahInputs.forEach(input => {
         const jumlah = parseInt(input.value);
         const harga = parseInt(input.dataset.harga);
+        const nama = input.dataset.nama || input.closest('div.flex.justify-between').querySelector('span').textContent;
         if (jumlah > 0) {
           const subtotal = harga * jumlah;
           total += subtotal;
           html += `<div class="flex justify-between mb-1">
-            <span>${input.closest('div.flex.justify-between').querySelector('span').textContent} (x${jumlah})</span>
+            <span>${nama} (x${jumlah})</span>
             <span>Rp ${subtotal.toLocaleString('id-ID')}</span>
           </div>`;
         }

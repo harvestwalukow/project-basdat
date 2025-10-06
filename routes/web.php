@@ -44,7 +44,26 @@ Route::get('/layanan', function () {
 // Reservasi
 Route::get('/reservasi', function () {
     $user = session('user_email') ? Pengguna::where('email', session('user_email'))->first() : null;
-    return view('user.reservasi', ['user' => $user]);
+    
+    // Get active paket layanan (main packages)
+    $paketLayanans = DB::table('paket_layanan')
+        ->where('is_active', true)
+        ->where('nama_paket', 'LIKE', '%Paket%')
+        ->orderBy('harga_per_hari', 'asc')
+        ->get();
+    
+    // Get active layanan tambahan (add-ons)
+    $layananTambahan = DB::table('paket_layanan')
+        ->where('is_active', true)
+        ->where('nama_paket', 'NOT LIKE', '%Paket%')
+        ->orderBy('harga_per_hari', 'asc')
+        ->get();
+    
+    return view('user.reservasi', [
+        'user' => $user,
+        'paketLayanans' => $paketLayanans,
+        'layananTambahan' => $layananTambahan
+    ]);
 })->name('reservasi');
 
 Route::post('/reservasi', [PenitipanController::class, 'store'])->name('reservasi.submit');
@@ -163,6 +182,10 @@ Route::middleware('admin')->group(function () {
     Route::get('/admin/update-kondisi', [AdminController::class, 'rooms'])->name('admin.rooms');
     Route::post('/admin/update-kondisi', [AdminController::class, 'storeUpdateKondisi'])->name('admin.rooms.store');
     Route::get('/admin/paket-layanan', [AdminController::class, 'service'])->name('admin.service');
+    Route::post('/admin/paket-layanan', [AdminController::class, 'storePaket'])->name('admin.service.store');
+    Route::get('/admin/paket-layanan/{id}', [AdminController::class, 'showPaket'])->name('admin.service.show');
+    Route::put('/admin/paket-layanan/{id}', [AdminController::class, 'updatePaket'])->name('admin.service.update');
+    Route::put('/admin/paket-layanan/{id}/toggle', [AdminController::class, 'togglePaketStatus'])->name('admin.service.toggle');
     Route::get('/admin/pembayaran', [AdminController::class, 'payments'])->name('admin.payments');
     Route::put('/admin/pembayaran/{id}/update-status', [AdminController::class, 'updatePaymentStatus'])->name('admin.payments.update');
 });
