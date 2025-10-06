@@ -161,6 +161,7 @@ Route::middleware('admin')->group(function () {
     Route::get('/admin/hewan', [AdminController::class, 'pets'])->name('admin.pets');
     Route::put('/admin/hewan/{id}/update', [AdminController::class, 'updatePet'])->name('admin.pets.update');
     Route::get('/admin/update-kondisi', [AdminController::class, 'rooms'])->name('admin.rooms');
+    Route::post('/admin/update-kondisi', [AdminController::class, 'storeUpdateKondisi'])->name('admin.rooms.store');
     Route::get('/admin/paket-layanan', [AdminController::class, 'service'])->name('admin.service');
     Route::get('/admin/pembayaran', [AdminController::class, 'payments'])->name('admin.payments');
     Route::put('/admin/pembayaran/{id}/update-status', [AdminController::class, 'updatePaymentStatus'])->name('admin.payments.update');

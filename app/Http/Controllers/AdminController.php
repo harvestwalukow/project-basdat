@@ -147,12 +147,64 @@ class AdminController extends Controller
         // Get all staff for filter dropdown
         $staffMembers = Pengguna::whereIn('role', ['staff', 'admin'])->orderBy('nama_lengkap')->get();
 
+        // Get active penitipan for adding new update
+        $aktivePenitipan = Penitipan::with(['hewan', 'pemilik'])
+            ->where('status', 'aktif')
+            ->orderBy('tanggal_masuk', 'desc')
+            ->get();
+
         return view('admin.rooms', compact(
             'updateKondisis',
             'sehatCount',
             'perluPerhatianCount',
-            'staffMembers'
+            'staffMembers',
+            'aktivePenitipan'
         ));
+    }
+
+    /**
+     * Store New Update Kondisi
+     */
+    public function storeUpdateKondisi(Request $request)
+    {
+        try {
+            // Validate input
+            $validated = $request->validate([
+                'id_penitipan' => 'required|exists:penitipan,id_penitipan',
+                'kondisi_hewan' => 'required|string|max:255',
+                'aktivitas_hari_ini' => 'required|string',
+                'catatan_staff' => 'nullable|string',
+                'foto_hewan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            // Get current staff ID from session
+            $staffId = session('user_id');
+
+            // Handle file upload
+            $fotoPath = null;
+            if ($request->hasFile('foto_hewan')) {
+                $file = $request->file('foto_hewan');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('uploads/update_kondisi'), $filename);
+                $fotoPath = 'uploads/update_kondisi/' . $filename;
+            }
+
+            // Create new update kondisi
+            UpdateKondisi::create([
+                'id_penitipan' => $validated['id_penitipan'],
+                'id_staff' => $staffId,
+                'kondisi_hewan' => $validated['kondisi_hewan'],
+                'aktivitas_hari_ini' => $validated['aktivitas_hari_ini'],
+                'catatan_staff' => $validated['catatan_staff'],
+                'foto_hewan' => $fotoPath,
+                'waktu_update' => now(),
+            ]);
+
+            return redirect()->route('admin.rooms')->with('success', 'Update kondisi berhasil ditambahkan!');
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
     /**

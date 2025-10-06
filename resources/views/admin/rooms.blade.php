@@ -2,13 +2,26 @@
 
 @section('content')
 <div class="flex flex-col h-full">
+  <!-- Flash Messages -->
+  @if(session('success'))
+    <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+      <span class="block sm:inline">{{ session('success') }}</span>
+    </div>
+  @endif
+
+  @if(session('error'))
+    <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <span class="block sm:inline">{{ session('error') }}</span>
+    </div>
+  @endif
+
   <!-- Header -->
   <header class="flex items-center justify-between mb-6">
     <div>
       <h1 class="text-3xl font-bold">UPDATE KONDISI</h1>
       <p class="text-gray-600">Kelola update kondisi hewan dalam penitipan</p>
     </div>
-    <button class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+    <button onclick="openModal()" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
       </svg>
@@ -156,6 +169,85 @@
   </div>
 </div>
 
+<!-- Modal Tambah Update -->
+<div id="addUpdateModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold">Tambah Update Kondisi</h2>
+      <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <form action="{{ route('admin.rooms.store') }}" method="POST" enctype="multipart/form-data">
+      @csrf
+      
+      <div class="space-y-4">
+        <!-- Pilih Penitipan -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Penitipan Aktif *</label>
+          <select name="id_penitipan" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Pilih Penitipan</option>
+            @foreach($aktivePenitipan as $penitipan)
+              <option value="{{ $penitipan->id_penitipan }}">
+                PNT-{{ str_pad($penitipan->id_penitipan, 4, '0', STR_PAD_LEFT) }} - 
+                {{ $penitipan->hewan->nama_hewan }} 
+                ({{ $penitipan->pemilik->nama_lengkap }})
+              </option>
+            @endforeach
+          </select>
+        </div>
+
+        <!-- Kondisi Hewan -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Kondisi Hewan *</label>
+          <select name="kondisi_hewan" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Pilih Kondisi</option>
+            <option value="sehat">Sehat</option>
+            <option value="perlu perhatian">Perlu Perhatian</option>
+            <option value="sakit">Sakit</option>
+          </select>
+        </div>
+
+        <!-- Aktivitas Hari Ini -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Aktivitas Hari Ini *</label>
+          <textarea name="aktivitas_hari_ini" required rows="3" 
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Contoh: Makan 3x sehari, bermain di taman, tidur nyenyak"></textarea>
+        </div>
+
+        <!-- Catatan Staff -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Catatan Staff</label>
+          <textarea name="catatan_staff" rows="3" 
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Catatan tambahan (opsional)"></textarea>
+        </div>
+
+        <!-- Foto Hewan -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Foto Hewan</label>
+          <input type="file" name="foto_hewan" accept="image/*"
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, GIF (max 2MB)</p>
+        </div>
+      </div>
+
+      <div class="flex gap-4 mt-6">
+        <button type="submit" class="flex-1 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+          Simpan Update
+        </button>
+        <button type="button" onclick="closeModal()" class="flex-1 bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300">
+          Batal
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <style>
 /* Custom scrollbar styling */
 .scrollbar-custom::-webkit-scrollbar {
@@ -185,6 +277,27 @@
 </style>
 
 <script>
+// Modal functions
+function openModal() {
+  document.getElementById('addUpdateModal').classList.remove('hidden');
+  document.getElementById('addUpdateModal').classList.add('flex');
+}
+
+function closeModal() {
+  document.getElementById('addUpdateModal').classList.remove('flex');
+  document.getElementById('addUpdateModal').classList.add('hidden');
+}
+
+// Close modal when clicking outside
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('addUpdateModal');
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+});
+
 // Fungsi search untuk halaman update kondisi
 function searchFunction() {
   console.log('Search function called for updates!');
