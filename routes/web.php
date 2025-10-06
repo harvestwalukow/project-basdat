@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Pengguna;
 use App\Http\Controllers\PenitipanController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OwnerController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -193,20 +194,13 @@ Route::middleware('admin')->group(function () {
 
 // Protected Routes - Owner
 Route::middleware('owner')->prefix('owner')->name('owner.')->group(function () {
-    Route::get('/', function () { return view('owner.dashboard'); })->name('dashboard');
-
-    Route::get('/reservations/{tab?}', function ($tab = 'semua') {
-    $validTabs = ['semua', 'today', 'upcoming', 'selesai'];
-    if (!in_array($tab, $validTabs)) {
-        $tab = 'semua';
-    }
-    return view('owner.reservations', compact('tab')); // BUKAN owner.reservations.index
-})->name('reservations');
-    Route::get('/finance', function () { return view('owner.finance'); })->name('finance');
-    Route::get('/pets', function () { return view('owner.pets'); })->name('pets');
-    Route::get('/services', function () { return view('owner.services'); })->name('services');
-    Route::get('/staff', function () { return view('owner.staff'); })->name('staff');
-    Route::get('/reports', function () { return view('owner.reports'); })->name('reports');
+    Route::get('/', [OwnerController::class, 'dashboard'])->name('dashboard');
+    Route::get('/reservations/{tab?}', [OwnerController::class, 'reservations'])->name('reservations');
+    Route::get('/finance', [OwnerController::class, 'finance'])->name('finance');
+    Route::get('/pets', [OwnerController::class, 'pets'])->name('pets');
+    Route::get('/services', [OwnerController::class, 'services'])->name('services');
+    Route::get('/staff', [OwnerController::class, 'staff'])->name('staff');
+    Route::get('/reports', [OwnerController::class, 'reports'])->name('reports');
 });
 
 

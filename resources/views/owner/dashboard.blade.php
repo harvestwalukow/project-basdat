@@ -10,8 +10,12 @@
         <h2 class="text-sm font-medium">Pendapatan Bulan Ini</h2>
         <i class="fas fa-dollar-sign text-gray-500"></i>
       </div>
-      <div class="mt-2 text-2xl font-bold">Rp 67.000.000</div>
-      <p class="text-xs text-gray-500"><span class="text-green-600">+15.2%</span> dari bulan lalu</p>
+      <div class="mt-2 text-2xl font-bold">Rp {{ number_format($currentMonthIncome ?? 0, 0, ',', '.') }}</div>
+      <p class="text-xs text-gray-500">
+        <span class="{{ ($incomePercentage ?? 0) >= 0 ? 'text-green-600' : 'text-red-600' }}">
+          {{ ($incomePercentage ?? 0) >= 0 ? '+' : '' }}{{ number_format($incomePercentage ?? 0, 1) }}%
+        </span> dari bulan lalu
+      </p>
     </div>
 
     {{-- Hewan Aktif --}}
@@ -20,8 +24,8 @@
         <h2 class="text-sm font-medium">Hewan Aktif</h2>
         <i class="fas fa-paw text-gray-500"></i>
       </div>
-      <div class="mt-2 text-2xl font-bold">127</div>
-      <p class="text-xs text-gray-500"><span class="text-green-600">+8</span> hewan baru minggu ini</p>
+      <div class="mt-2 text-2xl font-bold">{{ $activeAnimals ?? 0 }}</div>
+      <p class="text-xs text-gray-500"><span class="text-green-600">+{{ $newAnimalsThisWeek ?? 0 }}</span> hewan baru minggu ini</p>
     </div>
 
     {{-- Reservasi Bulan Ini --}}
@@ -30,8 +34,12 @@
         <h2 class="text-sm font-medium">Reservasi Bulan Ini</h2>
         <i class="fas fa-calendar text-gray-500"></i>
       </div>
-      <div class="mt-2 text-2xl font-bold">284</div>
-      <p class="text-xs text-gray-500"><span class="text-green-600">+12.5%</span> dari bulan lalu</p>
+      <div class="mt-2 text-2xl font-bold">{{ $currentMonthReservations ?? 0 }}</div>
+      <p class="text-xs text-gray-500">
+        <span class="{{ ($reservationPercentage ?? 0) >= 0 ? 'text-green-600' : 'text-red-600' }}">
+          {{ ($reservationPercentage ?? 0) >= 0 ? '+' : '' }}{{ number_format($reservationPercentage ?? 0, 1) }}%
+        </span> dari bulan lalu
+      </p>
     </div>
 
     {{-- Rating --}}
@@ -40,8 +48,8 @@
         <h2 class="text-sm font-medium">Rating Rata-rata</h2>
         <i class="fas fa-star text-gray-500"></i>
       </div>
-      <div class="mt-2 text-2xl font-bold">4.8</div>
-      <p class="text-xs text-gray-500">Dari 156 ulasan bulan ini</p>
+      <div class="mt-2 text-2xl font-bold">{{ number_format($avgRating ?? 0, 1) }}</div>
+      <p class="text-xs text-gray-500">Dari {{ $reviewsThisMonth ?? 0 }} ulasan bulan ini</p>
     </div>
   </div>
 
@@ -72,12 +80,15 @@
   new Chart(ctxRevenue, {
     type: 'line',
     data: {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+      labels: @json($revenueLabels ?? []),
       datasets: [{
-        label: 'Pendapatan',
-        data: [0, 0, 0, 0, 0, 0],
+        label: 'Pendapatan (Juta Rp)',
+        data: @json($revenueData ?? []),
         borderColor: '#8884d8',
-        borderWidth: 2
+        borderWidth: 2,
+        fill: true,
+        backgroundColor: 'rgba(136, 132, 216, 0.1)',
+        tension: 0.3
       }]
     },
     options: {
@@ -90,18 +101,27 @@
           top: 10,
           bottom: 10
         }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
       }
     }
   });
 
   const ctxService = document.getElementById('serviceChart');
+  const serviceData = @json($serviceData ?? []);
+  const serviceLabels = serviceData.map(item => item.nama_paket);
+  const serviceCounts = serviceData.map(item => item.total);
+  
   new Chart(ctxService, {
     type: 'pie',
     data: {
-      labels: ['Pick-up & Delivery', 'Grooming', 'Kolam Renang', 'Boarding'],
+      labels: serviceLabels.length > 0 ? serviceLabels : ['Tidak ada data'],
       datasets: [{
-        data: [0, 0, 0, 0],
-        backgroundColor: ['#8884d8', '#82ca9d', '#ffc658', '#ff7300']
+        data: serviceCounts.length > 0 ? serviceCounts : [1],
+        backgroundColor: ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#a4de6c', '#d0ed57']
       }]
     },
     options: {

@@ -87,19 +87,19 @@
             <h3 class="text-lg font-semibold mb-2">Paket Layanan</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               @forelse($paketLayanans as $paket)
-                <div class="bg-white rounded-lg border border-[#F2784B] shadow p-6 flex flex-col cursor-pointer hover:bg-orange-50 transition"
+                <div class="bg-white rounded-lg border-2 border-[#F2784B] shadow-lg p-6 flex flex-col cursor-pointer hover:bg-orange-50 transition duration-300"
                      data-harga="{{ $paket->harga_per_hari }}" 
                      data-nama="{{ $paket->nama_paket }}" 
                      data-id="{{ $paket->id_paket }}"
                      onclick="pilihPaket(this)">
-                  <h3 class="text-2xl font-bold mb-2 text-gray-800">{{ $paket->nama_paket }}</h3>
+                  <h3 class="text-2xl font-bold mb-2 text-gray-800">{{ str_replace('Paket ', '', $paket->nama_paket) }}</h3>
                   <p class="text-[#F2784B] font-bold mb-4">Rp {{ number_format($paket->harga_per_hari, 0, ',', '.') }}</p>
                   <p class="text-left text-gray-600 mb-4">{{ $paket->deskripsi }}</p>
                   @if($paket->fasilitas)
                     <ul class="text-left space-y-2 text-gray-600 mb-6">
                       @foreach(explode("\n", $paket->fasilitas) as $fasilitas)
                         @if(trim($fasilitas))
-                          <li>{{ trim($fasilitas) }}</li>
+                          <li class="flex items-center">{{ trim($fasilitas) }}</li>
                         @endif
                       @endforeach
                     </ul>
@@ -118,20 +118,20 @@
 
           <!-- Layanan Tambahan -->
           <div>
-            <label class="block font-medium mb-2">Layanan Tambahan (Opsional)</label>
-            <div class="flex flex-col space-y-2">
+            <h3 class="text-lg font-semibold mb-2">Layanan Tambahan (Opsional)</h3>
+            <div class="flex flex-col space-y-3">
               @forelse($layananTambahan as $layanan)
-                <div class="flex items-center justify-between space-x-2">
-                  <span>{{ $layanan->nama_paket }} (+Rp {{ number_format($layanan->harga_per_hari, 0, ',', '.') }})</span>
+                <div class="flex items-center justify-between space-x-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <span class="text-gray-700 font-medium">{{ $layanan->nama_paket }} (+Rp {{ number_format($layanan->harga_per_hari, 0, ',', '.') }})</span>
                   <div class="flex items-center space-x-2">
-                    <button type="button" class="decrement bg-gray-200 px-2 rounded">-</button>
+                    <button type="button" class="decrement bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded transition">-</button>
                     <input type="number" value="0" min="0" 
-                      class="jumlah w-12 text-center border rounded" 
+                      class="jumlah w-16 text-center border border-gray-300 rounded py-1" 
                       data-harga="{{ $layanan->harga_per_hari }}"
                       data-id="{{ $layanan->id_paket }}"
                       data-nama="{{ $layanan->nama_paket }}"
                       name="addon_{{ $layanan->id_paket }}">
-                    <button type="button" class="increment bg-gray-200 px-2 rounded">+</button>
+                    <button type="button" class="increment bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded transition">+</button>
                   </div>
                 </div>
               @empty
