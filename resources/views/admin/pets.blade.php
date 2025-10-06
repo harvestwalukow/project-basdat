@@ -20,15 +20,15 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
     <div class="bg-white p-6 rounded-lg shadow-md">
       <h3 class="text-lg font-semibold text-gray-600">Total Hewan</h3>
-      <p class="text-3xl font-bold mt-2">0</p>
+      <p class="text-3xl font-bold mt-2">{{ $totalHewan }}</p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow-md">
       <h3 class="text-lg font-semibold text-gray-600">Anjing</h3>
-      <p class="text-3xl font-bold mt-2">0</p>
+      <p class="text-3xl font-bold mt-2">{{ $anjingCount }}</p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow-md">
       <h3 class="text-lg font-semibold text-gray-600">Kucing</h3>
-      <p class="text-3xl font-bold mt-2">0</p>
+      <p class="text-3xl font-bold mt-2">{{ $kucingCount }}</p>
     </div>
   </div>
 
@@ -75,16 +75,67 @@
             </tr>
           </thead>
           <tbody id="tableBody" class="text-sm">
-            <!-- Data hewan akan muncul di sini -->
-            <tr>
-              <td colspan="7" class="p-8 text-center text-gray-500">
-                <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                </svg>
-                <p class="text-lg font-medium">Belum ada data hewan</p>
-                <p class="text-sm text-gray-400 mt-1">Tambahkan hewan baru dengan klik tombol "Tambah Hewan"</p>
-              </td>
-            </tr>
+            @forelse($hewans as $hewan)
+              @php
+                $statusPenitipan = 'Di Rumah';
+                $activePenitipan = $hewan->penitipan->where('status', 'aktif')->first();
+                if ($activePenitipan) {
+                  $statusPenitipan = 'Dalam Penitipan';
+                }
+              @endphp
+              <tr class="pet-row border-b hover:bg-gray-50" data-jenis="{{ strtolower($hewan->jenis_hewan) }}" data-status="{{ $statusPenitipan }}">
+                <td class="p-4">
+                  <div>
+                    <p class="font-semibold">{{ $hewan->nama_hewan }}</p>
+                    <p class="text-xs text-gray-500">{{ ucfirst($hewan->jenis_hewan) }} • {{ $hewan->ras }}</p>
+                  </div>
+                </td>
+                <td class="p-4">
+                  <div>
+                    <p class="font-medium">{{ $hewan->pemilik->nama_lengkap }}</p>
+                    <p class="text-xs text-gray-500">{{ $hewan->pemilik->no_telepon }}</p>
+                  </div>
+                </td>
+                <td class="p-4">
+                  <div class="text-xs">
+                    <p>Umur: {{ $hewan->umur }} tahun</p>
+                    <p>Berat: {{ $hewan->berat }} kg</p>
+                    <p>{{ ucfirst($hewan->jenis_kelamin) }}</p>
+                  </div>
+                </td>
+                <td class="p-4">
+                  <p class="text-xs">{{ $hewan->kondisi_khusus ?? '-' }}</p>
+                  @if($hewan->catatan_medis)
+                    <p class="text-xs text-gray-500 mt-1">Catatan: {{ Str::limit($hewan->catatan_medis, 30) }}</p>
+                  @endif
+                </td>
+                <td class="p-4">
+                  <p class="text-xs">-</p>
+                </td>
+                <td class="p-4">
+                  <p class="text-xs">{{ $hewan->penitipan->count() }} kali</p>
+                  @if($hewan->penitipan->count() > 0)
+                    <p class="text-xs text-gray-500">Terakhir: {{ $hewan->penitipan->first()->tanggal_masuk->format('d M Y') }}</p>
+                  @endif
+                </td>
+                <td class="p-4">
+                  <div class="flex gap-2">
+                    <button class="text-blue-600 hover:underline text-xs">Detail</button>
+                    <button class="text-green-600 hover:underline text-xs">Edit</button>
+                  </div>
+                </td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="7" class="p-8 text-center text-gray-500">
+                  <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                  </svg>
+                  <p class="text-lg font-medium">Belum ada data hewan</p>
+                  <p class="text-sm text-gray-400 mt-1">Tambahkan hewan baru dengan klik tombol "Tambah Hewan"</p>
+                </td>
+              </tr>
+            @endforelse
           </tbody>
         </table>
 

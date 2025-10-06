@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use App\Models\User;
 use App\Models\Pengguna;
 use App\Http\Controllers\PenitipanController;
+use App\Http\Controllers\AdminController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -155,12 +156,12 @@ Route::get('/logout', function () {
 
 // Protected Routes - Admin
 Route::middleware('admin')->group(function () {
-    Route::get('/admin/', function () { return view('admin.dashboard'); })->name('admin.dashboard');
-    Route::get('/admin/penitipan', function () { return view('admin.booking'); })->name('admin.booking');
-    Route::get('/admin/hewan', function () { return view('admin.pets'); })->name('admin.pets');
-    Route::get('/admin/update-kondisi', function () { return view('admin.rooms'); })->name('admin.rooms');
-    Route::get('/admin/paket-layanan', function () { return view('admin.service'); })->name('admin.service');
-    Route::get('/admin/pembayaran', function () { return view('admin.payments'); })->name('admin.payments');
+    Route::get('/admin/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/penitipan', [AdminController::class, 'booking'])->name('admin.booking');
+    Route::get('/admin/hewan', [AdminController::class, 'pets'])->name('admin.pets');
+    Route::get('/admin/update-kondisi', [AdminController::class, 'rooms'])->name('admin.rooms');
+    Route::get('/admin/paket-layanan', [AdminController::class, 'service'])->name('admin.service');
+    Route::get('/admin/pembayaran', [AdminController::class, 'payments'])->name('admin.payments');
 });
 
 

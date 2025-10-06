@@ -17,11 +17,11 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
     <div class="bg-white p-6 rounded-lg shadow-md">
         <h3 class="text-lg font-semibold text-gray-600">Total Pendapatan</h3>
-        <p class="text-3xl font-bold mt-2">Rp 0</p>
+        <p class="text-3xl font-bold mt-2">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow-md">
         <h3 class="text-lg font-semibold text-gray-600">Total Pembayaran</h3>
-        <p class="text-3xl font-bold mt-2">0</p>
+        <p class="text-3xl font-bold mt-2">{{ $totalPembayaran }}</p>
     </div>
   </div>
 
@@ -85,16 +85,58 @@
             </tr>
           </thead>
           <tbody id="tableBody">
-            <!-- Data pembayaran akan muncul di sini -->
-            <tr>
-              <td colspan="7" class="p-8 text-center text-gray-500">
-                <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                </svg>
-                <p class="text-lg font-medium">Belum ada data pembayaran</p>
-                <p class="text-sm text-gray-400 mt-1">Data pembayaran akan muncul di sini</p>
-              </td>
-            </tr>
+            @forelse($pembayarans as $pembayaran)
+              <tr class="payment-row border-b hover:bg-gray-50"
+                  data-metode="{{ $pembayaran->metode_pembayaran }}"
+                  data-status="{{ $pembayaran->status_pembayaran }}"
+                  data-date="{{ $pembayaran->tanggal_bayar ? $pembayaran->tanggal_bayar->format('Y-m-d') : '' }}">
+                <td class="p-4 font-medium">{{ $pembayaran->nomor_transaksi }}</td>
+                <td class="p-4">PNT-{{ str_pad($pembayaran->id_penitipan, 4, '0', STR_PAD_LEFT) }}</td>
+                <td class="p-4">
+                  <div>
+                    <p class="font-medium">{{ $pembayaran->penitipan->pemilik->nama_lengkap }}</p>
+                    <p class="text-xs text-gray-500">{{ $pembayaran->penitipan->pemilik->email }}</p>
+                  </div>
+                </td>
+                <td class="p-4">
+                  @if($pembayaran->tanggal_bayar)
+                    {{ $pembayaran->tanggal_bayar->format('d M Y') }}
+                  @else
+                    <span class="text-gray-400">-</span>
+                  @endif
+                </td>
+                <td class="p-4 font-semibold">Rp {{ number_format($pembayaran->jumlah_bayar, 0, ',', '.') }}</td>
+                <td class="p-4">
+                  <span class="px-2 py-1 text-xs rounded-full
+                    @if($pembayaran->metode_pembayaran == 'transfer') bg-blue-100 text-blue-700
+                    @elseif($pembayaran->metode_pembayaran == 'e_wallet') bg-green-100 text-green-700
+                    @elseif($pembayaran->metode_pembayaran == 'qris') bg-yellow-100 text-yellow-700
+                    @else bg-purple-100 text-purple-700
+                    @endif">
+                    {{ ucfirst(str_replace('_', ' ', $pembayaran->metode_pembayaran)) }}
+                  </span>
+                </td>
+                <td class="p-4">
+                  <span class="px-3 py-1 text-xs font-semibold rounded-full
+                    @if($pembayaran->status_pembayaran == 'lunas') bg-green-100 text-green-700
+                    @elseif($pembayaran->status_pembayaran == 'pending') bg-yellow-100 text-yellow-700
+                    @else bg-red-100 text-red-700
+                    @endif">
+                    {{ ucfirst($pembayaran->status_pembayaran) }}
+                  </span>
+                </td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="7" class="p-8 text-center text-gray-500">
+                  <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                  </svg>
+                  <p class="text-lg font-medium">Belum ada data pembayaran</p>
+                  <p class="text-sm text-gray-400 mt-1">Data pembayaran akan muncul di sini</p>
+                </td>
+              </tr>
+            @endforelse
           </tbody>
         </table>
       </div>
@@ -194,7 +236,12 @@ console.log('Pembayaran page loaded');
       labels: ['Transfer Bank', 'E-Wallet', 'QRIS', 'Kartu Kredit'],
       datasets: [{
         label: 'Jumlah Transaksi',
-        data: [0, 0, 0, 0],
+        data: [
+          {{ $paymentMethodData['transfer'] }},
+          {{ $paymentMethodData['e_wallet'] }},
+          {{ $paymentMethodData['qris'] }},
+          {{ $paymentMethodData['kartu_kredit'] ?? 0 }}
+        ],
         backgroundColor: [
           'rgba(59, 130, 246, 0.8)',
           'rgba(16, 185, 129, 0.8)',
@@ -233,10 +280,10 @@ console.log('Pembayaran page loaded');
   new Chart(dailyRevenueCtx, {
     type: 'line',
     data: {
-      labels: ['29 Sep', '30 Sep', '01 Okt', '02 Okt', '03 Okt', '04 Okt', '05 Okt'],
+      labels: @json($dailyRevenueLabels),
       datasets: [{
         label: 'Pendapatan',
-        data: [0, 0, 0, 0, 0, 0, 0],
+        data: @json($dailyRevenueData),
         borderColor: 'rgba(59, 130, 246, 1)',
         backgroundColor: 'rgba(59, 130, 246, 0.1)',
         borderWidth: 3,

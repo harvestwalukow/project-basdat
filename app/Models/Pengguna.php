@@ -26,5 +26,26 @@ class Pengguna extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    // Relations
+    public function hewans()
+    {
+        return $this->hasMany(Hewan::class, 'id_pemilik', 'id_pengguna');
+    }
+
+    public function penitipans()
+    {
+        return $this->hasMany(Penitipan::class, 'id_pemilik', 'id_pengguna');
+    }
+
+    public function staffPenitipans()
+    {
+        return $this->hasMany(Penitipan::class, 'id_staff', 'id_pengguna');
+    }
+
+    public function updateKondisis()
+    {
+        return $this->hasMany(UpdateKondisi::class, 'id_staff', 'id_pengguna');
+    }
 }
 

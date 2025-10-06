@@ -20,11 +20,11 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-6">
     <div class="bg-white p-6 rounded-lg shadow-md">
       <h3 class="text-lg font-semibold text-gray-600">Kondisi Sehat</h3>
-      <p class="text-3xl font-bold mt-2">0</p>
+      <p class="text-3xl font-bold mt-2">{{ $sehatCount }}</p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow-md">
       <h3 class="text-lg font-semibold text-gray-600">Perlu Perhatian</h3>
-      <p class="text-3xl font-bold mt-2">0</p>
+      <p class="text-3xl font-bold mt-2">{{ $perluPerhatianCount }}</p>
     </div>
   </div>
 
@@ -86,7 +86,64 @@
             </tr>
           </thead>
           <tbody id="tableBody">
-            <!-- Data update kondisi akan muncul di sini -->
+            @forelse($updateKondisis as $update)
+              <tr class="update-row border-b hover:bg-gray-50"
+                  data-status="{{ strtolower($update->penitipan->status) }}"
+                  data-staff="{{ strtolower(str_replace(' ', '_', $update->staff->nama_lengkap)) }}"
+                  data-kondisi="{{ strtolower(str_replace(' ', '_', $update->kondisi_hewan)) }}"
+                  data-date="{{ $update->waktu_update->format('Y-m-d') }}">
+                <td class="p-4">UPD-{{ str_pad($update->id_update, 4, '0', STR_PAD_LEFT) }}</td>
+                <td class="p-4">
+                  <div>
+                    <p class="font-medium">PNT-{{ str_pad($update->penitipan->id_penitipan, 4, '0', STR_PAD_LEFT) }}</p>
+                    <span class="text-xs px-2 py-1 rounded-full
+                      @if($update->penitipan->status == 'aktif') bg-green-100 text-green-700
+                      @else bg-gray-100 text-gray-700
+                      @endif">
+                      {{ ucfirst($update->penitipan->status) }}
+                    </span>
+                  </div>
+                </td>
+                <td class="p-4">
+                  <div>
+                    <p class="font-semibold">{{ $update->penitipan->hewan->nama_hewan }}</p>
+                    <p class="text-xs text-gray-500">{{ ucfirst($update->penitipan->hewan->jenis_hewan) }}</p>
+                  </div>
+                </td>
+                <td class="p-4">
+                  <div>
+                    <p class="text-sm">{{ $update->staff->nama_lengkap }}</p>
+                    <p class="text-xs text-gray-500">{{ $update->staff->role }}</p>
+                  </div>
+                </td>
+                <td class="p-4">
+                  <span class="px-2 py-1 text-xs font-semibold rounded-full
+                    @if(strtolower($update->kondisi_hewan) == 'sehat') bg-green-100 text-green-700
+                    @else bg-yellow-100 text-yellow-700
+                    @endif">
+                    {{ ucfirst($update->kondisi_hewan) }}
+                  </span>
+                </td>
+                <td class="p-4">
+                  <p class="text-sm">{{ Str::limit($update->aktivitas_hari_ini, 40) }}</p>
+                  @if($update->catatan_staff)
+                    <p class="text-xs text-gray-500 mt-1">{{ Str::limit($update->catatan_staff, 30) }}</p>
+                  @endif
+                </td>
+                <td class="p-4">
+                  <div>
+                    <p class="text-sm">{{ $update->waktu_update->format('d M Y') }}</p>
+                    <p class="text-xs text-gray-500">{{ $update->waktu_update->format('H:i') }}</p>
+                  </div>
+                </td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="7" class="p-8 text-center text-gray-500">
+                  <p>Belum ada update kondisi</p>
+                </td>
+              </tr>
+            @endforelse
           </tbody>
         </table>
 

@@ -12,15 +12,15 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <div class="bg-white p-4 rounded-xl shadow">
       <h4 class="text-sm text-gray-500">Total Penitipan</h4>
-      <p class="text-2xl font-bold text-gray-800">0</p>
+      <p class="text-2xl font-bold text-gray-800">{{ $totalPenitipan }}</p>
     </div>
     <div class="bg-white p-4 rounded-xl shadow">
       <h4 class="text-sm text-gray-500">Aktif</h4>
-      <p class="text-2xl font-bold text-green-600">0</p>
+      <p class="text-2xl font-bold text-green-600">{{ $aktifCount }}</p>
     </div>
     <div class="bg-white p-4 rounded-xl shadow">
       <h4 class="text-sm text-gray-500">Selesai</h4>
-      <p class="text-2xl font-bold text-blue-500">0</p>
+      <p class="text-2xl font-bold text-blue-500">{{ $selesaiCount }}</p>
     </div>
   </div>
 
@@ -75,7 +75,37 @@
         </thead>
 
         <tbody id="bookingTable">
-          <!-- Data penitipan akan muncul di sini -->
+          @forelse($penitipans as $penitipan)
+            <tr class="border-b hover:bg-gray-50" data-status="{{ strtolower($penitipan->status) }}">
+              <td class="p-4">PNT-{{ str_pad($penitipan->id_penitipan, 4, '0', STR_PAD_LEFT) }}</td>
+              <td class="p-4">{{ $penitipan->pemilik->nama_lengkap }}</td>
+              <td class="p-4">{{ $penitipan->hewan->nama_hewan }}</td>
+              <td class="p-4">{{ \Carbon\Carbon::parse($penitipan->tanggal_masuk)->format('d M Y') }}</td>
+              <td class="p-4">{{ \Carbon\Carbon::parse($penitipan->tanggal_keluar)->format('d M Y') }}</td>
+              <td class="p-4">
+                <span class="px-3 py-1 rounded-full text-xs font-semibold
+                  @if($penitipan->status == 'aktif') bg-green-100 text-green-700
+                  @elseif($penitipan->status == 'pending') bg-yellow-100 text-yellow-700
+                  @elseif($penitipan->status == 'selesai') bg-blue-100 text-blue-700
+                  @else bg-red-100 text-red-700
+                  @endif">
+                  {{ ucfirst($penitipan->status) }}
+                </span>
+              </td>
+              <td class="p-4">
+                <div class="flex gap-2">
+                  <button class="text-blue-600 hover:underline text-sm">Detail</button>
+                  <button class="text-green-600 hover:underline text-sm">Edit</button>
+                </div>
+              </td>
+            </tr>
+          @empty
+            <tr>
+              <td colspan="7" class="p-8 text-center text-gray-500">
+                <p>Belum ada data penitipan</p>
+              </td>
+            </tr>
+          @endforelse
         </tbody>
       </table>
     </div>

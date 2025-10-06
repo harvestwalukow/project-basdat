@@ -20,15 +20,15 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
     <div class="bg-white p-6 rounded-lg shadow-md">
       <h3 class="text-lg font-semibold text-gray-600">Total Paket</h3>
-      <p class="text-3xl font-bold mt-2" id="totalPaket">7</p>
+      <p class="text-3xl font-bold mt-2" id="totalPaket">{{ $totalPaket }}</p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow-md">
       <h3 class="text-lg font-semibold text-gray-600">Paket Aktif</h3>
-      <p class="text-3xl font-bold mt-2" id="paketAktif">6</p>
+      <p class="text-3xl font-bold mt-2" id="paketAktif">{{ $paketAktif }}</p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow-md">
       <h3 class="text-lg font-semibold text-gray-600">Total Pemesanan</h3>
-      <p class="text-3xl font-bold mt-2">0</p>
+      <p class="text-3xl font-bold mt-2">{{ $totalPemesanan }}</p>
     </div>
   </div>
 
@@ -84,70 +84,40 @@
           </tr>
         </thead>
         <tbody id="tableBody">
-          {{-- PAKET --}}
-          <tr class="service-row border-b hover:bg-gray-50" data-tipe="paket" data-status="aktif" data-harga="150000">
-            <td class="p-4 font-medium">Paket Basic</td>
-            <td class="p-4">Penitipan standar dengan fasilitas dasar</td>
-            <td class="p-4">Rp 150.000</td>
-            <td class="p-4 text-center">0</td>
-            <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
-            <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
-          </tr>
-
-          <tr class="service-row border-b hover:bg-gray-50" data-tipe="paket" data-status="aktif" data-harga="250000">
-            <td class="p-4 font-medium">Paket Premium</td>
-            <td class="p-4">Penitipan premium dengan fasilitas lengkap dan grooming</td>
-            <td class="p-4">Rp 250.000</td>
-            <td class="p-4 text-center">0</td>
-            <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
-            <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
-          </tr>
-
-          <tr class="service-row border-b hover:bg-gray-50" data-tipe="paket" data-status="non_aktif" data-harga="350000">
-            <td class="p-4 font-medium">Paket Deluxe</td>
-            <td class="p-4">Penitipan mewah dengan layanan eksklusif dan spa</td>
-            <td class="p-4">Rp 350.000</td>
-            <td class="p-4 text-center">0</td>
-            <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-gray-700 bg-gray-100 rounded-full">Non-Aktif</span></td>
-            <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
-          </tr>
-
-          {{-- TAMBAHAN --}}
-          <tr class="service-row border-b hover:bg-gray-50" data-tipe="tambahan" data-status="aktif" data-harga="150000">
-            <td class="p-4 font-medium">Grooming Premium</td>
-            <td class="p-4">Spa lengkap, potong kuku, bersih telinga, aromaterapi</td>
-            <td class="p-4">Rp 150.000</td>
-            <td class="p-4 text-center">0</td>
-            <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
-            <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
-          </tr>
-
-          <tr class="service-row border-b hover:bg-gray-50" data-tipe="tambahan" data-status="aktif" data-harga="100000">
-            <td class="p-4 font-medium">Kolam Renang</td>
-            <td class="p-4">Layanan berenang bagi anabul</td>
-            <td class="p-4">Rp 100.000</td>
-            <td class="p-4 text-center">0</td>
-            <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
-            <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
-          </tr>
-
-          <tr class="service-row border-b hover:bg-gray-50" data-tipe="tambahan" data-status="aktif" data-harga="100000">
-            <td class="p-4 font-medium">Pick-up & Delivery</td>
-            <td class="p-4">Layanan antar jemput dalam radius 10km</td>
-            <td class="p-4">Rp 100.000</td>
-            <td class="p-4 text-center">0</td>
-            <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
-            <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
-          </tr>
-
-          <tr class="service-row hover:bg-gray-50" data-tipe="tambahan" data-status="aktif" data-harga="45000">
-            <td class="p-4 font-medium">Enrichment Extra</td>
-            <td class="p-4">Sesi stimulasi 15–20 menit (puzzle feeder, lick mat, sniffing)</td>
-            <td class="p-4">Rp 45.000</td>
-            <td class="p-4 text-center">0</td>
-            <td class="p-4 text-center"><span class="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span></td>
-            <td class="p-4"><div class="flex items-center gap-2"><a href="#" class="text-blue-600 hover:underline text-sm">Edit</a><a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a></div></td>
-          </tr>
+          @forelse($paketLayanans as $paket)
+            @php
+              $tipe = (strpos(strtolower($paket->nama_paket), 'paket') !== false) ? 'paket' : 'tambahan';
+            @endphp
+            <tr class="service-row border-b hover:bg-gray-50" 
+                data-tipe="{{ $tipe }}" 
+                data-status="{{ $paket->is_active ? 'aktif' : 'non_aktif' }}" 
+                data-harga="{{ $paket->harga_per_hari }}">
+              <td class="p-4 font-medium">{{ $paket->nama_paket }}</td>
+              <td class="p-4">{{ $paket->deskripsi }}</td>
+              <td class="p-4">Rp {{ number_format($paket->harga_per_hari, 0, ',', '.') }}</td>
+              <td class="p-4 text-center">{{ $paket->detail_penitipan_count ?? 0 }}</td>
+              <td class="p-4 text-center">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full
+                  @if($paket->is_active) text-green-700 bg-green-100
+                  @else text-gray-700 bg-gray-100
+                  @endif">
+                  {{ $paket->is_active ? 'Aktif' : 'Non-Aktif' }}
+                </span>
+              </td>
+              <td class="p-4">
+                <div class="flex items-center gap-2">
+                  <a href="#" class="text-blue-600 hover:underline text-sm">Edit</a>
+                  <a href="#" class="text-gray-600 hover:underline text-sm">Lihat</a>
+                </div>
+              </td>
+            </tr>
+          @empty
+            <tr>
+              <td colspan="6" class="p-8 text-center text-gray-500">
+                <p>Belum ada paket layanan</p>
+              </td>
+            </tr>
+          @endforelse
         </tbody>
       </table>
     </div>
@@ -266,8 +236,8 @@ function updateStats(visibleCount) {
     document.getElementById('totalPaket').textContent = visibleCount;
     document.getElementById('paketAktif').textContent = aktifCount;
   } else {
-    document.getElementById('totalPaket').textContent = '7';
-    document.getElementById('paketAktif').textContent = '6';
+    document.getElementById('totalPaket').textContent = '{{ $totalPaket }}';
+    document.getElementById('paketAktif').textContent = '{{ $paketAktif }}';
   }
 }
 
