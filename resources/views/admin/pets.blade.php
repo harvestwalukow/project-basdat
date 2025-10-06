@@ -2,18 +2,33 @@
 
 @section('content')
 <div class="flex flex-col h-full">
-  <!-- Header -->
-  <header class="flex items-center justify-between mb-6">
-    <div>
-      <h1 class="text-3xl font-bold">HEWAN</h1>
-      <p class="text-gray-600">Daftar semua hewan yang terdaftar di sistem</p>
+  <!-- Success/Error Messages -->
+  @if(session('success'))
+    <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg flex items-center justify-between">
+      <span>{{ session('success') }}</span>
+      <button onclick="this.parentElement.remove()" class="text-green-700 hover:text-green-900">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
     </div>
-    <button class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-      </svg>
-      <span>Tambah Hewan</span>
-    </button>
+  @endif
+
+  @if(session('error'))
+    <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg flex items-center justify-between">
+      <span>{{ session('error') }}</span>
+      <button onclick="this.parentElement.remove()" class="text-red-700 hover:text-red-900">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+  @endif
+
+  <!-- Header -->
+  <header class="mb-6">
+    <h1 class="text-3xl font-bold">HEWAN</h1>
+    <p class="text-gray-600">Daftar semua hewan yang terdaftar di sistem</p>
   </header>
 
   <!-- Stats -->
@@ -120,8 +135,8 @@
                 </td>
                 <td class="p-4">
                   <div class="flex gap-2">
-                    <button class="text-blue-600 hover:underline text-xs">Detail</button>
-                    <button class="text-green-600 hover:underline text-xs">Edit</button>
+                    <button onclick="showDetailModal({{ $hewan->id_hewan }})" class="text-blue-600 hover:underline text-xs">Detail</button>
+                    <button onclick="showEditModal({{ $hewan->id_hewan }})" class="text-green-600 hover:underline text-xs">Edit</button>
                   </div>
                 </td>
               </tr>
@@ -144,6 +159,58 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Modal Detail Hewan -->
+<div id="detailModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-xl font-bold text-gray-800">Detail Hewan</h3>
+      <button onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-600 transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="detailContent" class="space-y-4">
+      <!-- Content will be loaded here -->
+    </div>
+  </div>
+</div>
+
+<!-- Modal Edit Hewan -->
+<div id="editModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-xl font-bold text-gray-800">Edit Data Hewan</h3>
+      <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-600 transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <form id="editForm" method="POST" action="" class="space-y-4">
+      @csrf
+      @method('PUT')
+      
+      <div id="editContent">
+        <!-- Content will be loaded here -->
+      </div>
+
+      <div class="flex gap-3 pt-4">
+        <button type="button" onclick="closeEditModal()"
+          class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium">
+          Batal
+        </button>
+        <button type="submit"
+          class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium">
+          Simpan Perubahan
+        </button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -204,6 +271,198 @@ function searchFunction() {
   var noResults = document.getElementById('noResults');
   if (noResults) noResults.classList.toggle('hidden', visibleCount !== 0);
 }
+
+// Store pets data for modals
+const hewansData = @json($hewans);
+
+// Modal functions
+function showDetailModal(id) {
+  const hewan = hewansData.find(h => h.id_hewan === id);
+  if (!hewan) return;
+
+  const penitipanCount = hewan.penitipan ? hewan.penitipan.length : 0;
+  const lastPenitipan = hewan.penitipan && hewan.penitipan.length > 0 ? hewan.penitipan[0].tanggal_masuk : null;
+
+  const content = `
+    <div class="grid grid-cols-2 gap-4">
+      <div class="col-span-2">
+        <h4 class="text-lg font-semibold text-gray-700 mb-2">Informasi Hewan</h4>
+      </div>
+      
+      <div>
+        <label class="text-sm text-gray-500">Nama Hewan</label>
+        <p class="font-semibold">${hewan.nama_hewan}</p>
+      </div>
+      
+      <div>
+        <label class="text-sm text-gray-500">Jenis</label>
+        <p class="font-semibold">${hewan.jenis_hewan.charAt(0).toUpperCase() + hewan.jenis_hewan.slice(1)}</p>
+      </div>
+      
+      <div>
+        <label class="text-sm text-gray-500">Ras</label>
+        <p class="font-semibold">${hewan.ras}</p>
+      </div>
+      
+      <div>
+        <label class="text-sm text-gray-500">Umur</label>
+        <p class="font-semibold">${hewan.umur} tahun</p>
+      </div>
+      
+      <div>
+        <label class="text-sm text-gray-500">Berat</label>
+        <p class="font-semibold">${hewan.berat} kg</p>
+      </div>
+      
+      <div>
+        <label class="text-sm text-gray-500">Jenis Kelamin</label>
+        <p class="font-semibold">${hewan.jenis_kelamin.charAt(0).toUpperCase() + hewan.jenis_kelamin.slice(1)}</p>
+      </div>
+      
+      <div class="col-span-2">
+        <label class="text-sm text-gray-500">Kondisi Khusus</label>
+        <p class="font-semibold">${hewan.kondisi_khusus || '-'}</p>
+      </div>
+      
+      <div class="col-span-2">
+        <label class="text-sm text-gray-500">Catatan Medis</label>
+        <p class="font-semibold">${hewan.catatan_medis || '-'}</p>
+      </div>
+      
+      <div class="col-span-2 border-t pt-4 mt-2">
+        <h4 class="text-lg font-semibold text-gray-700 mb-2">Informasi Pemilik</h4>
+      </div>
+      
+      <div>
+        <label class="text-sm text-gray-500">Nama Pemilik</label>
+        <p class="font-semibold">${hewan.pemilik.nama_lengkap}</p>
+      </div>
+      
+      <div>
+        <label class="text-sm text-gray-500">Email</label>
+        <p class="font-semibold">${hewan.pemilik.email}</p>
+      </div>
+      
+      <div class="col-span-2">
+        <label class="text-sm text-gray-500">No. Telepon</label>
+        <p class="font-semibold">${hewan.pemilik.no_telepon}</p>
+      </div>
+      
+      <div class="col-span-2 border-t pt-4 mt-2">
+        <h4 class="text-lg font-semibold text-gray-700 mb-2">Riwayat Penitipan</h4>
+      </div>
+      
+      <div>
+        <label class="text-sm text-gray-500">Total Penitipan</label>
+        <p class="font-semibold">${penitipanCount} kali</p>
+      </div>
+      
+      <div>
+        <label class="text-sm text-gray-500">Terakhir Dititipkan</label>
+        <p class="font-semibold">${lastPenitipan || '-'}</p>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('detailContent').innerHTML = content;
+  document.getElementById('detailModal').classList.remove('hidden');
+}
+
+function closeDetailModal() {
+  document.getElementById('detailModal').classList.add('hidden');
+}
+
+function showEditModal(id) {
+  const hewan = hewansData.find(h => h.id_hewan === id);
+  if (!hewan) return;
+
+  document.getElementById('editForm').action = '/admin/hewan/' + id + '/update';
+
+  const content = `
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Hewan</label>
+        <input type="text" name="nama_hewan" value="${hewan.nama_hewan}" required
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Hewan</label>
+          <select name="jenis_hewan" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="anjing" ${hewan.jenis_hewan === 'anjing' ? 'selected' : ''}>Anjing</option>
+            <option value="kucing" ${hewan.jenis_hewan === 'kucing' ? 'selected' : ''}>Kucing</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Ras</label>
+          <input type="text" name="ras" value="${hewan.ras}" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Umur (tahun)</label>
+          <input type="number" name="umur" value="${hewan.umur}" min="0" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Berat (kg)</label>
+          <input type="number" name="berat" value="${hewan.berat}" min="0" step="0.1" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Kelamin</label>
+          <select name="jenis_kelamin" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="jantan" ${hewan.jenis_kelamin === 'jantan' ? 'selected' : ''}>Jantan</option>
+            <option value="betina" ${hewan.jenis_kelamin === 'betina' ? 'selected' : ''}>Betina</option>
+            <option value="tidak diketahui" ${hewan.jenis_kelamin === 'tidak diketahui' ? 'selected' : ''}>Tidak Diketahui</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Kondisi Khusus</label>
+        <textarea name="kondisi_khusus" rows="2"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Alergi, kebiasaan khusus, dll.">${hewan.kondisi_khusus || ''}</textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Catatan Medis</label>
+        <textarea name="catatan_medis" rows="2"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Riwayat penyakit, vaksinasi, dll.">${hewan.catatan_medis || ''}</textarea>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('editContent').innerHTML = content;
+  document.getElementById('editModal').classList.remove('hidden');
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').classList.add('hidden');
+}
+
+// Close modals when clicking outside
+document.addEventListener('click', function(event) {
+  const detailModal = document.getElementById('detailModal');
+  const editModal = document.getElementById('editModal');
+  
+  if (event.target === detailModal) {
+    closeDetailModal();
+  }
+  if (event.target === editModal) {
+    closeEditModal();
+  }
+});
 
 console.log('Pets page script loaded.');
 </script>

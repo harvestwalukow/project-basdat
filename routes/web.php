@@ -159,6 +159,7 @@ Route::middleware('admin')->group(function () {
     Route::get('/admin/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/penitipan', [AdminController::class, 'booking'])->name('admin.booking');
     Route::get('/admin/hewan', [AdminController::class, 'pets'])->name('admin.pets');
+    Route::put('/admin/hewan/{id}/update', [AdminController::class, 'updatePet'])->name('admin.pets.update');
     Route::get('/admin/update-kondisi', [AdminController::class, 'rooms'])->name('admin.rooms');
     Route::get('/admin/paket-layanan', [AdminController::class, 'service'])->name('admin.service');
     Route::get('/admin/pembayaran', [AdminController::class, 'payments'])->name('admin.payments');

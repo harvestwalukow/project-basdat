@@ -109,17 +109,18 @@ class AdminController extends Controller
      */
     public function pets()
     {
-        // Get all pets with owner information
+        // Get all pets with owner and penitipan information
         $hewans = Hewan::with(['pemilik', 'penitipan' => function($query) {
-            $query->orderBy('created_at', 'desc');
+            // Sort penitipan by tanggal_masuk to get the latest one first
+            $query->orderBy('tanggal_masuk', 'desc');
         }])
         ->orderBy('created_at', 'desc')
         ->get();
 
-        // Calculate statistics
-        $totalHewan = $hewans->count();
-        $anjingCount = $hewans->where('jenis_hewan', 'anjing')->count();
-        $kucingCount = $hewans->where('jenis_hewan', 'kucing')->count();
+        // Calculate statistics directly from the database for accuracy
+        $totalHewan = Hewan::count();
+        $anjingCount = Hewan::whereRaw('LOWER(jenis_hewan) IN (?, ?)', ['anjing', 'dog'])->count();
+        $kucingCount = Hewan::whereRaw('LOWER(jenis_hewan) IN (?, ?)', ['kucing', 'cat'])->count();
 
         return view('admin.pets', compact(
             'hewans',
@@ -143,10 +144,14 @@ class AdminController extends Controller
         $sehatCount = $updateKondisis->where('kondisi_hewan', 'sehat')->count();
         $perluPerhatianCount = $updateKondisis->whereIn('kondisi_hewan', ['sakit', 'perlu perhatian', 'tidak baik'])->count();
 
+        // Get all staff for filter dropdown
+        $staffMembers = Pengguna::whereIn('role', ['staff', 'admin'])->orderBy('nama_lengkap')->get();
+
         return view('admin.rooms', compact(
             'updateKondisis',
             'sehatCount',
-            'perluPerhatianCount'
+            'perluPerhatianCount',
+            'staffMembers'
         ));
     }
 
@@ -235,6 +240,37 @@ class AdminController extends Controller
             'dailyRevenueData',
             'dailyRevenueLabels'
         ));
+    }
+
+    /**
+     * Update Pet Data
+     */
+    public function updatePet(Request $request, $id)
+    {
+        try {
+            // Validate input
+            $validated = $request->validate([
+                'nama_hewan' => 'required|string|max:100',
+                'jenis_hewan' => 'required|in:anjing,kucing',
+                'ras' => 'required|string|max:100',
+                'umur' => 'required|integer|min:0',
+                'berat' => 'required|numeric|min:0',
+                'jenis_kelamin' => 'required|in:jantan,betina,tidak diketahui',
+                'kondisi_khusus' => 'nullable|string',
+                'catatan_medis' => 'nullable|string',
+            ]);
+
+            // Find pet
+            $hewan = Hewan::findOrFail($id);
+
+            // Update pet data
+            $hewan->update($validated);
+
+            return redirect()->route('admin.pets')->with('success', 'Data hewan berhasil diperbarui!');
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
     /**

@@ -24,27 +24,19 @@
     </div>
   </div>
 
-  <!-- Filters & Actions (hapus tombol Tambah Penitipan) -->
-  <div class="flex flex-wrap items-center justify-between gap-4">
-    <div class="flex bg-gray-200 rounded-lg p-1">
-      <button id="btnTable" class="px-4 py-2 text-sm font-semibold text-gray-800 bg-white rounded-md shadow">Table View</button>
-      <button id="btnCalendar" class="px-4 py-2 text-sm font-semibold text-gray-500">Calendar View</button>
-    </div>
+  <!-- Filters & Actions -->
+  <div class="flex flex-wrap items-center gap-3">
+    <input id="searchInput" type="text" placeholder="Cari nama pemilik / ID / hewan"
+           class="w-full sm:w-64 px-4 py-2 border rounded-lg" />
 
-    <div class="flex flex-wrap items-center gap-3">
-      <input id="searchInput" type="text" placeholder="Cari nama pemilik / ID / hewan"
-             class="w-full sm:w-64 px-4 py-2 border rounded-lg" />
+    <select id="statusFilter" class="px-4 py-2 border rounded-lg">
+      <option value="">Semua Status</option>
+      <option value="Aktif">Aktif</option>
+      <option value="Selesai">Selesai</option>
+      <option value="Dibatalkan">Dibatalkan</option>
+    </select>
 
-      <!-- Pending dihapus dari opsi -->
-      <select id="statusFilter" class="px-4 py-2 border rounded-lg">
-        <option value="">Semua Status</option>
-        <option value="Aktif">Aktif</option>
-        <option value="Selesai">Selesai</option>
-        <option value="Dibatalkan">Dibatalkan</option>
-      </select>
-
-      <input id="dateFilter" type="date" class="px-4 py-2 border rounded-lg" />
-    </div>
+    <input id="dateFilter" type="date" class="px-4 py-2 border rounded-lg" />
   </div>
 
   <!-- Notifikasi contoh (dihapus) -->
@@ -54,10 +46,9 @@
   </div> --}}
 
   <!-- Tabel Penitipan -->
-  <div id="tableView" class="flex-1 bg-white rounded-lg shadow-md overflow-hidden">
-    <div class="px-6 py-4 border-b flex items-center justify-between">
+  <div class="flex-1 bg-white rounded-lg shadow-md overflow-hidden">
+    <div class="px-6 py-4 border-b">
       <h3 class="font-semibold">DAFTAR PENITIPAN</h3>
-      <button class="text-sm text-blue-600 hover:underline">Export CSV</button>
     </div>
 
     <div class="overflow-x-auto">
@@ -70,7 +61,6 @@
             <th class="p-4">Tanggal Masuk</th>
             <th class="p-4">Tanggal Keluar</th>
             <th class="p-4">Status</th>
-            <th class="p-4">Aksi</th>
           </tr>
         </thead>
 
@@ -92,16 +82,10 @@
                   {{ ucfirst($penitipan->status) }}
                 </span>
               </td>
-              <td class="p-4">
-                <div class="flex gap-2">
-                  <button class="text-blue-600 hover:underline text-sm">Detail</button>
-                  <button class="text-green-600 hover:underline text-sm">Edit</button>
-                </div>
-              </td>
             </tr>
           @empty
             <tr>
-              <td colspan="7" class="p-8 text-center text-gray-500">
+              <td colspan="6" class="p-8 text-center text-gray-500">
                 <p>Belum ada data penitipan</p>
               </td>
             </tr>
@@ -109,14 +93,6 @@
         </tbody>
       </table>
     </div>
-  </div>
-</div>
-
-<!-- Calendar View -->
-<div id="calendarView" class="hidden bg-white rounded-lg shadow-md p-6">
-  <h3 class="font-semibold mb-4">Calendar View</h3>
-  <div class="grid grid-cols-7 gap-4 text-center">
-    <!-- Data calendar akan muncul di sini -->
   </div>
 </div>
 @endsection
@@ -166,27 +142,5 @@
   if (dateFilter)   dateFilter.addEventListener('change',  filterTable);
 
   filterTable();
-
-  // --- SWITCH VIEW ---
-  const btnTable     = document.getElementById('btnTable');
-  const btnCalendar  = document.getElementById('btnCalendar');
-  const tableView    = document.getElementById('tableView');
-  const calendarView = document.getElementById('calendarView');
-
-  btnTable.addEventListener('click', () => {
-    tableView.classList.remove('hidden');
-    calendarView.classList.add('hidden');
-    btnTable.classList.add('bg-white', 'text-gray-800', 'shadow');
-    btnCalendar.classList.remove('bg-white', 'text-gray-800', 'shadow');
-    btnCalendar.classList.add('text-gray-500');
-  });
-
-  btnCalendar.addEventListener('click', () => {
-    calendarView.classList.remove('hidden');
-    tableView.classList.add('hidden');
-    btnCalendar.classList.add('bg-white', 'text-gray-800', 'shadow');
-    btnTable.classList.remove('bg-white', 'text-gray-800', 'shadow');
-    btnTable.classList.add('text-gray-500');
-  });
 })();
 @endpush

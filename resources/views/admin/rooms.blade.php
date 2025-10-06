@@ -47,8 +47,9 @@
 
       <select id="staffFilter" class="px-4 py-2 border rounded-lg" onchange="searchFunction()">
         <option value="">Semua Staff</option>
-        <option value="staff_a">Staff A</option>
-        <option value="staff_b">Staff B</option>
+        @foreach($staffMembers as $staff)
+            <option value="{{ strtolower(str_replace(' ', '_', $staff->nama_lengkap)) }}">{{ $staff->nama_lengkap }}</option>
+        @endforeach
       </select>
 
       <select id="kondisiFilter" class="px-4 py-2 border rounded-lg" onchange="searchFunction()">
