@@ -103,6 +103,28 @@ Route::post('/signin', function (Request $request) {
     return back()->with('error', 'Email atau password salah');
 })->name('signin.submit');
 
+// Reset Password (Lupa Password)
+Route::get('/reset-password', function () {
+    return view('reset_password');
+})->name('password.reset.form');
+
+Route::post('/reset-password', function (Request $request) {
+    $request->validate([
+        'email' => 'required|email|exists:users,email',
+        'password' => 'required|string|min:6|confirmed',
+    ]);
+
+    // Update password di database
+    DB::table('users')
+        ->where('email', $request->email)
+        ->update([
+            'password' => bcrypt($request->password),
+            'updated_at' => now(),
+        ]);
+
+    return redirect()->route('signin')->with('success', 'Password berhasil diperbarui! Silakan login dengan password baru.');
+})->name('password.reset.submit');
+
 // Logout
 Route::get('/logout', function () {
     session()->flush();

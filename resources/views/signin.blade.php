@@ -40,6 +40,19 @@
         <p class="text-gray-600 text-sm">Kelola reservasi dan jadwal hewan kesayangan Anda</p>
       </div>
 
+      <!-- Notifikasi -->
+      @if(session('success'))
+        <div class="bg-green-100 text-green-700 p-2 rounded mb-3 text-center text-sm">
+          {{ session('success') }}
+        </div>
+      @endif
+
+      @if(session('error'))
+        <div class="bg-red-100 text-red-700 p-2 rounded mb-3 text-center text-sm">
+          {{ session('error') }}
+        </div>
+      @endif
+
       <!-- Form -->
       <form action="{{ route('signin.submit') }}" method="POST" class="space-y-4">
         @csrf
@@ -72,7 +85,7 @@
             <input type="checkbox" class="rounded border-gray-300" />
             <span>Ingat saya</span>
           </label>
-          <a href="#" class="text-blue-600 hover:underline">Lupa password?</a>
+          <a href="{{ route('password.reset.form') }}" class="text-blue-600 hover:underline">Lupa password?</a>
         </div>
 
         <!-- Tombol Login -->
