@@ -50,20 +50,36 @@
       <form action="{{ route('signup.submit') }}" method="POST" class="space-y-4">
         @csrf
 
-        <!-- Nama -->
+        <!-- Nama Lengkap -->
         <div>
-          <label for="name" class="block text-sm font-medium">Nama Lengkap</label>
-          <input type="text" id="name" name="name" required
-            placeholder="Nama Anda"
+          <label for="nama_lengkap" class="block text-sm font-medium">Nama Lengkap</label>
+          <input type="text" id="nama_lengkap" name="nama_lengkap" required value="{{ old('nama_lengkap') }}"
+            placeholder="Nama lengkap Anda"
             class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
         </div>
 
         <!-- Email -->
         <div>
           <label for="email" class="block text-sm font-medium">Email</label>
-          <input type="email" id="email" name="email" required
+          <input type="email" id="email" name="email" required value="{{ old('email') }}"
             placeholder="nama@email.com"
             class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
+        </div>
+
+        <!-- No Telepon -->
+        <div>
+          <label for="no_telepon" class="block text-sm font-medium">No. Telepon</label>
+          <input type="tel" id="no_telepon" name="no_telepon" required value="{{ old('no_telepon') }}"
+            placeholder="08xxxxxxxxxx"
+            class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
+        </div>
+
+        <!-- Alamat -->
+        <div>
+          <label for="alamat" class="block text-sm font-medium">Alamat</label>
+          <textarea id="alamat" name="alamat" required rows="2"
+            placeholder="Alamat lengkap Anda"
+            class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">{{ old('alamat') }}</textarea>
         </div>
 
         <!-- Password -->

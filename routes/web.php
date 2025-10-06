@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Models\User;
+use App\Models\Pengguna;
 use App\Http\Controllers\PenitipanController;
 
 // Halaman Utama
@@ -41,7 +42,8 @@ Route::get('/layanan', function () {
 
 // Reservasi
 Route::get('/reservasi', function () {
-    return view('reservasi', ['user' => auth()->user()]);
+    $user = session('user_email') ? Pengguna::where('email', session('user_email'))->first() : null;
+    return view('user.reservasi', ['user' => $user]);
 })->name('reservasi');
 
 Route::post('/reservasi', [PenitipanController::class, 'store'])->name('reservasi.submit');
@@ -63,16 +65,22 @@ Route::post('/signin', function (Request $request) {
     // --- LOGIN MANUAL: ADMIN, OWNER, USER ---
     $manualUsers = [
         'admin@gmail.com' => [
+            'id' => 9999,
+            'name' => 'Admin',
             'password' => '123456',
             'role' => 'admin',
             'redirect' => '/admin/',
         ],
         'owner@gmail.com' => [
+            'id' => 9998,
+            'name' => 'Owner',
             'password' => '123456',
             'role' => 'owner',
             'redirect' => '/owner',
         ],
         'user@gmail.com' => [
+            'id' => 9997,
+            'name' => 'User',
             'password' => '123456',
             'role' => 'user',
             'redirect' => '/dashboard',
@@ -82,21 +90,34 @@ Route::post('/signin', function (Request $request) {
     // Cek dulu apakah email cocok dengan manual user
     if (isset($manualUsers[$email]) && $manualUsers[$email]['password'] === $password) {
         session([
+            'user_id' => $manualUsers[$email]['id'],
             'user_email' => $email,
+            'user_name' => $manualUsers[$email]['name'],
             'user_role' => $manualUsers[$email]['role'],
         ]);
         return redirect($manualUsers[$email]['redirect'])->with('success', 'Berhasil login!');
     }
 
     // --- LOGIN VIA DATABASE (untuk akun yang daftar lewat signup) ---
-    $user = DB::table('users')->where('email', $email)->first();
+    $user = DB::table('pengguna')->where('email', $email)->first();
 
     if ($user && password_verify($password, $user->password)) {
         session([
+            'user_id' => $user->id_pengguna,
             'user_email' => $user->email,
-            'user_role' => 'user',
+            'user_name' => $user->nama_lengkap,
+            'user_role' => $user->role,
         ]);
-        return redirect('/dashboard')->with('success', 'Berhasil login!');
+        
+        // Redirect berdasarkan role
+        $redirectMap = [
+            'admin' => '/admin/',
+            'staff' => '/admin/',
+            'pet_owner' => '/dashboard',
+        ];
+        
+        $redirect = $redirectMap[$user->role] ?? '/dashboard';
+        return redirect($redirect)->with('success', 'Berhasil login!');
     }
 
     // Kalau dua-duanya gagal
@@ -110,12 +131,12 @@ Route::get('/reset-password', function () {
 
 Route::post('/reset-password', function (Request $request) {
     $request->validate([
-        'email' => 'required|email|exists:users,email',
+        'email' => 'required|email|exists:pengguna,email',
         'password' => 'required|string|min:6|confirmed',
     ]);
 
     // Update password di database
-    DB::table('users')
+    DB::table('pengguna')
         ->where('email', $request->email)
         ->update([
             'password' => bcrypt($request->password),
@@ -166,32 +187,71 @@ Route::middleware('owner')->prefix('owner')->name('owner.')->group(function () {
 // Protected Routes - User (Pelanggan)
 Route::middleware('user')->group(function () {
     Route::get('/dashboard', function () {
-        $user = User::where('email', session('user_email'))->first();
-        return view('reservasi', ['user' => $user]);
+        $userId = session('user_id');
+        $user = Pengguna::find($userId);
+        
+        if (!$user) {
+            return redirect()->route('signin')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        // Get all reservations for this user with related data
+        $reservations = DB::table('penitipan')
+            ->leftJoin('hewan', 'penitipan.id_hewan', '=', 'hewan.id_hewan')
+            ->leftJoin('pembayaran', 'penitipan.id_penitipan', '=', 'pembayaran.id_penitipan')
+            ->leftJoin('detail_penitipan', 'penitipan.id_penitipan', '=', 'detail_penitipan.id_penitipan')
+            ->leftJoin('paket_layanan', 'detail_penitipan.id_paket', '=', 'paket_layanan.id_paket')
+            ->where('penitipan.id_pemilik', $userId)
+            ->select(
+                'penitipan.*',
+                'hewan.nama_hewan',
+                'hewan.jenis_hewan',
+                'hewan.ras',
+                'pembayaran.status_pembayaran',
+                'pembayaran.nomor_transaksi',
+                'paket_layanan.nama_paket'
+            )
+            ->orderBy('penitipan.created_at', 'desc')
+            ->get();
+
+        // Calculate statistics
+        $stats = [
+            'total' => $reservations->count(),
+            'aktif' => $reservations->where('status', 'aktif')->count(),
+            'hewan' => DB::table('hewan')->where('id_pemilik', $userId)->count(),
+        ];
+
+        return view('user.dashboard', compact('user', 'reservations', 'stats'));
     })->name('dashboard');
 });
 
 // Proses Sign Up
 Route::post('/signup', function (Request $request) {
     $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users',
+        'nama_lengkap' => 'required|string|max:255',
+        'email' => 'required|email|unique:pengguna,email',
         'password' => 'required|string|min:6|confirmed',
+        'no_telepon' => 'required|string|max:20',
+        'alamat' => 'required|string',
     ]);
 
-    // Simpan ke database (pastikan tabel 'users' ada)
-    DB::table('users')->insert([
-        'name' => $request->name,
+    // Simpan ke database tabel pengguna
+    $userId = DB::table('pengguna')->insertGetId([
+        'nama_lengkap' => $request->nama_lengkap,
         'email' => $request->email,
         'password' => bcrypt($request->password),
+        'no_telepon' => $request->no_telepon,
+        'alamat' => $request->alamat,
+        'role' => 'pet_owner', // Auto set role to pet_owner
         'created_at' => now(),
         'updated_at' => now(),
     ]);
 
     // Setelah daftar, langsung login manual ke sesi
     session([
+        'user_id' => $userId,
         'user_email' => $request->email,
-        'user_role' => 'user',
+        'user_name' => $request->nama_lengkap,
+        'user_role' => 'pet_owner',
     ]);
 
     return redirect('/dashboard')->with('success', 'Akun berhasil dibuat dan Anda telah login!');

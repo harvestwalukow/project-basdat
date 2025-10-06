@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.user')
 
 @section('title', 'Form Reservasi - PawsHotel')
 
@@ -23,19 +23,19 @@
         <div class="p-4 grid md:grid-cols-2 gap-4">
           <div>
             <label for="ownerName" class="block text-sm font-medium text-gray-700">Nama Lengkap *</label>
-            <input type="text" id="ownerName" name="ownerName" value="{{ $user?->name ?? '' }}" class="mt-1 block w-full border rounded p-2" required>
+            <input type="text" id="ownerName" name="ownerName" value="{{ $user->nama_lengkap ?? session('user_name', '') }}" class="mt-1 block w-full border rounded p-2" required>
           </div>
           <div>
             <label for="phone" class="block text-sm font-medium text-gray-700">Nomor Telepon *</label>
-            <input type="text" id="phone" name="phone" class="mt-1 block w-full border rounded p-2" required>
+            <input type="text" id="phone" name="phone" value="{{ $user->no_telepon ?? '' }}" class="mt-1 block w-full border rounded p-2" required>
           </div>
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-            <input type="email" id="email" name="email" value="{{ $user?->email ?? session('user_email') ?? '' }}" class="mt-1 block w-full border rounded p-2">
+            <input type="email" id="email" name="email" value="{{ $user->email ?? session('user_email', '') }}" class="mt-1 block w-full border rounded p-2">
           </div>
           <div>
             <label for="address" class="block text-sm font-medium text-gray-700">Alamat</label>
-            <input type="text" id="address" name="address" class="mt-1 block w-full border rounded p-2">
+            <input type="text" id="address" name="address" value="{{ $user->alamat ?? '' }}" class="mt-1 block w-full border rounded p-2">
           </div>
         </div>
       </div>
@@ -180,7 +180,7 @@
       <div id="ringkasanBiaya" class="bg-white shadow-md rounded-lg border border-yellow-200 p-4"></div>
 
       <div class="flex justify-end space-x-4 mt-6 border-t pt-4">
-        <button type="button" class="px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100" onclick="konfirmasiKembali()">Kembali</button>
+        <a href="{{ url('/user/dashboard') }}" class="px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100">Kembali</a>
         <button type="submit" class="px-4 py-2 rounded bg-[#F2784B] hover:bg-[#e0673d] text-white">Lanjut ke Pembayaran</button>
       </div>
     </form>
@@ -188,12 +188,6 @@
 
 @push('scripts')
   <script>
-    function konfirmasiKembali() {
-      if (confirm('Yakin mau kembali? Data reservasi yang sudah diisi bisa hilang.')) {
-        window.location.href = '/';
-      }
-    }
-
     const ringkasan = document.getElementById('ringkasanBiaya');
     const checkInDateInput = document.getElementById('checkInDate');
     const checkOutDateInput = document.getElementById('checkOutDate');
@@ -299,3 +293,4 @@
   </script>
 @endpush
 @endsection
+

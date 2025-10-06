@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.user')
 
 @section('title', 'Pembayaran Reservasi - PawsHotel')
 
@@ -88,7 +88,7 @@
 
       <!-- Tombol Navigasi -->
       <div class="flex justify-end space-x-4 border-t pt-4">
-        <a href="{{ url('/reservasi') }}" 
+        <a href="{{ url('/user/reservasi') }}" 
            class="px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100">
           edit
         </a>
@@ -131,3 +131,4 @@
   </script>
 @endpush
 @endsection
+
