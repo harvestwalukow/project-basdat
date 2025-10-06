@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_penitipan');
             $table->string('nomor_transaksi')->unique();
             $table->decimal('jumlah_bayar', 10, 2);
-            $table->enum('metode_pembayaran', ['transfer', 'e_wallet', 'qris']);
+            $table->enum('metode_pembayaran', ['cash', 'transfer', 'e_wallet', 'qris', 'kartu_kredit']);
             $table->enum('status_pembayaran', ['pending', 'lunas', 'gagal'])->default('pending');
             $table->dateTime('tanggal_bayar')->nullable();
             $table->string('bukti_pembayaran')->nullable();

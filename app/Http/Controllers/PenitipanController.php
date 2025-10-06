@@ -125,7 +125,7 @@ class PenitipanController extends Controller
                 'id_penitipan' => $penitipanId,
                 'nomor_transaksi' => $nomorTransaksi,
                 'jumlah_bayar' => $totalBiaya,
-                'metode_pembayaran' => 'transfer', // Default, can be changed later
+                'metode_pembayaran' => 'cash', // Default cash, can be changed by admin
                 'status_pembayaran' => 'pending',
                 'tanggal_bayar' => null,
                 'bukti_pembayaran' => null,

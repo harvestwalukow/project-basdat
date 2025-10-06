@@ -37,17 +37,20 @@ class AdminController extends Controller
             ->get();
 
         // Prepare weekly revenue data for chart
-        $revenueData = [0, 0, 0, 0, 0, 0, 0]; // 7 days
+        $revenueData = [];
         $revenueLabels = [];
+        
+        // Indonesian day names
+        $dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
         
         for ($i = 6; $i >= 0; $i--) {
             $date = Carbon::now()->subDays($i);
-            $revenueLabels[] = $date->isoFormat('dddd');
+            
+            // Use Indonesian day names
+            $revenueLabels[] = $dayNames[$date->dayOfWeek] . ', ' . $date->format('d M');
             
             $dayRevenue = $weeklyRevenue->firstWhere('date', $date->format('Y-m-d'));
-            if ($dayRevenue) {
-                $revenueData[6 - $i] = $dayRevenue->total;
-            }
+            $revenueData[] = $dayRevenue ? (float) $dayRevenue->total : 0;
         }
 
         // Get today's schedule (penitipan that start or end today)
@@ -191,6 +194,7 @@ class AdminController extends Controller
             ->get();
 
         $paymentMethodData = [
+            'cash' => 0,
             'transfer' => 0,
             'e_wallet' => 0,
             'qris' => 0,
@@ -231,6 +235,51 @@ class AdminController extends Controller
             'dailyRevenueData',
             'dailyRevenueLabels'
         ));
+    }
+
+    /**
+     * Update Payment Status
+     */
+    public function updatePaymentStatus(Request $request, $id)
+    {
+        try {
+            // Validate input
+            $validated = $request->validate([
+                'metode_pembayaran' => 'required|in:cash,transfer,e_wallet,qris,kartu_kredit',
+                'status_pembayaran' => 'required|in:pending,lunas,gagal',
+                'tanggal_bayar' => 'nullable|date',
+            ]);
+
+            // Find payment
+            $pembayaran = Pembayaran::findOrFail($id);
+
+            // Update payment data
+            $pembayaran->metode_pembayaran = $validated['metode_pembayaran'];
+            $pembayaran->status_pembayaran = $validated['status_pembayaran'];
+            
+            // Set tanggal_bayar if provided, otherwise use current time if status is lunas
+            if ($request->tanggal_bayar) {
+                $pembayaran->tanggal_bayar = $validated['tanggal_bayar'];
+            } elseif ($validated['status_pembayaran'] === 'lunas' && !$pembayaran->tanggal_bayar) {
+                $pembayaran->tanggal_bayar = now();
+            }
+
+            $pembayaran->save();
+
+            // Update penitipan status if payment is completed
+            if ($validated['status_pembayaran'] === 'lunas') {
+                $penitipan = $pembayaran->penitipan;
+                if ($penitipan && $penitipan->status === 'pending') {
+                    $penitipan->status = 'aktif';
+                    $penitipan->save();
+                }
+            }
+
+            return redirect()->route('admin.payments')->with('success', 'Status pembayaran berhasil diperbarui!');
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }
 

@@ -81,27 +81,61 @@
 @endsection
 
 @push('scripts')
-const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-new Chart(revenueCtx, {
-  type: 'line',
-  data: {
-    labels: @json($revenueLabels),
-    datasets: [{
-      label: 'Pendapatan (Rp)',
-      data: @json($revenueData),
-      borderColor: 'rgba(242,120,75,1)',
-      backgroundColor: 'rgba(242,120,75,0.2)',
-      pointRadius: 4,
-      borderWidth: 2,
-      tension: 0.4,
-      fill: true,
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: { y: { beginAtZero: true } },
-    plugins: { legend: { display: true, labels: { boxWidth: 12 } } }
+document.addEventListener('DOMContentLoaded', function() {
+  const revenueCanvas = document.getElementById('revenueChart');
+  
+  if (revenueCanvas) {
+    const revenueCtx = revenueCanvas.getContext('2d');
+    new Chart(revenueCtx, {
+      type: 'line',
+      data: {
+        labels: @json($revenueLabels ?? []),
+        datasets: [{
+          label: 'Pendapatan (Rp)',
+          data: @json($revenueData ?? []),
+          borderColor: 'rgba(242,120,75,1)',
+          backgroundColor: 'rgba(242,120,75,0.2)',
+          pointRadius: 4,
+          borderWidth: 2,
+          tension: 0.4,
+          fill: true,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { 
+          y: { 
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return 'Rp ' + value.toLocaleString('id-ID');
+              }
+            }
+          } 
+        },
+        plugins: { 
+          legend: { 
+            display: true, 
+            labels: { boxWidth: 12 } 
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                let label = context.dataset.label || '';
+                if (label) {
+                  label += ': ';
+                }
+                label += 'Rp ' + context.parsed.y.toLocaleString('id-ID');
+                return label;
+              }
+            }
+          }
+        }
+      }
+    });
+  } else {
+    console.error('Canvas element with id "revenueChart" not found');
   }
 });
 @endpush

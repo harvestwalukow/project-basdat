@@ -2,6 +2,29 @@
 
 @section('content')
 <div class="pb-8">
+  <!-- Success/Error Messages -->
+  @if(session('success'))
+    <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg flex items-center justify-between">
+      <span>{{ session('success') }}</span>
+      <button onclick="this.parentElement.remove()" class="text-green-700 hover:text-green-900">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+  @endif
+
+  @if(session('error'))
+    <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg flex items-center justify-between">
+      <span>{{ session('error') }}</span>
+      <button onclick="this.parentElement.remove()" class="text-red-700 hover:text-red-900">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+  @endif
+
   <!-- Header -->
   <header class="flex items-center justify-between mb-6">
     <div>
@@ -49,6 +72,7 @@
         onkeyup="filterPayments()">
       <select id="metodeFilter" class="px-4 py-2 border rounded-lg" onchange="filterPayments()">
         <option value="">Semua Metode</option>
+        <option value="cash">Cash</option>
         <option value="transfer">Transfer Bank</option>
         <option value="e_wallet">E-Wallet</option>
         <option value="qris">QRIS</option>
@@ -82,6 +106,7 @@
               <th class="p-4 font-semibold">Jumlah</th>
               <th class="p-4 font-semibold">Metode</th>
               <th class="p-4 font-semibold">Status</th>
+              <th class="p-4 font-semibold">Aksi</th>
             </tr>
           </thead>
           <tbody id="tableBody">
@@ -108,7 +133,8 @@
                 <td class="p-4 font-semibold">Rp {{ number_format($pembayaran->jumlah_bayar, 0, ',', '.') }}</td>
                 <td class="p-4">
                   <span class="px-2 py-1 text-xs rounded-full
-                    @if($pembayaran->metode_pembayaran == 'transfer') bg-blue-100 text-blue-700
+                    @if($pembayaran->metode_pembayaran == 'cash') bg-gray-100 text-gray-700
+                    @elseif($pembayaran->metode_pembayaran == 'transfer') bg-blue-100 text-blue-700
                     @elseif($pembayaran->metode_pembayaran == 'e_wallet') bg-green-100 text-green-700
                     @elseif($pembayaran->metode_pembayaran == 'qris') bg-yellow-100 text-yellow-700
                     @else bg-purple-100 text-purple-700
@@ -125,10 +151,27 @@
                     {{ ucfirst($pembayaran->status_pembayaran) }}
                   </span>
                 </td>
+                <td class="p-4">
+                  @if($pembayaran->status_pembayaran == 'pending')
+                    <button 
+                      onclick="openPaymentModal({{ $pembayaran->id_pembayaran }}, '{{ $pembayaran->nomor_transaksi }}', {{ $pembayaran->jumlah_bayar }}, '{{ $pembayaran->metode_pembayaran }}')"
+                      class="px-3 py-1.5 text-xs font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition">
+                      Konfirmasi Bayar
+                    </button>
+                  @elseif($pembayaran->status_pembayaran == 'lunas')
+                    <span class="text-xs text-gray-500">-</span>
+                  @else
+                    <button 
+                      onclick="openPaymentModal({{ $pembayaran->id_pembayaran }}, '{{ $pembayaran->nomor_transaksi }}', {{ $pembayaran->jumlah_bayar }}, '{{ $pembayaran->metode_pembayaran }}')"
+                      class="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition">
+                      Update Status
+                    </button>
+                  @endif
+                </td>
               </tr>
             @empty
               <tr>
-                <td colspan="7" class="p-8 text-center text-gray-500">
+                <td colspan="8" class="p-8 text-center text-gray-500">
                   <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                   </svg>
@@ -150,6 +193,84 @@
       <p class="text-lg font-medium">Tidak ada hasil ditemukan</p>
       <p class="text-sm text-gray-400 mt-1">Coba ubah filter pencarian Anda</p>
     </div>
+  </div>
+</div>
+
+<!-- Modal Update Pembayaran -->
+<div id="paymentModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-xl font-bold text-gray-800">Update Status Pembayaran</h3>
+      <button onclick="closePaymentModal()" class="text-gray-400 hover:text-gray-600 transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <form id="paymentForm" method="POST" action="">
+      @csrf
+      @method('PUT')
+      
+      <div class="space-y-4 mb-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nomor Transaksi</label>
+          <p id="modalNomorTransaksi" class="text-gray-900 font-semibold">-</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Jumlah Pembayaran</label>
+          <p id="modalJumlah" class="text-gray-900 font-semibold">-</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Metode Pembayaran</label>
+          <select name="metode_pembayaran" id="modalMetode" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="cash">Cash</option>
+            <option value="transfer">Transfer Bank</option>
+            <option value="e_wallet">E-Wallet</option>
+            <option value="qris">QRIS</option>
+            <option value="kartu_kredit">Kartu Kredit</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Status Pembayaran</label>
+          <select name="status_pembayaran" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="pending">Pending</option>
+            <option value="lunas">Lunas</option>
+            <option value="gagal">Gagal</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Pembayaran</label>
+          <input type="datetime-local" name="tanggal_bayar" 
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <p class="text-xs text-gray-500 mt-1">Kosongkan untuk menggunakan waktu sekarang</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Catatan (Opsional)</label>
+          <textarea name="catatan" rows="2"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Tambahkan catatan jika diperlukan"></textarea>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        <button type="button" onclick="closePaymentModal()"
+          class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium">
+          Batal
+        </button>
+        <button type="submit"
+          class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium">
+          Update Status
+        </button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -221,6 +342,36 @@ function filterPayments() {
   }
 }
 
+// Modal functions
+function openPaymentModal(idPembayaran, nomorTransaksi, jumlah, metode) {
+  const modal = document.getElementById('paymentModal');
+  const form = document.getElementById('paymentForm');
+  
+  // Set form action URL
+  form.action = '/admin/pembayaran/' + idPembayaran + '/update-status';
+  
+  // Fill modal data
+  document.getElementById('modalNomorTransaksi').textContent = nomorTransaksi;
+  document.getElementById('modalJumlah').textContent = 'Rp ' + parseInt(jumlah).toLocaleString('id-ID');
+  document.getElementById('modalMetode').value = metode;
+  
+  // Show modal
+  modal.classList.remove('hidden');
+}
+
+function closePaymentModal() {
+  const modal = document.getElementById('paymentModal');
+  modal.classList.add('hidden');
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', function(event) {
+  const modal = document.getElementById('paymentModal');
+  if (event.target === modal) {
+    closePaymentModal();
+  }
+});
+
 console.log('Pembayaran page loaded');
 </script>
 @endsection
@@ -233,16 +384,18 @@ console.log('Pembayaran page loaded');
   new Chart(paymentMethodCtx, {
     type: 'bar',
     data: {
-      labels: ['Transfer Bank', 'E-Wallet', 'QRIS', 'Kartu Kredit'],
+      labels: ['Cash', 'Transfer Bank', 'E-Wallet', 'QRIS', 'Kartu Kredit'],
       datasets: [{
         label: 'Jumlah Transaksi',
         data: [
+          {{ $paymentMethodData['cash'] ?? 0 }},
           {{ $paymentMethodData['transfer'] }},
           {{ $paymentMethodData['e_wallet'] }},
           {{ $paymentMethodData['qris'] }},
           {{ $paymentMethodData['kartu_kredit'] ?? 0 }}
         ],
         backgroundColor: [
+          'rgba(107, 114, 128, 0.8)',
           'rgba(59, 130, 246, 0.8)',
           'rgba(16, 185, 129, 0.8)',
           'rgba(245, 158, 11, 0.8)',

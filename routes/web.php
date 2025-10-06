@@ -162,6 +162,7 @@ Route::middleware('admin')->group(function () {
     Route::get('/admin/update-kondisi', [AdminController::class, 'rooms'])->name('admin.rooms');
     Route::get('/admin/paket-layanan', [AdminController::class, 'service'])->name('admin.service');
     Route::get('/admin/pembayaran', [AdminController::class, 'payments'])->name('admin.payments');
+    Route::put('/admin/pembayaran/{id}/update-status', [AdminController::class, 'updatePaymentStatus'])->name('admin.payments.update');
 });
 
 
