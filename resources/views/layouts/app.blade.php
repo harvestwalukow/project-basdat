@@ -26,10 +26,10 @@
       </a>
 
       <nav class="hidden md:flex col-span-6 md:col-span-6 justify-center gap-8 font-medium">
-        <a href="{{ url('/') }}" class="hover:text-[#F2784B]">Beranda</a>
-        <a href="{{ url('/layanan') }}" class="hover:text-[#F2784B]">Layanan</a>
-        <a href="{{ url('/about') }}" class="hover:text-[#F2784B]">Tentang Kami</a>
-        <a href="{{ url('/kontak') }}" class="hover:text-[#F2784B]">Kontak</a>
+        <a href="{{ url('/') }}" class="hover:text-[#F2784B] transition-all {{ request()->is('/') ? 'text-[#F2784B] font-bold border-b-2 border-[#F2784B] pb-1' : '' }}">Beranda</a>
+        <a href="{{ url('/layanan') }}" class="hover:text-[#F2784B] transition-all {{ request()->is('layanan') ? 'text-[#F2784B] font-bold border-b-2 border-[#F2784B] pb-1' : '' }}">Layanan</a>
+        <a href="{{ url('/about') }}" class="hover:text-[#F2784B] transition-all {{ request()->is('about') ? 'text-[#F2784B] font-bold border-b-2 border-[#F2784B] pb-1' : '' }}">Tentang Kami</a>
+        <a href="{{ url('/kontak') }}" class="hover:text-[#F2784B] transition-all {{ request()->is('kontak') ? 'text-[#F2784B] font-bold border-b-2 border-[#F2784B] pb-1' : '' }}">Kontak</a>
       </nav>
       <!-- Tombol Sign In & Sign Up -->
        <div class="col-span-6 md:col-span-3 flex justify-end space-x-3">
