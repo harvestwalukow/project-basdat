@@ -54,7 +54,7 @@
     <!-- Tim -->
     <div class="max-w-6xl mx-auto px-6 mb-20">
         <h2 class="text-3xl font-bold text-center mb-12">Tim Profesional Kami</h2>
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="grid md:grid-cols-3 lg:grid-cols-3 gap-8">
             <div class="bg-white rounded-lg shadow p-6 text-center">
                 <div class="w-24 h-24 bg-[#FEFBF7] border rounded-full mx-auto mb-4 flex items-center justify-center">
                     👩‍⚕️
@@ -79,8 +79,33 @@
                 <p class="text-gray-600">Pet Care Specialist</p>
                 <p class="text-sm text-[#F2784B]">6 tahun pengalaman - Pengasuh hewan</p>
             </div>
+            <div class="bg-white rounded-lg shadow p-6 text-center">
+                <div class="w-24 h-24 bg-[#FEFBF7] border rounded-full mx-auto mb-4 flex items-center justify-center">
+                    🐶
+                </div>
+                <h3 class="font-bold">Kevin Pratama</h3>
+                <p class="text-gray-600">Trainer Hewan</p>
+                <p class="text-sm text-[#F2784B]">7 tahun pengalaman - Ahli perilaku hewan</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6 text-center">
+                <div class="w-24 h-24 bg-[#FEFBF7] border rounded-full mx-auto mb-4 flex items-center justify-center">
+                    🧼
+                </div>
+                <h3 class="font-bold">Rina Melati</h3>
+                <p class="text-gray-600">Grooming Specialist</p>
+                <p class="text-sm text-[#F2784B]">4 tahun pengalaman - Styling & perawatan bulu</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6 text-center">
+                <div class="w-24 h-24 bg-[#FEFBF7] border rounded-full mx-auto mb-4 flex items-center justify-center">
+                    🐕
+                </div>
+                <h3 class="font-bold">Dimas Aryo</h3>
+                <p class="text-gray-600">Pet Sitter</p>
+                <p class="text-sm text-[#F2784B]">5 tahun pengalaman - Perawatan harian & feeding</p>
+            </div>
         </div>
     </div>
+
 
     <!-- Fasilitas -->
     <div class="max-w-6xl mx-auto px-6 mb-20">
