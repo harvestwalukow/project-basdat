@@ -13,14 +13,18 @@
   @stack('styles')
 </head>
 
-<body class="@yield('body-class', 'bg-cover bg-center bg-fixed text-[#333333] antialiased')" @yield('body-style')>
+<body class="bg-cover bg-center bg-fixed text-[#333333] antialiased" 
+      style="background-image: url('{{ asset('img/backround.png') }}'); background-size: cover; background-attachment: fixed;">
+
 
 <!-- NAVBAR -->
   <header class="sticky top-0 z-50 bg-[#fff2de]/90 backdrop-blur border-b border-orange-100/60">
     <div class="max-w-7xl mx-auto px-6 py-4 grid grid-cols-12 items-center gap-4">
-      <a href="{{ url('/') }}" class="col-span-6 md:col-span-3 text-2xl font-extrabold text-[#F2784B]">
-        PawsHotel
+      <a href="{{ url('/') }}" class="col-span-6 md:col-span-3 flex items-center space-x-2">
+        <img src="{{ asset('img/logo1.png') }}" alt="PawsHotel Logo" class="w-8 h-8 md:w-10 md:h-10">
+        <span class="text-2xl font-extrabold text-[#F2784B]">PawsHotel</span>
       </a>
+
       <nav class="hidden md:flex col-span-6 md:col-span-6 justify-center gap-8 font-medium">
         <a href="{{ url('/') }}" class="hover:text-[#F2784B]">Beranda</a>
         <a href="{{ url('/layanan') }}" class="hover:text-[#F2784B]">Layanan</a>
