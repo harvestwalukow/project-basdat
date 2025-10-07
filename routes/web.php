@@ -153,6 +153,9 @@ Route::middleware('admin')->group(function () {
     Route::put('/admin/hewan/{id}/update', [AdminController::class, 'updatePet'])->name('admin.pets.update');
     Route::get('/admin/update-kondisi', [AdminController::class, 'rooms'])->name('admin.rooms');
     Route::post('/admin/update-kondisi', [AdminController::class, 'storeUpdateKondisi'])->name('admin.rooms.store');
+    Route::get('/admin/update-kondisi/{id}', [AdminController::class, 'showUpdateKondisi'])->name('admin.rooms.show');
+    Route::put('/admin/update-kondisi/{id}', [AdminController::class, 'updateUpdateKondisi'])->name('admin.rooms.update');
+    Route::delete('/admin/update-kondisi/{id}', [AdminController::class, 'deleteUpdateKondisi'])->name('admin.rooms.delete');
     Route::get('/admin/paket-layanan', [AdminController::class, 'service'])->name('admin.service');
     Route::post('/admin/paket-layanan', [AdminController::class, 'storePaket'])->name('admin.service.store');
     Route::get('/admin/paket-layanan/{id}', [AdminController::class, 'showPaket'])->name('admin.service.show');

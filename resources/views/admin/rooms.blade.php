@@ -97,6 +97,7 @@
               <th class="p-4">Kondisi Hewan</th>
               <th class="p-4">Aktivitas</th>
               <th class="p-4">Waktu Update</th>
+              <th class="p-4">Aksi</th>
             </tr>
           </thead>
           <tbody id="tableBody">
@@ -166,10 +167,24 @@
                     <p class="text-xs text-gray-500">{{ $update->waktu_update->format('H:i') }}</p>
                   </div>
                 </td>
+                <td class="p-4">
+                  <div class="flex gap-2">
+                    <button onclick="openEditModal({{ $update->id_update }})" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg" title="Edit">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                      </svg>
+                    </button>
+                    <button onclick="confirmDelete({{ $update->id_update }})" class="p-2 text-red-600 hover:bg-red-50 rounded-lg" title="Delete">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
               </tr>
             @empty
               <tr>
-                <td colspan="7" class="p-8 text-center text-gray-500">
+                <td colspan="8" class="p-8 text-center text-gray-500">
                   <p>Belum ada update kondisi</p>
                 </td>
               </tr>
@@ -264,6 +279,116 @@
   </div>
 </div>
 
+<!-- Modal Edit Update -->
+<div id="editUpdateModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold">Edit Update Kondisi</h2>
+      <button onclick="closeEditModal()" class="text-gray-500 hover:text-gray-700">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <form id="editUpdateForm" method="POST" enctype="multipart/form-data">
+      @csrf
+      @method('PUT')
+      
+      <div class="space-y-4">
+        <!-- Pilih Penitipan -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Penitipan Aktif *</label>
+          <select name="id_penitipan" id="edit_id_penitipan" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Pilih Penitipan</option>
+            @foreach($aktivePenitipan as $penitipan)
+              <option value="{{ $penitipan->id_penitipan }}">
+                PNT-{{ str_pad($penitipan->id_penitipan, 4, '0', STR_PAD_LEFT) }} - 
+                {{ $penitipan->hewan->nama_hewan }} 
+                ({{ $penitipan->pemilik->nama_lengkap }})
+              </option>
+            @endforeach
+          </select>
+        </div>
+
+        <!-- Kondisi Hewan -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Kondisi Hewan *</label>
+          <select name="kondisi_hewan" id="edit_kondisi_hewan" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Pilih Kondisi</option>
+            <option value="sehat">Sehat</option>
+            <option value="perlu perhatian">Perlu Perhatian</option>
+            <option value="sakit">Sakit</option>
+          </select>
+        </div>
+
+        <!-- Aktivitas Hari Ini -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Aktivitas Hari Ini *</label>
+          <textarea name="aktivitas_hari_ini" id="edit_aktivitas_hari_ini" required rows="3" 
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Contoh: Makan 3x sehari, bermain di taman, tidur nyenyak"></textarea>
+        </div>
+
+        <!-- Catatan Staff -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Catatan Staff</label>
+          <textarea name="catatan_staff" id="edit_catatan_staff" rows="3" 
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Catatan tambahan (opsional)"></textarea>
+        </div>
+
+        <!-- Foto Hewan -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Foto Hewan</label>
+          <input type="file" name="foto_hewan" accept="image/*"
+            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, GIF (max 2MB) - Kosongkan jika tidak ingin mengubah foto</p>
+          <div id="current_foto" class="mt-2"></div>
+        </div>
+      </div>
+
+      <div class="flex gap-4 mt-6">
+        <button type="submit" class="flex-1 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+          Perbarui Update
+        </button>
+        <button type="button" onclick="closeEditModal()" class="flex-1 bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300">
+          Batal
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+    <div class="flex justify-center mb-4">
+      <div class="rounded-full bg-red-100 p-3">
+        <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+        </svg>
+      </div>
+    </div>
+    <h3 class="text-xl font-bold text-center mb-2">Konfirmasi Hapus</h3>
+    <p class="text-gray-600 text-center mb-6">Apakah Anda yakin ingin menghapus update kondisi ini? Tindakan ini tidak dapat dibatalkan.</p>
+    
+    <form id="deleteForm" method="POST">
+      @csrf
+      @method('DELETE')
+      
+      <div class="flex gap-4">
+        <button type="submit" class="flex-1 bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700">
+          Ya, Hapus
+        </button>
+        <button type="button" onclick="closeDeleteModal()" class="flex-1 bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300">
+          Batal
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <style>
 /* Custom scrollbar styling */
 .scrollbar-custom::-webkit-scrollbar {
@@ -310,6 +435,20 @@ document.addEventListener('DOMContentLoaded', function() {
   modal.addEventListener('click', function(e) {
     if (e.target === modal) {
       closeModal();
+    }
+  });
+
+  const editModal = document.getElementById('editUpdateModal');
+  editModal.addEventListener('click', function(e) {
+    if (e.target === editModal) {
+      closeEditModal();
+    }
+  });
+
+  const deleteModal = document.getElementById('deleteModal');
+  deleteModal.addEventListener('click', function(e) {
+    if (e.target === deleteModal) {
+      closeDeleteModal();
     }
   });
 });
@@ -404,6 +543,61 @@ function toggleCatatan(button) {
     fullText.classList.remove('hidden');
     button.textContent = 'Lihat lebih sedikit';
   }
+}
+
+// Edit Modal Functions
+function openEditModal(updateId) {
+  // Fetch update kondisi data
+  fetch(`/admin/update-kondisi/${updateId}`)
+    .then(response => response.json())
+    .then(data => {
+      // Set form action
+      document.getElementById('editUpdateForm').action = `/admin/update-kondisi/${updateId}`;
+      
+      // Populate form fields
+      document.getElementById('edit_id_penitipan').value = data.id_penitipan;
+      document.getElementById('edit_kondisi_hewan').value = data.kondisi_hewan;
+      document.getElementById('edit_aktivitas_hari_ini').value = data.aktivitas_hari_ini;
+      document.getElementById('edit_catatan_staff').value = data.catatan_staff || '';
+      
+      // Show current photo if exists
+      const currentFotoDiv = document.getElementById('current_foto');
+      if (data.foto_hewan) {
+        currentFotoDiv.innerHTML = `
+          <p class="text-xs text-gray-600 mb-1">Foto saat ini:</p>
+          <img src="/${data.foto_hewan}" alt="Current photo" class="w-32 h-32 object-cover rounded-lg">
+        `;
+      } else {
+        currentFotoDiv.innerHTML = '';
+      }
+      
+      // Show modal
+      document.getElementById('editUpdateModal').classList.remove('hidden');
+      document.getElementById('editUpdateModal').classList.add('flex');
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Gagal memuat data update kondisi');
+    });
+}
+
+function closeEditModal() {
+  document.getElementById('editUpdateModal').classList.remove('flex');
+  document.getElementById('editUpdateModal').classList.add('hidden');
+  document.getElementById('editUpdateForm').reset();
+  document.getElementById('current_foto').innerHTML = '';
+}
+
+// Delete Modal Functions
+function confirmDelete(updateId) {
+  document.getElementById('deleteForm').action = `/admin/update-kondisi/${updateId}`;
+  document.getElementById('deleteModal').classList.remove('hidden');
+  document.getElementById('deleteModal').classList.add('flex');
+}
+
+function closeDeleteModal() {
+  document.getElementById('deleteModal').classList.remove('flex');
+  document.getElementById('deleteModal').classList.add('hidden');
 }
 </script>
 @endsection
