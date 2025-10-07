@@ -188,6 +188,10 @@ Route::middleware('user')->group(function () {
     })->name('reservasi');
 
     Route::post('/reservasi', [PenitipanController::class, 'store'])->name('reservasi.submit');
+    
+    // Payment routes
+    Route::get('/payment', [PenitipanController::class, 'paymentPage'])->name('payment.page');
+    Route::get('/payment/finish', [PenitipanController::class, 'paymentFinish'])->name('payment.finish');
 
     Route::get('/dashboard', function () {
         $userId = session('user_id');
@@ -211,6 +215,7 @@ Route::middleware('user')->group(function () {
                 'hewan.ras',
                 'pembayaran.status_pembayaran',
                 'pembayaran.nomor_transaksi',
+                'pembayaran.metode_pembayaran',
                 'paket_layanan.nama_paket'
             )
             ->orderBy('penitipan.created_at', 'desc')
@@ -226,6 +231,9 @@ Route::middleware('user')->group(function () {
         return view('user.dashboard', compact('user', 'reservations', 'stats'));
     })->name('dashboard');
 });
+
+// Payment callback (outside middleware as Midtrans will call this)
+Route::post('/payment/callback', [PenitipanController::class, 'paymentCallback'])->name('payment.callback');
 
 // Proses Sign Up
 Route::post('/signup', function (Request $request) {

@@ -11,7 +11,33 @@
       <p class="text-gray-700">Isi form di bawah untuk melakukan reservasi PawsHotel</p>
     </div>
 
-    <form action="{{ route('reservasi.submit') }}" method="POST" class="space-y-8">
+    <!-- Display Errors -->
+    @if ($errors->any())
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <strong>Oops! Ada beberapa masalah:</strong>
+        <ul class="mt-2 list-disc list-inside">
+          @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+    @endif
+
+    <!-- Display Success Message -->
+    @if (session('success'))
+      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+        {{ session('success') }}
+      </div>
+    @endif
+
+    <!-- Display Error Message -->
+    @if (session('error'))
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        {{ session('error') }}
+      </div>
+    @endif
+
+    <form action="{{ route('reservasi.submit') }}" method="POST" class="space-y-8" id="reservasiForm">
       @csrf
 
       <!-- Informasi Pemilik -->
@@ -177,9 +203,10 @@
 
       <!-- Tombol Aksi -->
       <div class="flex justify-end space-x-4 mt-6 border-t pt-4" style="border-color:#f9a826;">
-        <a href="{{ url('/user/dashboard') }}" class="px-4 py-2 rounded border text-gray-700 hover:bg-[#fff4e3] transition" style="border-color:#f9a826;">Kembali</a>
-        <button type="submit" class="px-4 py-2 rounded text-white hover:opacity-90 transition" style="background-color:#f9a826;">Lanjut ke Pembayaran</button>
+        <a href="{{ url('/dashboard') }}" class="px-4 py-2 rounded border text-gray-700 hover:bg-[#fff4e3] transition" style="border-color:#f9a826;">Kembali</a>
+        <button type="submit" id="submitBtn" class="px-4 py-2 rounded text-white hover:opacity-90 transition" style="background-color:#f9a826;">Lanjut ke Pembayaran</button>
       </div>
+    </form>
 </div>
 
 
@@ -193,7 +220,24 @@
     const decrementBtns = document.querySelectorAll('.decrement');
     const packageTypeInput = document.getElementById('packageType');
     const packageIdInput = document.getElementById('packageId');
+    const reservasiForm = document.getElementById('reservasiForm');
+    const submitBtn = document.getElementById('submitBtn');
     let selectedPaket = null;
+
+    // Form validation before submit
+    reservasiForm.addEventListener('submit', function(e) {
+      if (!selectedPaket) {
+        e.preventDefault();
+        alert('⚠️ Silakan pilih paket layanan terlebih dahulu!');
+        window.scrollTo({top: 0, behavior: 'smooth'});
+        return false;
+      }
+      
+      // Disable button to prevent double submit
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Memproses...';
+      submitBtn.style.opacity = '0.6';
+    });
 
     function pilihPaket(el) {
       document.querySelectorAll('[data-harga]').forEach(card => card.classList.remove('border-4', 'border-orange-400'));

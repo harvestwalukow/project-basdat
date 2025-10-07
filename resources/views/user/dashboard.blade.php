@@ -145,21 +145,52 @@
 
             @if($reservation->status_pembayaran)
               <div class="mt-3 pt-3 border-t border-gray-100">
-                <div class="flex items-center justify-between text-sm">
-                  <span class="text-gray-600">Status Pembayaran:</span>
-                  @php
-                    $paymentColors = [
-                      'pending' => 'text-yellow-700',
-                      'lunas' => 'text-green-700',
-                      'gagal' => 'text-red-700'
-                    ];
-                  @endphp
-                  <span class="font-semibold {{ $paymentColors[$reservation->status_pembayaran] ?? 'text-gray-700' }}">
-                    {{ ucfirst($reservation->status_pembayaran) }}
-                  </span>
+                <div class="grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <span class="text-gray-600">Status Pembayaran:</span>
+                    @php
+                      $paymentStatusColors = [
+                        'pending' => 'bg-yellow-100 text-yellow-700',
+                        'lunas' => 'bg-green-100 text-green-700',
+                        'gagal' => 'bg-red-100 text-red-700'
+                      ];
+                      $paymentStatusLabels = [
+                        'pending' => 'Pending',
+                        'lunas' => 'Lunas',
+                        'gagal' => 'Gagal'
+                      ];
+                    @endphp
+                    <span class="inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded {{ $paymentStatusColors[$reservation->status_pembayaran] ?? 'bg-gray-100 text-gray-700' }}">
+                      {{ $paymentStatusLabels[$reservation->status_pembayaran] ?? ucfirst($reservation->status_pembayaran) }}
+                    </span>
+                  </div>
+                  @if($reservation->metode_pembayaran)
+                  <div>
+                    <span class="text-gray-600">Metode:</span>
+                    @php
+                      $methodIcons = [
+                        'cash' => '💵',
+                        'transfer' => '🏦',
+                        'e_wallet' => '📱',
+                        'qris' => '📲',
+                        'kartu_kredit' => '💳'
+                      ];
+                      $methodLabels = [
+                        'cash' => 'Cash',
+                        'transfer' => 'Transfer',
+                        'e_wallet' => 'E-Wallet',
+                        'qris' => 'QRIS',
+                        'kartu_kredit' => 'Kartu Kredit'
+                      ];
+                    @endphp
+                    <span class="inline-block mt-1 text-xs">
+                      {{ $methodIcons[$reservation->metode_pembayaran] ?? '💰' }} {{ $methodLabels[$reservation->metode_pembayaran] ?? '-' }}
+                    </span>
+                  </div>
+                  @endif
                 </div>
                 @if($reservation->nomor_transaksi)
-                  <p class="text-xs text-gray-500 mt-1">Transaksi: {{ $reservation->nomor_transaksi }}</p>
+                  <p class="text-xs text-gray-500 mt-2">ID Transaksi: {{ $reservation->nomor_transaksi }}</p>
                 @endif
               </div>
             @endif
