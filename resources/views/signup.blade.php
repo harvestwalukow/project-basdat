@@ -90,7 +90,7 @@
               placeholder="Minimal 6 karakter"
               class="w-full border rounded-lg px-3 py-2 pr-10 focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
             <button type="button" onclick="togglePassword('password', this)"
-              class="absolute right-3 top-2.5 text-gray-500 focus:outline-none">👁️</button>
+              class="absolute right-3 top-2.5 text-gray-500 focus:outline-none">🙉</button>
           </div>
         </div>
 
@@ -102,7 +102,7 @@
               placeholder="Ulangi kata sandi"
               class="w-full border rounded-lg px-3 py-2 pr-10 focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
             <button type="button" onclick="togglePassword('password_confirmation', this)"
-              class="absolute right-3 top-2.5 text-gray-500 focus:outline-none">👁️</button>
+              class="absolute right-3 top-2.5 text-gray-500 focus:outline-none">🙉</button>
           </div>
         </div>
 
@@ -128,7 +128,7 @@
         btn.textContent = "🙈"; // tampilkan
       } else {
         input.type = "password";
-        btn.textContent = "👁️"; // sembunyikan lagi
+        btn.textContent = "🙉"; // sembunyikan lagi
       }
     }
   </script>
