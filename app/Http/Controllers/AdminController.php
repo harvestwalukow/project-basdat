@@ -595,6 +595,27 @@ class AdminController extends Controller
     }
 
     /**
+     * Delete Paket Layanan
+     */
+    public function deletePaket($id)
+    {
+        try {
+            $paket = PaketLayanan::findOrFail($id);
+            
+            // Check if paket has related bookings
+            if ($paket->detailPenitipan()->count() > 0) {
+                return back()->with('error', 'Tidak dapat menghapus paket yang sudah memiliki pemesanan!');
+            }
+
+            $paket->delete();
+
+            return redirect()->route('admin.service')->with('success', 'Paket layanan berhasil dihapus!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Staff Management
      */
     public function staff()

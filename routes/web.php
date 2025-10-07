@@ -160,6 +160,7 @@ Route::middleware('admin')->group(function () {
     Route::post('/admin/paket-layanan', [AdminController::class, 'storePaket'])->name('admin.service.store');
     Route::get('/admin/paket-layanan/{id}', [AdminController::class, 'showPaket'])->name('admin.service.show');
     Route::put('/admin/paket-layanan/{id}', [AdminController::class, 'updatePaket'])->name('admin.service.update');
+    Route::delete('/admin/paket-layanan/{id}', [AdminController::class, 'deletePaket'])->name('admin.service.delete');
     Route::put('/admin/paket-layanan/{id}/toggle', [AdminController::class, 'togglePaketStatus'])->name('admin.service.toggle');
     Route::get('/admin/pembayaran', [AdminController::class, 'payments'])->name('admin.payments');
     Route::put('/admin/pembayaran/{id}/update-status', [AdminController::class, 'updatePaymentStatus'])->name('admin.payments.update');
