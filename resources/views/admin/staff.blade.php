@@ -40,8 +40,8 @@
   {{-- Tabs --}}
   <div>
     <ul class="flex border-b text-sm font-medium">
-      <li class="mr-2"><a href="#employees" class="tab-link inline-block p-4 border-b-2 border-blue-600" data-tab="employees">Daftar Karyawan</a></li>
-      <li class="mr-2"><a href="#schedule" class="tab-link inline-block p-4" data-tab="schedule">Jadwal Kerja</a></li>
+      <li class="mr-2"><a href="#employees" class="tab-link inline-block p-4 border-b-2 border-transparent hover:border-gray-300" data-tab="employees">Daftar Karyawan</a></li>
+      <li class="mr-2"><a href="#schedule" class="tab-link inline-block p-4 border-b-2 border-transparent hover:border-gray-300" data-tab="schedule">Jadwal Kerja</a></li>
     </ul>
   </div>
 
@@ -53,29 +53,20 @@
           <div class="flex items-center justify-between mb-3">
             <div>
               <h3 class="font-semibold">{{ $emp['name'] }}</h3>
-              <p class="text-sm text-gray-500">{{ $emp['position'] }}</p>
+              <p class="text-sm text-gray-500">{{ $emp['specialization'] }}</p>
             </div>
             <span class="px-2 py-1 text-xs rounded {{ $emp['status'] == 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700' }}">
               {{ $emp['status'] == 'active' ? 'Aktif' : 'Non-aktif' }}
             </span>
           </div>
 
-          <div class="flex justify-between items-center mb-2">
-            <span class="px-2 py-1 text-xs rounded bg-blue-100 text-blue-700">{{ $emp['department'] }}</span>
-            <span class="flex items-center text-gray-400">★ {{ number_format($emp['rating'] ?? 0, 1) }}</span>
+          <div class="space-y-1 text-sm text-gray-600 mb-3">
+            <p>{{ $emp['email'] }}</p>
+            <p>{{ $emp['phone'] }}</p>
+            <p>Bergabung: {{ $emp['joinDate'] }}</p>
           </div>
 
-          <p class="text-sm text-gray-600">{{ $emp['email'] }}</p>
-          <p class="text-sm text-gray-600">{{ $emp['phone'] }}</p>
-          <p class="text-sm text-gray-600">{{ $emp['shift'] }}</p>
-
-          <div class="bg-gray-100 p-2 rounded mt-3 text-sm space-y-1">
-            <p><b>Spesialisasi:</b> {{ $emp['specialization'] }}</p>
-            <p><b>Pengalaman:</b> {{ $emp['experience'] }}</p>
-            <p><b>Bergabung:</b> {{ $emp['joinDate'] }}</p>
-          </div>
-
-          <div class="flex gap-2 pt-2">
+          <div class="flex gap-2">
             <button onclick="openEditModal({{ $emp['id'] }})" class="flex-1 px-2 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">Edit</button>
             <button onclick="confirmDelete({{ $emp['id'] }}, '{{ $emp['name'] }}')" class="px-2 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700">Hapus</button>
           </div>
@@ -91,32 +82,17 @@
   {{-- Schedule Tab --}}
   <div id="schedule" class="tab-content hidden">
     <div class="bg-white shadow rounded-lg p-6">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-xl font-semibold">Jadwal Shift Karyawan</h2>
-        <div class="flex items-center gap-4">
-          <button onclick="previousWeek()" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-            </svg>
-          </button>
-          <span class="font-medium" id="weekLabel">Minggu ini</span>
-          <button onclick="nextWeek()" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
-          </button>
-        </div>
-      </div>
+      <h2 class="text-xl font-semibold mb-4">Jadwal Shift Karyawan</h2>
 
-      {{-- Legend --}}
-      <div class="flex gap-4 mb-4 text-sm">
+      {{-- Shift Legend --}}
+      <div class="flex gap-6 mb-6">
         <div class="flex items-center gap-2">
-          <div class="w-4 h-4 bg-yellow-200 border border-yellow-400 rounded"></div>
-          <span>Shift Pagi (08:00 - 16:00)</span>
+          <div class="w-6 h-6 bg-yellow-100 border border-yellow-200 rounded"></div>
+          <span class="text-sm text-gray-600">Shift Pagi (08:00 - 20:00)</span>
         </div>
         <div class="flex items-center gap-2">
-          <div class="w-4 h-4 bg-blue-200 border border-blue-400 rounded"></div>
-          <span>Shift Malam (16:00 - 24:00)</span>
+          <div class="w-6 h-6 bg-blue-100 border border-blue-200 rounded"></div>
+          <span class="text-sm text-gray-600">Shift Malam (20:00 - 08:00)</span>
         </div>
       </div>
 
@@ -135,38 +111,52 @@
             </tr>
           </thead>
           <tbody>
-            @forelse ($employees ?? [] as $emp)
+            @php
+              // Auto-generate fair shift distribution
+              $totalEmployees = count($employees ?? []);
+              $shiftsPerWeek = 7; // 7 days
+              
+              // Create a balanced shift pattern
+              // Each employee works 5-6 days per week with mix of morning and night shifts
+              // Pattern: 2 morning, 2 night, 1 morning, 2 off (repeating with variation)
+              
+              function generateFairSchedule($employeeIndex, $totalEmployees) {
+                $patterns = [
+                  // Pattern 1: Morning heavy
+                  ['pagi', 'pagi', 'malam', 'malam', 'pagi', 'pagi', 'malam'],
+                  // Pattern 2: Night heavy
+                  ['malam', 'malam', 'pagi', 'pagi', 'malam', 'malam', 'pagi'],
+                  // Pattern 3: Alternating
+                  ['pagi', 'malam', 'pagi', 'malam', 'pagi', 'malam', 'pagi'],
+                  // Pattern 4: Balanced
+                  ['malam', 'pagi', 'malam', 'pagi', 'malam', 'pagi', 'malam'],
+                  // Pattern 5: Mixed 1
+                  ['pagi', 'pagi', 'malam', 'pagi', 'malam', 'malam', 'pagi'],
+                  // Pattern 6: Mixed 2
+                  ['malam', 'malam', 'pagi', 'malam', 'pagi', 'pagi', 'malam'],
+                ];
+                
+                // Rotate pattern based on employee index to ensure coverage
+                $patternIndex = $employeeIndex % count($patterns);
+                return $patterns[$patternIndex];
+              }
+            @endphp
+            
+            @forelse ($employees ?? [] as $index => $emp)
+              @php
+                $schedule = generateFairSchedule($index, $totalEmployees);
+              @endphp
               <tr>
                 <td class="border p-3">
                   <div class="font-medium">{{ $emp['name'] }}</div>
                   <div class="text-xs text-gray-500">{{ $emp['department'] }}</div>
                 </td>
-                @for($day = 0; $day < 7; $day++)
+                @foreach($schedule as $shift)
                   @php
-                    // Generate shift pattern (alternating or based on department)
-                    $shift = '';
-                    if ($emp['department'] === 'Groomer') {
-                      // Groomers work morning shifts on weekdays, off on weekends
-                      $shift = $day < 5 ? 'pagi' : 'off';
-                    } elseif ($emp['department'] === 'Handler') {
-                      // Handlers work night shifts
-                      $shift = 'malam';
-                    } elseif ($emp['department'] === 'Trainer') {
-                      // Trainers alternate shifts
-                      $shift = $day % 2 === 0 ? 'pagi' : 'malam';
-                    }
-                    
                     $bgColor = $shift === 'pagi' ? 'bg-yellow-100' : ($shift === 'malam' ? 'bg-blue-100' : 'bg-gray-50');
-                    $textColor = $shift === 'pagi' ? 'text-yellow-800' : ($shift === 'malam' ? 'text-blue-800' : 'text-gray-400');
-                    $time = $shift === 'pagi' ? '08:00 - 16:00' : ($shift === 'malam' ? '16:00 - 24:00' : 'Libur');
                   @endphp
-                  <td class="border p-2 text-center {{ $bgColor }}">
-                    <div class="text-xs font-medium {{ $textColor }}">
-                      {{ $shift === 'pagi' ? 'Pagi' : ($shift === 'malam' ? 'Malam' : 'Libur') }}
-                    </div>
-                    <div class="text-xs text-gray-600 mt-1">{{ $time }}</div>
-                  </td>
-                @endfor
+                  <td class="border p-4 {{ $bgColor }}"></td>
+                @endforeach
               </tr>
             @empty
               <tr>
@@ -177,26 +167,6 @@
         </table>
       </div>
 
-      {{-- Summary --}}
-      <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <p class="text-yellow-800 text-lg font-bold">
-            {{ collect($employees ?? [])->filter(function($e) { return $e['department'] === 'Groomer'; })->count() + 
-               collect($employees ?? [])->filter(function($e) { return $e['department'] === 'Trainer'; })->count() }}
-          </p>
-          <p class="text-yellow-700 text-sm">Shift Pagi Hari Ini</p>
-        </div>
-        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <p class="text-blue-800 text-lg font-bold">
-            {{ collect($employees ?? [])->filter(function($e) { return $e['department'] === 'Handler'; })->count() }}
-          </p>
-          <p class="text-blue-700 text-sm">Shift Malam Hari Ini</p>
-        </div>
-        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
-          <p class="text-gray-800 text-lg font-bold">{{ count($employees ?? []) }}</p>
-          <p class="text-gray-700 text-sm">Total Karyawan Aktif</p>
-        </div>
-      </div>
     </div>
   </div>
 </div>
@@ -321,15 +291,32 @@
       e.preventDefault();
       const target = e.target.dataset.tab;
 
-      // Remove active state
-      document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('border-blue-600'));
+      // Remove active state from all tabs
+      document.querySelectorAll('.tab-link').forEach(l => {
+        l.classList.remove('border-blue-600');
+        l.classList.add('border-transparent');
+      });
       document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
 
-      // Activate target
+      // Activate target tab
+      e.target.classList.remove('border-transparent');
       e.target.classList.add('border-blue-600');
       document.getElementById(target).classList.remove('hidden');
     });
   });
+
+  // Set initial active tab based on URL hash or default to employees
+  const setInitialTab = () => {
+    const hash = window.location.hash || '#employees';
+    const tabId = hash.substring(1);
+    const targetTab = document.querySelector(`[data-tab="${tabId}"]`);
+    if (targetTab) {
+      targetTab.classList.remove('border-transparent');
+      targetTab.classList.add('border-blue-600');
+      document.getElementById(tabId).classList.remove('hidden');
+    }
+  };
+  setInitialTab();
 
   // Add Staff Modal
   function openAddModal() {
@@ -390,31 +377,4 @@
     }
   }
 
-  // Schedule navigation
-  let currentWeekOffset = 0;
-
-  function previousWeek() {
-    currentWeekOffset--;
-    updateWeekLabel();
-  }
-
-  function nextWeek() {
-    currentWeekOffset++;
-    updateWeekLabel();
-  }
-
-  function updateWeekLabel() {
-    const label = document.getElementById('weekLabel');
-    if (currentWeekOffset === 0) {
-      label.textContent = 'Minggu ini';
-    } else if (currentWeekOffset === -1) {
-      label.textContent = 'Minggu lalu';
-    } else if (currentWeekOffset === 1) {
-      label.textContent = 'Minggu depan';
-    } else if (currentWeekOffset < 0) {
-      label.textContent = `${Math.abs(currentWeekOffset)} minggu yang lalu`;
-    } else {
-      label.textContent = `${currentWeekOffset} minggu ke depan`;
-    }
-  }
 @endpush

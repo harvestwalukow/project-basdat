@@ -6,223 +6,120 @@
   <div class="flex items-center justify-between">
     <div>
       <h1 class="text-2xl font-bold">Laporan & Analytics</h1>
-      <p class="text-gray-500">Analisis performa bisnis dan insights mendalam</p>
-    </div>
-    <div class="flex gap-2">
-      <button class="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/></svg>
-        Email Report
-      </button>
-      <button class="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 9h12M6 13h12M6 17h12"/></svg>
-        Print
-      </button>
-      <button class="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg text-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
-        Export PDF
-      </button>
+      <p id="pageSubtitle" class="text-gray-500">Ringkasan performa bisnis bulan ini</p>
     </div>
   </div>
 
   <!-- Report Controls -->
   <div class="bg-white p-4 rounded-xl shadow">
-    <div class="flex flex-col md:flex-row gap-4">
-      <select id="reportType" class="w-48 border rounded-lg p-2" onchange="filterReport()">
-        <option value="executive">Executive Summary</option>
-        <option value="financial">Financial Report</option>
-        <option value="operational">Operational Report</option>
-        <option value="customer">Customer Analytics</option>
-      </select>
-      <select id="timeRange" class="w-48 border rounded-lg p-2" onchange="filterReport()">
-        <option value="today">Hari Ini</option>
-        <option value="week">Minggu Ini</option>
+    <div class="flex items-center gap-4">
+      <label for="timeRange" class="text-sm font-medium text-gray-700">Periode:</label>
+      <select id="timeRange" class="w-48 border rounded-lg p-2" onchange="loadReportData(this.value)">
         <option value="month" selected>Bulan Ini</option>
         <option value="3months">3 Bulan Terakhir</option>
         <option value="6months">6 Bulan Terakhir</option>
         <option value="year">Tahun Ini</option>
       </select>
-      <button onclick="exportPDF()" class="ml-auto px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-        <i class="fas fa-download mr-2"></i>Export PDF
-      </button>
+      <div id="loadingIndicator" class="hidden">
+        <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </div>
     </div>
   </div>
 
-  <!-- Tabs -->
+  <!-- Executive Summary -->
   <div class="space-y-4">
-    <div class="flex gap-2 border-b">
-      <button class="report-tab px-4 py-2 border-b-2 border-blue-600 font-medium text-blue-600" data-tab="summary">Executive Summary</button>
-      <button class="report-tab px-4 py-2 text-gray-500 hover:text-gray-700" data-tab="revenue">Revenue Analysis</button>
-      <button class="report-tab px-4 py-2 text-gray-500 hover:text-gray-700" data-tab="customer">Customer Insights</button>
-      <button class="report-tab px-4 py-2 text-gray-500 hover:text-gray-700" data-tab="operational">Operational KPIs</button>
+    <!-- Key Metrics -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white p-6 rounded-xl shadow">
+        <div class="flex items-center justify-between mb-2">
+          <p class="text-sm text-gray-500">Total Pendapatan</p>
+          <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <p id="totalRevenue" class="text-2xl font-bold text-gray-800">Rp {{ number_format($totalRevenue ?? 0, 0, ',', '.') }}</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow">
+        <div class="flex items-center justify-between mb-2">
+          <p class="text-sm text-gray-500">Total Penitipan</p>
+          <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+          </svg>
+        </div>
+        <p id="totalBookings" class="text-2xl font-bold text-gray-800">{{ $totalBookings ?? 0 }}</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow">
+        <div class="flex items-center justify-between mb-2">
+          <p class="text-sm text-gray-500">Pelanggan Aktif</p>
+          <svg class="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+        </div>
+        <p id="activeCustomers" class="text-2xl font-bold text-gray-800">{{ $activeCustomers ?? 0 }}</p>
+      </div>
     </div>
 
-    <!-- Executive Summary Tab -->
-    <div id="summary-tab" class="tab-content space-y-4">
-      <!-- Key Metrics -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-white p-4 rounded-xl shadow flex items-center justify-between">
-          <div>
-            <p class="text-sm text-gray-500">Total Revenue</p>
-            <p class="text-2xl font-bold text-green-600">Rp {{ number_format(($totalRevenue ?? 0) / 1000000, 0) }}M</p>
-          </div>
-          <span class="text-green-600 text-sm">{{ $revenueGrowth ?? '0%' }}</span>
-        </div>
-
-        <div class="bg-white p-4 rounded-xl shadow flex items-center justify-between">
-          <div>
-            <p class="text-sm text-gray-500">Total Bookings</p>
-            <p class="text-2xl font-bold text-blue-600">{{ $totalBookings ?? 0 }}</p>
-          </div>
-          <span class="text-green-600 text-sm">{{ $bookingsGrowth ?? '0%' }}</span>
-        </div>
-
-        <div class="bg-white p-4 rounded-xl shadow flex items-center justify-between">
-          <div>
-            <p class="text-sm text-gray-500">Active Customers</p>
-            <p class="text-2xl font-bold text-purple-600">{{ $activeCustomers ?? 0 }}</p>
-          </div>
-          <span class="text-green-600 text-sm">{{ $customersGrowth ?? '0%' }}</span>
-        </div>
-
-        <div class="bg-white p-4 rounded-xl shadow flex items-center justify-between">
-          <div>
-            <p class="text-sm text-gray-500">Avg Rating</p>
-            <p class="text-2xl font-bold text-orange-600">{{ number_format($avgRating ?? 0, 1) }}</p>
-          </div>
-          <span class="text-green-600 text-sm">{{ $ratingChange ?? '0' }}</span>
+    <!-- Charts -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h3 id="revenueChartTitle" class="text-lg font-semibold mb-4">Tren Pendapatan</h3>
+        <div class="h-64">
+          <canvas id="revenueChart"></canvas>
         </div>
       </div>
-
-      <!-- Charts -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="bg-white p-4 rounded-xl shadow h-64">
-          <canvas id="revenueChart" class="h-full w-full"></canvas>
-        </div>
-        <div class="bg-white p-4 rounded-xl shadow h-64">
-          <canvas id="bookingChart" class="h-full w-full"></canvas>
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h3 id="bookingChartTitle" class="text-lg font-semibold mb-4">Penitipan & Pelanggan</h3>
+        <div class="h-64">
+          <canvas id="bookingChart"></canvas>
         </div>
       </div>
+    </div>
 
-      <!-- Table -->
-      <div class="bg-white rounded-xl shadow overflow-hidden">
-        <table class="min-w-full text-sm">
-          <thead class="bg-gray-50 text-gray-600">
+    <!-- Service Performance Table -->
+    <div class="bg-white rounded-xl shadow overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg font-semibold">Performa Layanan</h3>
+        <p class="text-sm text-gray-500">Statistik layanan berdasarkan pendapatan dan jumlah pemesanan</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
             <tr>
-              <th class="px-4 py-2 text-left">Layanan</th>
-              <th class="px-4 py-2 text-left">Revenue</th>
-              <th class="px-4 py-2 text-left">Bookings</th>
-              <th class="px-4 py-2 text-left">Rating</th>
-              <th class="px-4 py-2 text-left">Growth</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Layanan</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pendapatan</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pemesanan</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="servicePerformanceTable" class="bg-white divide-y divide-gray-200">
             @forelse($servicePerformance ?? [] as $service)
-              <tr class="border-t">
-                <td class="px-4 py-2">{{ $service->name }}</td>
-                <td class="px-4 py-2">Rp {{ number_format($service->revenue / 1000000, 1) }}M</td>
-                <td class="px-4 py-2">{{ $service->bookings }}</td>
-                <td class="px-4 py-2">{{ number_format($service->rating, 1) }} ★</td>
-                <td class="px-4 py-2 text-green-600">{{ $service->growth }}</td>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900">{{ $service->name }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">Rp {{ number_format($service->revenue, 0, ',', '.') }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">{{ $service->bookings }} kali</div>
+                </td>
               </tr>
             @empty
               <tr>
-                <td colspan="5" class="px-4 py-8 text-center text-gray-500">Belum ada data performa layanan</td>
+                <td colspan="3" class="px-6 py-8 text-center text-gray-500">
+                  <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                  <p class="mt-2">Belum ada data performa layanan periode ini</p>
+                </td>
               </tr>
             @endforelse
           </tbody>
         </table>
-      </div>
-    </div>
-
-    <!-- Revenue Analysis Tab -->
-    <div id="revenue-tab" class="tab-content hidden space-y-4">
-      <div class="bg-white p-6 rounded-xl shadow">
-        <h3 class="text-lg font-semibold mb-4">Analisis Pendapatan Bulanan</h3>
-        <canvas id="revenueDetailChart" class="h-64"></canvas>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-white p-6 rounded-xl shadow">
-          <h3 class="text-lg font-semibold mb-4">Top Revenue Sources</h3>
-          <div class="space-y-3">
-            @forelse($servicePerformance ?? [] as $service)
-              <div class="flex items-center justify-between">
-                <span class="text-sm">{{ $service->name }}</span>
-                <span class="font-bold text-green-600">Rp {{ number_format($service->revenue / 1000000, 1) }}M</span>
-              </div>
-            @empty
-              <p class="text-gray-500 text-center">Belum ada data</p>
-            @endforelse
-          </div>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow">
-          <h3 class="text-lg font-semibold mb-4">Revenue Growth Trend</h3>
-          <div class="space-y-3">
-            <div class="flex justify-between items-center">
-              <span class="text-sm">Pertumbuhan Bulan Ini</span>
-              <span class="text-green-600 font-bold">{{ $revenueGrowth ?? '0%' }}</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-sm">Total Revenue YTD</span>
-              <span class="font-bold">Rp {{ number_format(($totalRevenue ?? 0) / 1000000, 1) }}M</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Customer Insights Tab -->
-    <div id="customer-tab" class="tab-content hidden space-y-4">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-white p-6 rounded-xl shadow text-center">
-          <p class="text-sm text-gray-500">Total Customers</p>
-          <p class="text-3xl font-bold text-purple-600">{{ $activeCustomers ?? 0 }}</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow text-center">
-          <p class="text-sm text-gray-500">New Customers</p>
-          <p class="text-3xl font-bold text-blue-600">{{ $customersGrowth ?? '0' }}</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow text-center">
-          <p class="text-sm text-gray-500">Customer Satisfaction</p>
-          <p class="text-3xl font-bold text-orange-600">{{ number_format($avgRating ?? 0, 1) }}/5.0</p>
-        </div>
-      </div>
-      <div class="bg-white p-6 rounded-xl shadow">
-        <h3 class="text-lg font-semibold mb-4">Customer Booking Patterns</h3>
-        <canvas id="customerChart" class="h-64"></canvas>
-      </div>
-    </div>
-
-    <!-- Operational KPIs Tab -->
-    <div id="operational-tab" class="tab-content hidden space-y-4">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white p-6 rounded-xl shadow text-center">
-          <p class="text-sm text-gray-500">Total Bookings</p>
-          <p class="text-3xl font-bold text-blue-600">{{ $totalBookings ?? 0 }}</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow text-center">
-          <p class="text-sm text-gray-500">Active Penitipan</p>
-          <p class="text-3xl font-bold text-green-600">{{ \App\Models\Penitipan::where('status', 'aktif')->count() }}</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow text-center">
-          <p class="text-sm text-gray-500">Total Pets</p>
-          <p class="text-3xl font-bold text-purple-600">{{ \App\Models\Hewan::count() }}</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow text-center">
-          <p class="text-sm text-gray-500">Staff Active</p>
-          <p class="text-3xl font-bold text-orange-600">{{ \App\Models\Pengguna::whereIn('role', ['admin', 'staff'])->count() }}</p>
-        </div>
-      </div>
-      <div class="bg-white p-6 rounded-xl shadow">
-        <h3 class="text-lg font-semibold mb-4">Occupancy Rate</h3>
-        <div class="space-y-4">
-          <div class="flex justify-between items-center">
-            <span>Current Occupancy</span>
-            <span class="font-bold">{{ \App\Models\Penitipan::where('status', 'aktif')->count() }} / 50 rooms</span>
-          </div>
-          <div class="w-full bg-gray-200 rounded-full h-4">
-            <div class="bg-blue-600 h-4 rounded-full" style="width: {{ min((\App\Models\Penitipan::where('status', 'aktif')->count() / 50) * 100, 100) }}%"></div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -230,197 +127,226 @@
 @endsection
 
 @push('scripts')
-  // Tab switching functionality
-  document.querySelectorAll('.report-tab').forEach(button => {
-    button.addEventListener('click', function() {
-      const targetTab = this.getAttribute('data-tab');
-      
-      // Update button states
-      document.querySelectorAll('.report-tab').forEach(btn => {
-        btn.classList.remove('border-b-2', 'border-blue-600', 'text-blue-600', 'font-medium');
-        btn.classList.add('text-gray-500');
-      });
-      this.classList.add('border-b-2', 'border-blue-600', 'text-blue-600', 'font-medium');
-      this.classList.remove('text-gray-500');
-      
-      // Update tab content visibility
-      document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.add('hidden');
-      });
-      document.getElementById(targetTab + '-tab').classList.remove('hidden');
-    });
-  });
+<script>
+  // Initialize charts
+  let revenueChart = null;
+  let bookingChart = null;
 
-  // Revenue Trend (Line Chart) - Executive Summary
-  const revenueData = @json($revenueChartData ?? ['labels' => [], 'data' => []]);
-  
-  const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
-  const revenueChart = new Chart(ctxRevenue, {
-    type: 'line',
-    data: {
-      labels: revenueData.labels,
-      datasets: [{
-        label: 'Revenue (Juta Rupiah)',
-        data: revenueData.data,
-        backgroundColor: 'rgba(59, 130, 246, 0.2)',
-        borderColor: 'rgba(59, 130, 246, 1)',
-        borderWidth: 2,
-        fill: true,
-        tension: 0.3
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: true },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              return 'Revenue: Rp ' + context.parsed.y.toFixed(2) + 'M';
-            }
-          }
-        }
-      },
-      scales: {
-        y: { 
-          beginAtZero: true,
-          ticks: {
-            callback: function(value) {
-              return 'Rp ' + value + 'M';
-            }
-          }
-        }
-      }
+  // Format currency
+  function formatCurrency(value) {
+    return 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
+  }
+
+  // Initialize Revenue Chart
+  function initRevenueChart(data) {
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    
+    if (revenueChart) {
+      revenueChart.destroy();
     }
-  });
-
-  // Booking vs Customer (Bar Chart) - Executive Summary
-  const bookingData = @json($bookingChartData ?? ['labels' => [], 'bookings' => [], 'customers' => []]);
-  
-  const ctxBooking = document.getElementById('bookingChart').getContext('2d');
-  const bookingChart = new Chart(ctxBooking, {
-    type: 'bar',
-    data: {
-      labels: bookingData.labels,
-      datasets: [
-        { 
-          label: 'Bookings', 
-          data: bookingData.bookings, 
-          backgroundColor: 'rgba(59, 130, 246, 0.8)',
-          borderColor: '#3b82f6',
-          borderWidth: 1
+    
+    revenueChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: data.labels,
+        datasets: [{
+          label: 'Pendapatan (Juta Rupiah)',
+          data: data.data,
+          backgroundColor: 'rgba(34, 197, 94, 0.2)',
+          borderColor: 'rgba(34, 197, 94, 1)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          pointBackgroundColor: 'rgba(34, 197, 94, 1)',
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { 
+            display: true,
+            position: 'top',
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return 'Pendapatan: Rp ' + context.parsed.y.toFixed(2) + ' Juta';
+              }
+            }
+          }
         },
-        { 
-          label: 'Active Customers', 
-          data: bookingData.customers, 
-          backgroundColor: 'rgba(168, 85, 247, 0.8)',
-          borderColor: '#a855f7',
-          borderWidth: 1
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: true },
-      },
-      scales: {
-        y: { beginAtZero: true }
-      }
-    }
-  });
-
-  // Revenue Detail Chart - Revenue Tab
-  const ctxRevenueDetail = document.getElementById('revenueDetailChart').getContext('2d');
-  const revenueDetailChart = new Chart(ctxRevenueDetail, {
-    type: 'line',
-    data: {
-      labels: revenueData.labels,
-      datasets: [{
-        label: 'Monthly Revenue',
-        data: revenueData.data,
-        backgroundColor: 'rgba(34, 197, 94, 0.2)',
-        borderColor: 'rgba(34, 197, 94, 1)',
-        borderWidth: 3,
-        fill: true,
-        tension: 0.4
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: true },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              return 'Revenue: Rp ' + context.parsed.y.toFixed(2) + 'M';
-            }
-          }
-        }
-      },
-      scales: {
-        y: { 
-          beginAtZero: true,
-          ticks: {
-            callback: function(value) {
-              return 'Rp ' + value + 'M';
+        scales: {
+          y: { 
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return 'Rp ' + value + 'Jt';
+              }
             }
           }
         }
       }
-    }
-  });
+    });
+  }
 
-  // Customer Chart - Customer Tab
-  const ctxCustomer = document.getElementById('customerChart').getContext('2d');
-  const customerChart = new Chart(ctxCustomer, {
-    type: 'line',
-    data: {
-      labels: bookingData.labels,
-      datasets: [{
-        label: 'Active Customers',
-        data: bookingData.customers,
-        backgroundColor: 'rgba(168, 85, 247, 0.2)',
-        borderColor: 'rgba(168, 85, 247, 1)',
-        borderWidth: 2,
-        fill: true,
-        tension: 0.3
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: true },
+  // Initialize Booking Chart
+  function initBookingChart(data) {
+    const ctx = document.getElementById('bookingChart').getContext('2d');
+    
+    if (bookingChart) {
+      bookingChart.destroy();
+    }
+    
+    bookingChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: data.labels,
+        datasets: [
+          { 
+            label: 'Penitipan', 
+            data: data.bookings, 
+            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+            borderColor: 'rgba(59, 130, 246, 1)',
+            borderWidth: 2,
+            borderRadius: 4,
+          },
+          { 
+            label: 'Pelanggan Aktif', 
+            data: data.customers, 
+            backgroundColor: 'rgba(168, 85, 247, 0.8)',
+            borderColor: 'rgba(168, 85, 247, 1)',
+            borderWidth: 2,
+            borderRadius: 4,
+          }
+        ]
       },
-      scales: {
-        y: { beginAtZero: true }
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { 
+            display: true,
+            position: 'top',
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+          }
+        },
+        scales: {
+          y: { 
+            beginAtZero: true,
+            ticks: {
+              precision: 0
+            }
+          }
+        }
       }
+    });
+  }
+
+  // Get period title
+  function getPeriodTitle(timeRange) {
+    const titles = {
+      'month': 'Bulan Ini',
+      '3months': '3 Bulan Terakhir',
+      '6months': '6 Bulan Terakhir',
+      'year': 'Tahun Ini'
+    };
+    return titles[timeRange] || 'Bulan Ini';
+  }
+
+  // Load Report Data
+  function loadReportData(timeRange) {
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    loadingIndicator.classList.remove('hidden');
+
+    fetch(`{{ route('admin.reports') }}?timeRange=${timeRange}`, {
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Update metrics
+      document.getElementById('totalRevenue').textContent = formatCurrency(data.totalRevenue);
+      document.getElementById('totalBookings').textContent = data.totalBookings;
+      document.getElementById('activeCustomers').textContent = data.activeCustomers;
+
+      // Update page subtitle
+      const periodTitle = getPeriodTitle(timeRange);
+      const subtitles = {
+        'month': 'Ringkasan performa bisnis bulan ini',
+        '3months': 'Ringkasan performa bisnis 3 bulan terakhir',
+        '6months': 'Ringkasan performa bisnis 6 bulan terakhir',
+        'year': 'Ringkasan performa bisnis tahun ini'
+      };
+      document.getElementById('pageSubtitle').textContent = subtitles[timeRange] || subtitles['month'];
+      
+      // Update chart titles
+      document.getElementById('revenueChartTitle').textContent = `Tren Pendapatan (${periodTitle})`;
+      document.getElementById('bookingChartTitle').textContent = `Penitipan & Pelanggan (${periodTitle})`;
+
+      // Update charts
+      initRevenueChart(data.revenueChartData);
+      initBookingChart(data.bookingChartData);
+
+      // Update table
+      updateServiceTable(data.servicePerformance);
+
+      loadingIndicator.classList.add('hidden');
+    })
+    .catch(error => {
+      console.error('Error loading report data:', error);
+      loadingIndicator.classList.add('hidden');
+      alert('Gagal memuat data laporan. Silakan coba lagi.');
+    });
+  }
+
+  // Update Service Performance Table
+  function updateServiceTable(services) {
+    const tbody = document.getElementById('servicePerformanceTable');
+    
+    if (services.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="3" class="px-6 py-8 text-center text-gray-500">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            <p class="mt-2">Belum ada data performa layanan periode ini</p>
+          </td>
+        </tr>
+      `;
+      return;
     }
+
+    tbody.innerHTML = services.map(service => `
+      <tr class="hover:bg-gray-50">
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="text-sm font-medium text-gray-900">${service.name}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="text-sm text-gray-900">${formatCurrency(service.revenue)}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="text-sm text-gray-900">${service.bookings} kali</div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Initialize charts on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    const revenueData = @json($revenueChartData ?? ['labels' => [], 'data' => []]);
+    const bookingData = @json($bookingChartData ?? ['labels' => [], 'bookings' => [], 'customers' => []]);
+    
+    initRevenueChart(revenueData);
+    initBookingChart(bookingData);
   });
-
-  // Filter Report Function
-  function filterReport() {
-    const reportType = document.getElementById('reportType').value;
-    const timeRange = document.getElementById('timeRange').value;
-    console.log('Filtering report:', reportType, timeRange);
-    // Implement AJAX call to reload data based on filters
-    // For now, just log the values
-    alert('Filter akan diterapkan: ' + reportType + ' - ' + timeRange);
-  }
-
-  // Export PDF Function
-  function exportPDF() {
-    alert('Fitur export PDF akan segera tersedia');
-    // Implement PDF export functionality
-  }
-
-  // Print Function
-  function printReport() {
-    window.print();
-  }
+</script>
 @endpush
 

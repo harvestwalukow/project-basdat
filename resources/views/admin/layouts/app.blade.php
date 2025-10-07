@@ -20,9 +20,7 @@
     </main>
   </div>
 
-<script>
   @stack('scripts')
-</script>
 
 </body>
 </html>

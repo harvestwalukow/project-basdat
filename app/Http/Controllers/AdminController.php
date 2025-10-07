@@ -643,59 +643,87 @@ class AdminController extends Controller
     }
 
     /**
-     * Reports & Analytics (Owner View)
+     * Reports & Analytics
      */
-    public function reports()
+    public function reports(Request $request)
     {
-        $currentMonth = Carbon::now()->month;
-        $currentYear = Carbon::now()->year;
+        $timeRange = $request->input('timeRange', 'month');
+        
+        // Determine date range based on timeRange
+        switch ($timeRange) {
+            case '3months':
+                $startDate = Carbon::now()->subMonths(3)->startOfMonth();
+                $periodCount = 3;
+                $periodType = 'month';
+                break;
+            case '6months':
+                $startDate = Carbon::now()->subMonths(6)->startOfMonth();
+                $periodCount = 6;
+                $periodType = 'month';
+                break;
+            case 'year':
+                $startDate = Carbon::now()->subMonths(11)->startOfMonth(); // Last 12 months
+                $periodCount = 12;
+                $periodType = 'month';
+                break;
+            case 'month':
+            default:
+                $startDate = Carbon::now()->subDays(29); // Last 30 days
+                $periodCount = 30;
+                $periodType = 'day';
+                break;
+        }
+        
+        $endDate = Carbon::now();
 
         // Total Revenue
         $totalRevenue = DB::table('pembayaran')
-            ->whereMonth('tanggal_bayar', $currentMonth)
-            ->whereYear('tanggal_bayar', $currentYear)
+            ->whereBetween('tanggal_bayar', [$startDate, $endDate])
             ->where('status_pembayaran', 'lunas')
             ->sum('jumlah_bayar');
 
-        $revenueGrowth = '+15.2%'; // Placeholder
-
         // Total Bookings
         $totalBookings = DB::table('penitipan')
-            ->whereMonth('tanggal_masuk', $currentMonth)
-            ->whereYear('tanggal_masuk', $currentYear)
+            ->whereBetween('tanggal_masuk', [$startDate, $endDate])
             ->count();
-
-        $bookingsGrowth = '+12.5%'; // Placeholder
 
         // Active Customers
         $activeCustomers = DB::table('penitipan')
-            ->whereMonth('tanggal_masuk', $currentMonth)
-            ->whereYear('tanggal_masuk', $currentYear)
+            ->whereBetween('tanggal_masuk', [$startDate, $endDate])
             ->distinct('id_pemilik')
             ->count('id_pemilik');
 
-        $customersGrowth = '+8.3%'; // Placeholder
-
-        // Average Rating
-        $avgRating = 4.8; // Placeholder
-        $ratingChange = '+0.2'; // Placeholder
-
-        // Revenue Chart Data (6 months)
+        // Revenue Chart Data
         $revenueChartData = [
             'labels' => [],
             'data' => []
         ];
 
-        for ($i = 5; $i >= 0; $i--) {
-            $month = Carbon::now()->subMonths($i);
-            $revenue = DB::table('pembayaran')
-                ->whereMonth('tanggal_bayar', $month->month)
-                ->whereYear('tanggal_bayar', $month->year)
-                ->where('status_pembayaran', 'lunas')
-                ->sum('jumlah_bayar');
-            
-            $revenueChartData['labels'][] = $month->format('M Y');
-            $revenueChartData['data'][] = round($revenue / 1000000, 2);
+        if ($periodType === 'day') {
+            // Show daily data for last 30 days
+            for ($i = $periodCount - 1; $i >= 0; $i--) {
+                $date = Carbon::now()->subDays($i);
+                $revenue = DB::table('pembayaran')
+                    ->whereDate('tanggal_bayar', $date->format('Y-m-d'))
+                    ->where('status_pembayaran', 'lunas')
+                    ->sum('jumlah_bayar');
+                
+                $revenueChartData['labels'][] = $date->format('d M');
+                $revenueChartData['data'][] = round($revenue / 1000000, 2);
+            }
+        } else {
+            // Show monthly data
+            for ($i = $periodCount - 1; $i >= 0; $i--) {
+                $month = Carbon::now()->subMonths($i);
+                $revenue = DB::table('pembayaran')
+                    ->whereMonth('tanggal_bayar', $month->month)
+                    ->whereYear('tanggal_bayar', $month->year)
+                    ->where('status_pembayaran', 'lunas')
+                    ->sum('jumlah_bayar');
+                
+                $revenueChartData['labels'][] = $month->format('M Y');
+                $revenueChartData['data'][] = round($revenue / 1000000, 2);
+            }
         }
 
         // Booking Chart Data
@@ -705,50 +733,105 @@ class AdminController extends Controller
             'customers' => []
         ];
 
-        for ($i = 5; $i >= 0; $i--) {
-            $month = Carbon::now()->subMonths($i);
-            $bookings = DB::table('penitipan')
-                ->whereMonth('tanggal_masuk', $month->month)
-                ->whereYear('tanggal_masuk', $month->year)
-                ->count();
-            
-            $customers = DB::table('penitipan')
-                ->whereMonth('tanggal_masuk', $month->month)
-                ->whereYear('tanggal_masuk', $month->year)
-                ->distinct('id_pemilik')
-                ->count('id_pemilik');
-            
-            $bookingChartData['labels'][] = $month->format('M');
-            $bookingChartData['bookings'][] = $bookings;
-            $bookingChartData['customers'][] = $customers;
+        if ($periodType === 'day') {
+            // Show daily data for last 30 days
+            for ($i = $periodCount - 1; $i >= 0; $i--) {
+                $date = Carbon::now()->subDays($i);
+                $bookings = DB::table('penitipan')
+                    ->whereDate('tanggal_masuk', $date->format('Y-m-d'))
+                    ->count();
+                
+                $customers = DB::table('penitipan')
+                    ->whereDate('tanggal_masuk', $date->format('Y-m-d'))
+                    ->distinct('id_pemilik')
+                    ->count('id_pemilik');
+                
+                $bookingChartData['labels'][] = $date->format('d M');
+                $bookingChartData['bookings'][] = $bookings;
+                $bookingChartData['customers'][] = $customers;
+            }
+        } else {
+            // Show monthly data
+            for ($i = $periodCount - 1; $i >= 0; $i--) {
+                $month = Carbon::now()->subMonths($i);
+                $bookings = DB::table('penitipan')
+                    ->whereMonth('tanggal_masuk', $month->month)
+                    ->whereYear('tanggal_masuk', $month->year)
+                    ->count();
+                
+                $customers = DB::table('penitipan')
+                    ->whereMonth('tanggal_masuk', $month->month)
+                    ->whereYear('tanggal_masuk', $month->year)
+                    ->distinct('id_pemilik')
+                    ->count('id_pemilik');
+                
+                $bookingChartData['labels'][] = $month->format('M Y');
+                $bookingChartData['bookings'][] = $bookings;
+                $bookingChartData['customers'][] = $customers;
+            }
         }
 
-        // Service Performance
-        $servicePerformance = DB::table('detail_penitipan')
+        // Service Performance - Only Basic and Premium packages
+        $allPaketLayanan = DB::table('paket_layanan')
+            ->where('is_active', true)
+            ->where(function($query) {
+                $query->where('nama_paket', 'LIKE', '%Paket Basic%')
+                      ->orWhere('nama_paket', 'LIKE', '%Paket Premium%');
+            })
+            ->select('id_paket', 'nama_paket')
+            ->orderByRaw("CASE 
+                WHEN nama_paket LIKE '%Basic%' THEN 1 
+                WHEN nama_paket LIKE '%Premium%' THEN 2 
+                ELSE 3 END")
+            ->get()
+            ->keyBy('id_paket');
+
+        $currentServicePerformance = DB::table('detail_penitipan')
             ->join('paket_layanan', 'detail_penitipan.id_paket', '=', 'paket_layanan.id_paket')
             ->join('penitipan', 'detail_penitipan.id_penitipan', '=', 'penitipan.id_penitipan')
             ->join('pembayaran', 'penitipan.id_penitipan', '=', 'pembayaran.id_penitipan')
-            ->whereMonth('penitipan.tanggal_masuk', $currentMonth)
-            ->whereYear('penitipan.tanggal_masuk', $currentYear)
+            ->whereBetween('penitipan.created_at', [$startDate, $endDate])
+            ->where('pembayaran.status_pembayaran', 'lunas')
+            ->where(function($query) {
+                $query->where('paket_layanan.nama_paket', 'LIKE', '%Paket Basic%')
+                      ->orWhere('paket_layanan.nama_paket', 'LIKE', '%Paket Premium%');
+            })
             ->select(
-                'paket_layanan.nama_paket as name',
-                DB::raw('SUM(pembayaran.jumlah_bayar) as revenue'),
-                DB::raw('COUNT(detail_penitipan.id_detail) as bookings'),
-                DB::raw('4.5 as rating'),
-                DB::raw('"+10%" as growth')
+                'paket_layanan.id_paket',
+                DB::raw('SUM(detail_penitipan.subtotal) as revenue'),
+                DB::raw('COUNT(DISTINCT detail_penitipan.id_detail) as bookings')
             )
-            ->groupBy('paket_layanan.nama_paket')
-            ->get();
+            ->groupBy('paket_layanan.id_paket')
+            ->get()
+            ->keyBy('id_paket');
 
+        $servicePerformance = $allPaketLayanan->map(function ($paket) use ($currentServicePerformance) {
+            $current = $currentServicePerformance->get($paket->id_paket);
+            
+            return (object)[
+                'name' => $paket->nama_paket,
+                'revenue' => $current ? $current->revenue : 0,
+                'bookings' => $current ? $current->bookings : 0,
+            ];
+        })->values();
+
+        // If AJAX request, return JSON
+        if ($request->ajax()) {
+            return response()->json([
+                'totalRevenue' => $totalRevenue,
+                'totalBookings' => $totalBookings,
+                'activeCustomers' => $activeCustomers,
+                'revenueChartData' => $revenueChartData,
+                'bookingChartData' => $bookingChartData,
+                'servicePerformance' => $servicePerformance
+            ]);
+        }
+
+        // Regular view response
         return view('admin.reports', compact(
             'totalRevenue',
-            'revenueGrowth',
             'totalBookings',
-            'bookingsGrowth',
             'activeCustomers',
-            'customersGrowth',
-            'avgRating',
-            'ratingChange',
             'revenueChartData',
             'bookingChartData',
             'servicePerformance'
