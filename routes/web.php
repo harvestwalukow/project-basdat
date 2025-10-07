@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Models\Pengguna;
 use App\Http\Controllers\PenitipanController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\OwnerController;
 
 // Halaman Utama
 Route::get('/', function () {
@@ -97,7 +96,7 @@ Route::post('/signin', function (Request $request) {
             'name' => 'Owner',
             'password' => '123456',
             'role' => 'owner',
-            'redirect' => '/owner',
+            'redirect' => '/admin/',
         ],
         'user@gmail.com' => [
             'id' => 9997,
@@ -174,7 +173,7 @@ Route::get('/logout', function () {
 })->name('logout');
 
 
-// Protected Routes - Admin
+// Protected Routes - Admin & Owner (both use admin dashboard)
 Route::middleware('admin')->group(function () {
     Route::get('/admin/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/penitipan', [AdminController::class, 'booking'])->name('admin.booking');
@@ -189,20 +188,17 @@ Route::middleware('admin')->group(function () {
     Route::put('/admin/paket-layanan/{id}/toggle', [AdminController::class, 'togglePaketStatus'])->name('admin.service.toggle');
     Route::get('/admin/pembayaran', [AdminController::class, 'payments'])->name('admin.payments');
     Route::put('/admin/pembayaran/{id}/update-status', [AdminController::class, 'updatePaymentStatus'])->name('admin.payments.update');
+    
+    // Staff Management
+    Route::get('/admin/staff', [AdminController::class, 'staff'])->name('admin.staff');
+    Route::post('/admin/staff', [AdminController::class, 'storeStaff'])->name('admin.staff.store');
+    Route::get('/admin/staff/{id}', [AdminController::class, 'showStaff'])->name('admin.staff.show');
+    Route::put('/admin/staff/{id}', [AdminController::class, 'updateStaff'])->name('admin.staff.update');
+    Route::delete('/admin/staff/{id}', [AdminController::class, 'deleteStaff'])->name('admin.staff.delete');
+    
+    // Reports & Analytics
+    Route::get('/admin/laporan', [AdminController::class, 'reports'])->name('admin.reports');
 });
-
-
-// Protected Routes - Owner
-Route::middleware('owner')->prefix('owner')->name('owner.')->group(function () {
-    Route::get('/', [OwnerController::class, 'dashboard'])->name('dashboard');
-    Route::get('/reservations/{tab?}', [OwnerController::class, 'reservations'])->name('reservations');
-    Route::get('/finance', [OwnerController::class, 'finance'])->name('finance');
-    Route::get('/pets', [OwnerController::class, 'pets'])->name('pets');
-    Route::get('/services', [OwnerController::class, 'services'])->name('services');
-    Route::get('/staff', [OwnerController::class, 'staff'])->name('staff');
-    Route::get('/reports', [OwnerController::class, 'reports'])->name('reports');
-});
-
 
 
 // Protected Routes - User (Pelanggan)

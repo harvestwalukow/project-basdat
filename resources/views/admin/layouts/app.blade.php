@@ -7,7 +7,7 @@
   <title>Admin Dashboard - Pet Hotel</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.0.18/24/outline/hero-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body class="bg-gray-100 font-sans">
 

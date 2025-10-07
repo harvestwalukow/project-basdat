@@ -463,5 +463,271 @@ class AdminController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
+
+    /**
+     * Staff Management
+     */
+    public function staff()
+    {
+        // Get all staff and admin users from pengguna table
+        $employees = Pengguna::whereIn('role', ['staff', 'admin'])
+            ->withCount(['staffPenitipans', 'updateKondisis'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $employees = $employees->map(function($emp) {
+            return [
+                'id' => $emp->id_pengguna,
+                'name' => $emp->nama_lengkap,
+                'position' => $emp->role === 'admin' ? 'Administrator' : 'Staff Operasional',
+                'status' => 'active',
+                'department' => $emp->role === 'admin' ? 'Administrasi' : 'Operasional',
+                'email' => $emp->email,
+                'phone' => $emp->no_telepon ?? '-',
+                'shift' => 'Pagi (08:00 - 16:00)',
+                'specialization' => $emp->role === 'admin' ? 'Manajemen Sistem' : 'Perawatan Hewan',
+                'experience' => Carbon::parse($emp->created_at)->diffInMonths(now()) . ' bulan',
+                'joinDate' => Carbon::parse($emp->created_at)->format('d M Y'),
+                'rating' => 4.5,
+                'salary' => $emp->role === 'admin' ? 8000000 : 5000000,
+                'bonus' => $emp->staff_penitipans_count * 100000 + $emp->update_kondisis_count * 50000,
+                'task_count' => $emp->staff_penitipans_count + $emp->update_kondisis_count
+            ];
+        })->toArray();
+
+        // Department Stats
+        $adminCount = count(array_filter($employees, fn($e) => $e['department'] === 'Administrasi'));
+        $staffCount = count(array_filter($employees, fn($e) => $e['department'] === 'Operasional'));
+        
+        $departmentStats = [
+            ['name' => 'Operasional', 'employees' => $staffCount],
+            ['name' => 'Administrasi', 'employees' => $adminCount],
+            ['name' => 'Grooming', 'employees' => 0],
+            ['name' => 'Veteriner', 'employees' => 0],
+            ['name' => 'Customer Service', 'employees' => 0],
+        ];
+
+        // Payroll Stats
+        $totalPayroll = array_sum(array_column($employees, 'salary')) + array_sum(array_column($employees, 'bonus'));
+        $totalEmployees = count($employees);
+        $avgSalary = $totalEmployees > 0 ? $totalPayroll / $totalEmployees : 0;
+
+        return view('admin.staff', compact('employees', 'departmentStats', 'totalPayroll', 'totalEmployees', 'avgSalary'));
+    }
+
+    /**
+     * Store New Staff
+     */
+    public function storeStaff(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'nama_lengkap' => 'required|string|max:255',
+                'email' => 'required|email|unique:pengguna,email',
+                'password' => 'required|string|min:6',
+                'no_telepon' => 'required|string|max:20',
+                'alamat' => 'required|string',
+                'role' => 'required|in:admin,staff',
+            ]);
+
+            Pengguna::create([
+                'nama_lengkap' => $validated['nama_lengkap'],
+                'email' => $validated['email'],
+                'password' => bcrypt($validated['password']),
+                'no_telepon' => $validated['no_telepon'],
+                'alamat' => $validated['alamat'],
+                'role' => $validated['role'],
+            ]);
+
+            return redirect()->route('admin.staff')->with('success', 'Karyawan berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Update Staff
+     */
+    public function updateStaff(Request $request, $id)
+    {
+        try {
+            $validated = $request->validate([
+                'nama_lengkap' => 'required|string|max:255',
+                'email' => 'required|email|unique:pengguna,email,' . $id . ',id_pengguna',
+                'no_telepon' => 'required|string|max:20',
+                'alamat' => 'required|string',
+                'role' => 'required|in:admin,staff',
+                'password' => 'nullable|string|min:6',
+            ]);
+
+            $staff = Pengguna::findOrFail($id);
+            
+            $updateData = [
+                'nama_lengkap' => $validated['nama_lengkap'],
+                'email' => $validated['email'],
+                'no_telepon' => $validated['no_telepon'],
+                'alamat' => $validated['alamat'],
+                'role' => $validated['role'],
+            ];
+
+            // Update password only if provided
+            if (!empty($validated['password'])) {
+                $updateData['password'] = bcrypt($validated['password']);
+            }
+
+            $staff->update($updateData);
+
+            return redirect()->route('admin.staff')->with('success', 'Data karyawan berhasil diperbarui!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete Staff
+     */
+    public function deleteStaff($id)
+    {
+        try {
+            $staff = Pengguna::findOrFail($id);
+            
+            // Check if staff has any related records
+            if ($staff->staffPenitipans()->count() > 0 || $staff->updateKondisis()->count() > 0) {
+                return back()->with('error', 'Tidak dapat menghapus karyawan yang memiliki data terkait!');
+            }
+
+            $staff->delete();
+
+            return redirect()->route('admin.staff')->with('success', 'Karyawan berhasil dihapus!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Get Staff Details (JSON)
+     */
+    public function showStaff($id)
+    {
+        try {
+            $staff = Pengguna::findOrFail($id);
+            return response()->json($staff);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Staff tidak ditemukan'], 404);
+        }
+    }
+
+    /**
+     * Reports & Analytics (Owner View)
+     */
+    public function reports()
+    {
+        $currentMonth = Carbon::now()->month;
+        $currentYear = Carbon::now()->year;
+
+        // Total Revenue
+        $totalRevenue = DB::table('pembayaran')
+            ->whereMonth('tanggal_bayar', $currentMonth)
+            ->whereYear('tanggal_bayar', $currentYear)
+            ->where('status_pembayaran', 'lunas')
+            ->sum('jumlah_bayar');
+
+        $revenueGrowth = '+15.2%'; // Placeholder
+
+        // Total Bookings
+        $totalBookings = DB::table('penitipan')
+            ->whereMonth('tanggal_masuk', $currentMonth)
+            ->whereYear('tanggal_masuk', $currentYear)
+            ->count();
+
+        $bookingsGrowth = '+12.5%'; // Placeholder
+
+        // Active Customers
+        $activeCustomers = DB::table('penitipan')
+            ->whereMonth('tanggal_masuk', $currentMonth)
+            ->whereYear('tanggal_masuk', $currentYear)
+            ->distinct('id_pemilik')
+            ->count('id_pemilik');
+
+        $customersGrowth = '+8.3%'; // Placeholder
+
+        // Average Rating
+        $avgRating = 4.8; // Placeholder
+        $ratingChange = '+0.2'; // Placeholder
+
+        // Revenue Chart Data (6 months)
+        $revenueChartData = [
+            'labels' => [],
+            'data' => []
+        ];
+
+        for ($i = 5; $i >= 0; $i--) {
+            $month = Carbon::now()->subMonths($i);
+            $revenue = DB::table('pembayaran')
+                ->whereMonth('tanggal_bayar', $month->month)
+                ->whereYear('tanggal_bayar', $month->year)
+                ->where('status_pembayaran', 'lunas')
+                ->sum('jumlah_bayar');
+            
+            $revenueChartData['labels'][] = $month->format('M Y');
+            $revenueChartData['data'][] = round($revenue / 1000000, 2);
+        }
+
+        // Booking Chart Data
+        $bookingChartData = [
+            'labels' => [],
+            'bookings' => [],
+            'customers' => []
+        ];
+
+        for ($i = 5; $i >= 0; $i--) {
+            $month = Carbon::now()->subMonths($i);
+            $bookings = DB::table('penitipan')
+                ->whereMonth('tanggal_masuk', $month->month)
+                ->whereYear('tanggal_masuk', $month->year)
+                ->count();
+            
+            $customers = DB::table('penitipan')
+                ->whereMonth('tanggal_masuk', $month->month)
+                ->whereYear('tanggal_masuk', $month->year)
+                ->distinct('id_pemilik')
+                ->count('id_pemilik');
+            
+            $bookingChartData['labels'][] = $month->format('M');
+            $bookingChartData['bookings'][] = $bookings;
+            $bookingChartData['customers'][] = $customers;
+        }
+
+        // Service Performance
+        $servicePerformance = DB::table('detail_penitipan')
+            ->join('paket_layanan', 'detail_penitipan.id_paket', '=', 'paket_layanan.id_paket')
+            ->join('penitipan', 'detail_penitipan.id_penitipan', '=', 'penitipan.id_penitipan')
+            ->join('pembayaran', 'penitipan.id_penitipan', '=', 'pembayaran.id_penitipan')
+            ->whereMonth('penitipan.tanggal_masuk', $currentMonth)
+            ->whereYear('penitipan.tanggal_masuk', $currentYear)
+            ->select(
+                'paket_layanan.nama_paket as name',
+                DB::raw('SUM(pembayaran.jumlah_bayar) as revenue'),
+                DB::raw('COUNT(detail_penitipan.id_detail) as bookings'),
+                DB::raw('4.5 as rating'),
+                DB::raw('"+10%" as growth')
+            )
+            ->groupBy('paket_layanan.nama_paket')
+            ->get();
+
+        return view('admin.reports', compact(
+            'totalRevenue',
+            'revenueGrowth',
+            'totalBookings',
+            'bookingsGrowth',
+            'activeCustomers',
+            'customersGrowth',
+            'avgRating',
+            'ratingChange',
+            'revenueChartData',
+            'bookingChartData',
+            'servicePerformance'
+        ));
+    }
 }
 
