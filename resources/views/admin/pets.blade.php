@@ -59,11 +59,6 @@
         <option value="anjing">Anjing</option>
         <option value="kucing">Kucing</option>
       </select>
-      <select id="statusFilter" class="px-4 py-2 border rounded-lg" onchange="searchFunction()">
-        <option value="">Semua Status</option>
-        <option value="dalam_penitipan">Dalam Penitipan</option>
-        <option value="di_rumah">Di Rumah</option>
-      </select>
     </div>
   </div>
 
@@ -92,17 +87,22 @@
           <tbody id="tableBody" class="text-sm">
             @forelse($hewans as $hewan)
               @php
-                $statusPenitipan = 'Di Rumah';
                 $activePenitipan = $hewan->penitipan->where('status', 'aktif')->first();
-                if ($activePenitipan) {
-                  $statusPenitipan = 'Dalam Penitipan';
-                }
+                // Convert jenis to Indonesian for consistent filtering
+                $jenisForFilter = strtolower($hewan->jenis_hewan);
+                if ($jenisForFilter === 'cat') $jenisForFilter = 'kucing';
+                if ($jenisForFilter === 'dog') $jenisForFilter = 'anjing';
               @endphp
-              <tr class="pet-row border-b hover:bg-gray-50" data-jenis="{{ strtolower($hewan->jenis_hewan) }}" data-status="{{ $statusPenitipan }}">
+              <tr class="pet-row border-b hover:bg-gray-50" data-jenis="{{ $jenisForFilter }}">
                 <td class="p-4">
                   <div>
                     <p class="font-semibold">{{ $hewan->nama_hewan }}</p>
-                    <p class="text-xs text-gray-500">{{ ucfirst($hewan->jenis_hewan) }} • {{ $hewan->ras }}</p>
+                    @php
+                      $jenisIndonesia = $hewan->jenis_hewan;
+                      if (strtolower($jenisIndonesia) === 'cat') $jenisIndonesia = 'kucing';
+                      if (strtolower($jenisIndonesia) === 'dog') $jenisIndonesia = 'anjing';
+                    @endphp
+                    <p class="text-xs text-gray-500">{{ ucfirst($jenisIndonesia) }} • {{ $hewan->ras }}</p>
                   </div>
                 </td>
                 <td class="p-4">
@@ -264,7 +264,6 @@
 function searchFunction() {
   var searchValue = document.getElementById('petSearch').value.toLowerCase();
   var jenisValue  = document.getElementById('jenisFilter').value.toLowerCase();
-  var statusValue = document.getElementById('statusFilter').value.toLowerCase();
 
   var rows = document.getElementsByClassName('pet-row');
   var visibleCount = 0;
@@ -273,13 +272,11 @@ function searchFunction() {
     var row = rows[i];
     var rowText   = row.innerText.toLowerCase();
     var rowJenis  = (row.getAttribute('data-jenis') || '').toLowerCase();
-    var rowStatus = (row.getAttribute('data-status') || '').toLowerCase();
 
     var showRow = true;
 
     if (searchValue && !rowText.includes(searchValue)) showRow = false;
     if (jenisValue  && rowJenis !== jenisValue)       showRow = false;
-    if (statusValue && rowStatus.replace(' ', '_') !== statusValue) showRow = false;
 
     row.style.display = showRow ? '' : 'none';
     if (showRow) visibleCount++;
@@ -291,6 +288,14 @@ function searchFunction() {
 
 // Store pets data for modals
 const hewansData = @json($hewans);
+
+// Helper function to convert jenis to Indonesian
+function convertJenisToIndonesian(jenis) {
+  const jenisLower = jenis.toLowerCase();
+  if (jenisLower === 'cat') return 'Kucing';
+  if (jenisLower === 'dog') return 'Anjing';
+  return jenis.charAt(0).toUpperCase() + jenis.slice(1);
+}
 
 // Modal functions
 function showDetailModal(id) {
@@ -334,7 +339,7 @@ function showDetailModal(id) {
       
       <div>
         <label class="text-sm text-gray-500">Jenis</label>
-        <p class="font-semibold">${hewan.jenis_hewan.charAt(0).toUpperCase() + hewan.jenis_hewan.slice(1)}</p>
+        <p class="font-semibold">${convertJenisToIndonesian(hewan.jenis_hewan)}</p>
       </div>
       
       <div>
@@ -438,8 +443,8 @@ function showEditModal(id) {
           <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Hewan</label>
           <select name="jenis_hewan" required
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="anjing" ${hewan.jenis_hewan === 'anjing' ? 'selected' : ''}>Anjing</option>
-            <option value="kucing" ${hewan.jenis_hewan === 'kucing' ? 'selected' : ''}>Kucing</option>
+            <option value="anjing" ${hewan.jenis_hewan.toLowerCase() === 'anjing' || hewan.jenis_hewan.toLowerCase() === 'dog' ? 'selected' : ''}>Anjing</option>
+            <option value="kucing" ${hewan.jenis_hewan.toLowerCase() === 'kucing' || hewan.jenis_hewan.toLowerCase() === 'cat' ? 'selected' : ''}>Kucing</option>
           </select>
         </div>
 
