@@ -11,7 +11,25 @@
       <p class="text-gray-700">Isi form di bawah untuk melakukan reservasi PawsHotel</p>
     </div>
 
-    <form action="{{ route('reservasi.submit') }}" method="POST" class="space-y-8">
+    <!-- Display Error Messages -->
+    @if($errors->any())
+      <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+        <h4 class="font-bold mb-2">Terjadi kesalahan:</h4>
+        <ul class="list-disc list-inside">
+          @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+    @endif
+
+    @if(session('error'))
+      <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+        {{ session('error') }}
+      </div>
+    @endif
+
+    <form action="{{ route('reservasi.submit') }}" method="POST" class="space-y-8" id="reservasiForm">
       @csrf
 
       <!-- Informasi Pemilik -->
@@ -50,27 +68,27 @@
         <div class="p-4 grid md:grid-cols-2 gap-4">
           <div>
             <label for="petName" class="block text-sm font-medium" style="color:#4b3d2a;">Nama Hewan *</label>
-            <input type="text" id="petName" name="petName" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;" required>
+            <input type="text" id="petName" name="petName" value="{{ old('petName') }}" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;" required>
           </div>
           <div>
             <label for="petType" class="block text-sm font-medium" style="color:#4b3d2a;">Jenis Hewan *</label>
             <select id="petType" name="petType" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;" required>
               <option value="">Pilih jenis hewan</option>
-              <option value="dog">Anjing</option>
-              <option value="cat">Kucing</option>
+              <option value="anjing">Anjing</option>
+              <option value="kucing">Kucing</option>
             </select>
           </div>
           <div>
             <label for="petBreed" class="block text-sm font-medium" style="color:#4b3d2a;">Ras/Breed</label>
-            <input type="text" id="petBreed" name="petBreed" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;">
+            <input type="text" id="petBreed" name="petBreed" value="{{ old('petBreed') }}" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;">
           </div>
           <div>
             <label for="petAge" class="block text-sm font-medium" style="color:#4b3d2a;">Umur (bulan)</label>
-            <input type="number" id="petAge" name="petAge" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;">
+            <input type="number" id="petAge" name="petAge" value="{{ old('petAge') }}" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;">
           </div>
           <div>
             <label for="petWeight" class="block text-sm font-medium" style="color:#4b3d2a;">Berat Badan (kg)</label>
-            <input type="number" step="0.1" id="petWeight" name="petWeight" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;">
+            <input type="number" step="0.1" id="petWeight" name="petWeight" value="{{ old('petWeight') }}" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;">
           </div>
         </div>
       </div>
@@ -178,7 +196,12 @@
       <!-- Tombol Aksi -->
       <div class="flex justify-end space-x-4 mt-6 border-t pt-4" style="border-color:#f9a826;">
         <a href="{{ url('/user/dashboard') }}" class="px-4 py-2 rounded border text-gray-700 hover:bg-[#fff4e3] transition" style="border-color:#f9a826;">Kembali</a>
-        <button type="submit" class="px-4 py-2 rounded text-white hover:opacity-90 transition" style="background-color:#f9a826;">Lanjut ke Pembayaran</button>
+        <button type="submit" id="submitBtn" class="px-4 py-2 rounded text-white hover:opacity-90 transition" style="background-color:#f9a826;">Lanjut ke Pembayaran</button>
+      </div>
+      
+      <!-- Error Alert (Hidden by default) -->
+      <div id="errorAlert" class="hidden p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg mt-4">
+        <p id="errorMessage"></p>
       </div>
 </div>
 
@@ -290,6 +313,47 @@
         checkOutDateInput.value = '';
       }
       updateRingkasan();
+    });
+
+    // Form validation before submit
+    document.getElementById('reservasiForm').addEventListener('submit', function(e) {
+      const errorAlert = document.getElementById('errorAlert');
+      const errorMessage = document.getElementById('errorMessage');
+      
+      // Check if package is selected
+      if (!selectedPaket) {
+        e.preventDefault();
+        errorMessage.textContent = '⚠️ Silakan pilih paket layanan terlebih dahulu!';
+        errorAlert.classList.remove('hidden');
+        errorAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Hide alert after 5 seconds
+        setTimeout(() => {
+          errorAlert.classList.add('hidden');
+        }, 5000);
+        
+        return false;
+      }
+      
+      // Check if dates are selected
+      if (!checkInDateInput.value || !checkOutDateInput.value) {
+        e.preventDefault();
+        errorMessage.textContent = '⚠️ Silakan pilih tanggal check-in dan check-out!';
+        errorAlert.classList.remove('hidden');
+        errorAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        setTimeout(() => {
+          errorAlert.classList.add('hidden');
+        }, 5000);
+        
+        return false;
+      }
+      
+      // Show loading state
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Memproses...';
+      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
     });
   </script>
 @endpush

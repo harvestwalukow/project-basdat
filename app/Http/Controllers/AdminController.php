@@ -151,7 +151,7 @@ class AdminController extends Controller
         $hewans = Hewan::with(['pemilik', 'penitipan' => function($query) {
             // Sort penitipan by tanggal_masuk to get the latest one first
             $query->orderBy('tanggal_masuk', 'desc');
-        }])
+        }, 'penitipan.detailPenitipan.paketLayanan'])
         ->orderBy('created_at', 'desc')
         ->get();
 

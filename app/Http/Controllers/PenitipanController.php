@@ -11,20 +11,28 @@ class PenitipanController extends Controller
     public function store(Request $request)
     {
         // Validate the request
-        $request->validate([
+        $validated = $request->validate([
             'ownerName' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'email' => 'nullable|email',
             'address' => 'nullable|string',
             'petName' => 'required|string|max:255',
-            'petType' => 'required|string',
+            'petType' => 'required|in:anjing,kucing',
             'petBreed' => 'nullable|string|max:255',
-            'petAge' => 'nullable|integer',
-            'petWeight' => 'nullable|numeric',
+            'petAge' => 'nullable|integer|min:0',
+            'petWeight' => 'nullable|numeric|min:0',
             'packageType' => 'required|string',
-            'checkInDate' => 'required|date',
+            'packageId' => 'required|exists:paket_layanan,id_paket',
+            'checkInDate' => 'required|date|after_or_equal:today',
             'checkOutDate' => 'required|date|after:checkInDate',
             'specialRequests' => 'nullable|string',
+        ], [
+            'packageType.required' => 'Silakan pilih paket layanan',
+            'packageId.required' => 'Silakan pilih paket layanan',
+            'packageId.exists' => 'Paket layanan tidak valid',
+            'petType.in' => 'Jenis hewan harus anjing atau kucing',
+            'checkInDate.after_or_equal' => 'Tanggal check-in tidak boleh di masa lalu',
+            'checkOutDate.after' => 'Tanggal check-out harus setelah check-in',
         ]);
 
         try {
@@ -66,16 +74,19 @@ class PenitipanController extends Controller
             $jumlahHari = $checkOut->diff($checkIn)->days;
             if ($jumlahHari < 1) $jumlahHari = 1;
 
-            // Get package price based on package name
-            $packagePrices = [
-                'Paket Basic' => 150000,
-                'Paket Premium' => 250000,
-            ];
+            // 3. Get package details from database
+            $paketLayanan = DB::table('paket_layanan')
+                ->where('id_paket', $request->packageId)
+                ->first();
             
-            $hargaPaket = $packagePrices[$request->packageType] ?? 150000;
+            if (!$paketLayanan) {
+                throw new \Exception('Paket layanan tidak ditemukan');
+            }
+            
+            $hargaPaket = $paketLayanan->harga_per_hari;
             $totalBiaya = $hargaPaket * $jumlahHari;
 
-            // 3. Create penitipan record
+            // 4. Create penitipan record
             $penitipanId = DB::table('penitipan')->insertGetId([
                 'id_hewan' => $hewan,
                 'id_pemilik' => $userId,
@@ -89,36 +100,52 @@ class PenitipanController extends Controller
                 'updated_at' => now(),
             ]);
 
-            // 4. Find or create package in paket_layanan
-            $paketLayanan = DB::table('paket_layanan')
-                ->where('nama_paket', $request->packageType)
-                ->first();
-
-            if (!$paketLayanan) {
-                // Create package if it doesn't exist
-                $paketLayananId = DB::table('paket_layanan')->insertGetId([
-                    'nama_paket' => $request->packageType,
-                    'deskripsi' => 'Paket layanan penitipan hewan',
-                    'harga_per_hari' => $hargaPaket,
-                    'fasilitas' => 'Fasilitas lengkap',
-                    'is_active' => true,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            } else {
-                $paketLayananId = $paketLayanan->id_paket;
-            }
-
-            // 5. Create detail_penitipan record
+            // 5. Create detail_penitipan record for main package
             DB::table('detail_penitipan')->insert([
                 'id_penitipan' => $penitipanId,
-                'id_paket' => $paketLayananId,
+                'id_paket' => $request->packageId,
                 'jumlah_hari' => $jumlahHari,
                 'subtotal' => $totalBiaya,
                 'created_at' => now(),
             ]);
 
-            // 6. Create pembayaran record
+            // 6. Process layanan tambahan (add-ons)
+            $totalLayananTambahan = 0;
+            foreach ($request->all() as $key => $value) {
+                // Check if this is an addon field (addon_X where X is id_paket)
+                if (strpos($key, 'addon_') === 0 && $value > 0) {
+                    $addonId = str_replace('addon_', '', $key);
+                    $jumlahAddon = (int) $value;
+                    
+                    // Get addon price
+                    $addon = DB::table('paket_layanan')
+                        ->where('id_paket', $addonId)
+                        ->first();
+                    if ($addon) {
+                        $subtotalAddon = $addon->harga_per_hari * $jumlahAddon;
+                        $totalLayananTambahan += $subtotalAddon;
+                        
+                        // Insert detail_penitipan for this addon
+                        DB::table('detail_penitipan')->insert([
+                            'id_penitipan' => $penitipanId,
+                            'id_paket' => $addonId,
+                            'jumlah_hari' => $jumlahAddon, // For addons, jumlah_hari represents quantity
+                            'subtotal' => $subtotalAddon,
+                            'created_at' => now(),
+                        ]);
+                    }
+                }
+            }
+            
+            // Update total_biaya in penitipan if there are add-ons
+            if ($totalLayananTambahan > 0) {
+                $totalBiaya += $totalLayananTambahan;
+                DB::table('penitipan')
+                    ->where('id_penitipan', $penitipanId)
+                    ->update(['total_biaya' => $totalBiaya]);
+            }
+
+            // 7. Create pembayaran record
             $nomorTransaksi = 'TRX-' . date('Ymd') . '-' . str_pad($penitipanId, 6, '0', STR_PAD_LEFT);
             
             DB::table('pembayaran')->insert([

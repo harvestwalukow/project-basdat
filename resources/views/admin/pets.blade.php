@@ -84,7 +84,7 @@
               <th class="p-4">Pemilik</th>
               <th class="p-4">Detail Fisik</th>
               <th class="p-4">Kondisi Khusus</th>
-              <th class="p-4">Layanan Tambahan</th>
+              <th class="p-4">Layanan</th>
               <th class="p-4">Riwayat Penitipan</th>
               <th class="p-4">Aksi</th>
             </tr>
@@ -125,7 +125,24 @@
                   @endif
                 </td>
                 <td class="p-4">
-                  <p class="text-xs">-</p>
+                  @php
+                    // Ambil SEMUA layanan dari penitipan aktif
+                    $semuaLayanan = collect();
+                    if ($activePenitipan) {
+                      foreach ($activePenitipan->detailPenitipan as $detail) {
+                        if ($detail->paketLayanan) {
+                          $semuaLayanan->push($detail->paketLayanan->nama_paket);
+                        }
+                      }
+                    }
+                  @endphp
+                  @if($semuaLayanan->isNotEmpty())
+                    @foreach($semuaLayanan as $layanan)
+                      <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded mb-1 mr-1">{{ $layanan }}</span>
+                    @endforeach
+                  @else
+                    <p class="text-xs text-gray-400">-</p>
+                  @endif
                 </td>
                 <td class="p-4">
                   <p class="text-xs">{{ $hewan->penitipan->count() }} kali</p>
@@ -282,6 +299,27 @@ function showDetailModal(id) {
 
   const penitipanCount = hewan.penitipan ? hewan.penitipan.length : 0;
   const lastPenitipan = hewan.penitipan && hewan.penitipan.length > 0 ? hewan.penitipan[0].tanggal_masuk : null;
+  
+  // Get active penitipan layanan (SEMUA layanan yang dipilih)
+  let semuaLayanan = [];
+  const activePenitipan = hewan.penitipan ? hewan.penitipan.find(p => p.status === 'aktif') : null;
+  if (activePenitipan && activePenitipan.detail_penitipan) {
+    activePenitipan.detail_penitipan.forEach(detail => {
+      if (detail.paket_layanan) {
+        semuaLayanan.push(detail.paket_layanan.nama_paket);
+      }
+    });
+  }
+  
+  // Fallback: check for camelCase if snake_case doesn't exist
+  if (!activePenitipan?.detail_penitipan && activePenitipan?.detailPenitipan) {
+    activePenitipan.detailPenitipan.forEach(detail => {
+      if (detail.paketLayanan || detail.paket_layanan) {
+        const paket = detail.paketLayanan || detail.paket_layanan;
+        semuaLayanan.push(paket.nama_paket);
+      }
+    });
+  }
 
   const content = `
     <div class="grid grid-cols-2 gap-4">
@@ -327,6 +365,15 @@ function showDetailModal(id) {
       <div class="col-span-2">
         <label class="text-sm text-gray-500">Catatan Medis</label>
         <p class="font-semibold">${hewan.catatan_medis || '-'}</p>
+      </div>
+      
+      <div class="col-span-2">
+        <label class="text-sm text-gray-500">Layanan Aktif</label>
+        <div class="mt-1">
+          ${semuaLayanan.length > 0 
+            ? semuaLayanan.map(l => `<span class="inline-block bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full mr-2 mb-1">${l}</span>`).join('') 
+            : '<p class="font-semibold text-gray-400">-</p>'}
+        </div>
       </div>
       
       <div class="col-span-2 border-t pt-4 mt-2">
