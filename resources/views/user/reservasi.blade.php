@@ -2,7 +2,9 @@
 
 @section('title', 'Form Reservasi - PawsHotel')
 
-@section('body-style', 'style=background-image:url("/img/bg2.png");background-size:cover;background-attachment:fixed;background-repeat:no-repeat;')
+@section('additional-style')
+background-image: url('{{ asset('img/bg2.png') }}');
+@endsection
 
 @section('content')
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

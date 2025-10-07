@@ -13,7 +13,8 @@
   @stack('styles')
 </head>
 
-<body class="@yield('body-class', 'bg-cover bg-center bg-fixed text-[#333333] antialiased')" @hasSection('body-style')@yield('body-style')@else style="background-image: url('{{ asset('img/backround.png') }}'); background-size: cover; background-attachment: fixed;"@endif>
+<body class="@yield('body-class', 'bg-cover bg-center bg-fixed text-[#333333] antialiased')" 
+      style="background-image: url('{{ asset('img/backround.png') }}'); background-size: cover; background-attachment: fixed; @yield('additional-style')">
 
 
 <!-- NAVBAR -->
