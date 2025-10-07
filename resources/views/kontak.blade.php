@@ -14,46 +14,8 @@
       </p>
     </div>
 
-    <div class="grid lg:grid-cols-2 gap-12">
-      <!-- Contact Form -->
-      <div class="bg-white shadow rounded-lg p-8">
-        <h2 class="text-2xl font-bold mb-4">Kirim Pesan</h2>
-        <p class="text-gray-600 mb-6">Isi form di bawah dan kami akan menghubungi Anda dalam 24 jam</p>
-
-        <form class="space-y-4">
-          <div class="grid md:grid-cols-2 gap-4">
-            <div>
-              <label for="name" class="block text-sm font-medium mb-1">Nama Lengkap *</label>
-              <input id="name" type="text" class="w-full border rounded px-3 py-2" placeholder="Masukkan nama lengkap" required>
-            </div>
-            <div>
-              <label for="phone" class="block text-sm font-medium mb-1">Nomor Telepon</label>
-              <input id="phone" type="text" class="w-full border rounded px-3 py-2" placeholder="08xxxxxxxxxx">
-            </div>
-          </div>
-
-          <div>
-            <label for="email" class="block text-sm font-medium mb-1">Email *</label>
-            <input id="email" type="email" class="w-full border rounded px-3 py-2" placeholder="email@example.com" required>
-          </div>
-
-          <div>
-            <label for="subject" class="block text-sm font-medium mb-1">Subjek</label>
-            <input id="subject" type="text" class="w-full border rounded px-3 py-2" placeholder="Subjek pesan">
-          </div>
-
-          <div>
-            <label for="message" class="block text-sm font-medium mb-1">Pesan *</label>
-            <textarea id="message" rows="5" class="w-full border rounded px-3 py-2" placeholder="Tuliskan pesan Anda di sini..." required></textarea>
-          </div>
-
-          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded">
-            Kirim Pesan
-          </button>
-        </form>
-      </div>
-
-      <!-- Contact Information -->
+    <!-- Contact Information -->
+    <div class="max-w-4xl mx-auto">
       <div class="space-y-6">
 
         <!-- Contact Details -->
@@ -62,8 +24,8 @@
             <div class="text-2xl">📍</div>
             <div>
               <h3 class="font-semibold mb-2">Alamat</h3>
-              <p class="text-gray-600 text-sm">Jl. Raya Kebayoran No. 123</p>
-              <p class="text-gray-600 text-sm">Jakarta Selatan 12345</p>
+              <p class="text-gray-600 text-sm">Jl. Dr. Ir. H. Soekarno, Mulyorejo</p>
+              <p class="text-gray-600 text-sm">Kec. Mulyorejo, Surabaya, Jawa Timur 60115</p>
             </div>
           </div>
 
@@ -159,13 +121,17 @@
     <!-- Map Section -->
     <div class="mt-16 bg-white shadow rounded-lg p-8">
       <h3 class="font-semibold mb-2">Lokasi Kami</h3>
-      <p class="text-gray-600 mb-6">Kunjungi hotel hewan kami di Jakarta Selatan</p>
-      <div class="aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
-        <div class="text-center text-gray-500">
-          <div class="text-4xl mb-2">🗺️</div>
-          <p>Google Maps Integration</p>
-          <p class="text-sm">Jl. Raya Kebayoran No. 123, Jakarta Selatan</p>
-        </div>
+      <p class="text-gray-600 mb-6">Kunjungi hotel hewan kami di Surabaya</p>
+      <div class="aspect-video bg-gray-200 rounded-lg overflow-hidden">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.7826034695695!2d112.7849301!3d-7.265563699999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7fb7a9bdf4517%3A0x5b8bbf8317f96ed5!2sGedung%20Kuliah%20Bersama%20(GKB)%20Kampus%20C%20Unair!5e0!3m2!1sid!2sid!4v1759852883627!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          width="100%" 
+          height="100%" 
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
       </div>
     </div>
 
