@@ -84,25 +84,41 @@
     <div class="bg-white rounded-xl shadow overflow-hidden">
       <div class="px-6 py-4 border-b border-gray-200">
         <h3 class="text-lg font-semibold">Performa Layanan</h3>
-        <p class="text-sm text-gray-500">Statistik layanan berdasarkan pendapatan dan jumlah pemesanan</p>
+        <p class="text-sm text-gray-500">Statistik semua layanan berdasarkan pendapatan dan jumlah pemesanan</p>
       </div>
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Layanan</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pendapatan</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pemesanan</th>
             </tr>
           </thead>
           <tbody id="servicePerformanceTable" class="bg-white divide-y divide-gray-200">
             @forelse($servicePerformance ?? [] as $service)
+              @php
+                // Tentukan kategori berdasarkan nama layanan
+                if (str_contains(strtolower($service->name), 'paket')) {
+                  $kategori = 'Paket Utama';
+                  $badgeColor = 'bg-blue-100 text-blue-800';
+                } else {
+                  $kategori = 'Layanan Tambahan';
+                  $badgeColor = 'bg-green-100 text-green-800';
+                }
+              @endphp
               <tr class="hover:bg-gray-50">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm font-medium text-gray-900">{{ $service->name }}</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">Rp {{ number_format($service->revenue, 0, ',', '.') }}</div>
+                  <span class="px-2 py-1 text-xs font-medium rounded-full {{ $badgeColor }}">
+                    {{ $kategori }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-semibold text-gray-900">Rp {{ number_format($service->revenue, 0, ',', '.') }}</div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-900">{{ $service->bookings }} kali</div>
@@ -110,7 +126,7 @@
               </tr>
             @empty
               <tr>
-                <td colspan="3" class="px-6 py-8 text-center text-gray-500">
+                <td colspan="4" class="px-6 py-8 text-center text-gray-500">
                   <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                   </svg>
@@ -313,7 +329,7 @@
     if (services.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="3" class="px-6 py-8 text-center text-gray-500">
+          <td colspan="4" class="px-6 py-8 text-center text-gray-500">
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
@@ -324,19 +340,31 @@
       return;
     }
 
-    tbody.innerHTML = services.map(service => `
-      <tr class="hover:bg-gray-50">
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm font-medium text-gray-900">${service.name}</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-900">${formatCurrency(service.revenue)}</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-900">${service.bookings} kali</div>
-        </td>
-      </tr>
-    `).join('');
+    tbody.innerHTML = services.map(service => {
+      // Tentukan kategori berdasarkan nama layanan
+      const isPaketUtama = service.name.toLowerCase().includes('paket');
+      const kategori = isPaketUtama ? 'Paket Utama' : 'Layanan Tambahan';
+      const badgeColor = isPaketUtama ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800';
+      
+      return `
+        <tr class="hover:bg-gray-50">
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm font-medium text-gray-900">${service.name}</div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span class="px-2 py-1 text-xs font-medium rounded-full ${badgeColor}">
+              ${kategori}
+            </span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm font-semibold text-gray-900">${formatCurrency(service.revenue)}</div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm text-gray-900">${service.bookings} kali</div>
+          </td>
+        </tr>
+      `;
+    }).join('');
   }
 
   // Initialize charts on page load

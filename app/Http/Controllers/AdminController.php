@@ -537,7 +537,7 @@ class AdminController extends Controller
                 case 'handler':
                     $department = 'Handler';
                     $position = 'Pet Handler';
-                    $specializationName = 'Penanganan Hewan';
+                    $specializationName = 'Penanganan Hewan & Pick-up/Delivery';
                     break;
                 case 'trainer':
                     $department = 'Trainer';
@@ -815,18 +815,18 @@ class AdminController extends Controller
             }
         }
 
-        // Service Performance - Only Basic and Premium packages
+        // Service Performance - All packages (Basic, Premium, and Add-ons)
         $allPaketLayanan = DB::table('paket_layanan')
             ->where('is_active', true)
-            ->where(function($query) {
-                $query->where('nama_paket', 'LIKE', '%Paket Basic%')
-                      ->orWhere('nama_paket', 'LIKE', '%Paket Premium%');
-            })
             ->select('id_paket', 'nama_paket')
             ->orderByRaw("CASE 
-                WHEN nama_paket LIKE '%Basic%' THEN 1 
-                WHEN nama_paket LIKE '%Premium%' THEN 2 
-                ELSE 3 END")
+                WHEN nama_paket LIKE '%Paket Basic%' THEN 1 
+                WHEN nama_paket LIKE '%Paket Premium%' THEN 2 
+                WHEN nama_paket LIKE '%Grooming%' THEN 3
+                WHEN nama_paket LIKE '%Kolam%' THEN 4
+                WHEN nama_paket LIKE '%Pick%' THEN 5
+                WHEN nama_paket LIKE '%Enrichment%' THEN 6
+                ELSE 7 END")
             ->get()
             ->keyBy('id_paket');
 
@@ -836,10 +836,7 @@ class AdminController extends Controller
             ->join('pembayaran', 'penitipan.id_penitipan', '=', 'pembayaran.id_penitipan')
             ->whereBetween('penitipan.created_at', [$startDate, $endDate])
             ->where('pembayaran.status_pembayaran', 'lunas')
-            ->where(function($query) {
-                $query->where('paket_layanan.nama_paket', 'LIKE', '%Paket Basic%')
-                      ->orWhere('paket_layanan.nama_paket', 'LIKE', '%Paket Premium%');
-            })
+            ->where('paket_layanan.is_active', true)
             ->select(
                 'paket_layanan.id_paket',
                 DB::raw('SUM(detail_penitipan.subtotal) as revenue'),
