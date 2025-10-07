@@ -82,7 +82,7 @@ Route::post('/signin', function (Request $request) {
     $email = trim($request->input('email'));
     $password = trim($request->input('password'));
 
-    // --- LOGIN MANUAL: ADMIN, OWNER, USER ---
+    // --- LOGIN MANUAL: ADMIN ONLY ---
     $manualUsers = [
         'admin@gmail.com' => [
             'id' => 9999,
@@ -90,20 +90,6 @@ Route::post('/signin', function (Request $request) {
             'password' => '123456',
             'role' => 'admin',
             'redirect' => '/admin/',
-        ],
-        'owner@gmail.com' => [
-            'id' => 9998,
-            'name' => 'Owner',
-            'password' => '123456',
-            'role' => 'owner',
-            'redirect' => '/admin/',
-        ],
-        'user@gmail.com' => [
-            'id' => 9997,
-            'name' => 'User',
-            'password' => '123456',
-            'role' => 'user',
-            'redirect' => '/dashboard',
         ],
     ];
 

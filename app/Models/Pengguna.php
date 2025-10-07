@@ -16,6 +16,7 @@ class Pengguna extends Model
         'no_telepon',
         'alamat',
         'role',
+        'specialization',
     ];
 
     protected $hidden = [

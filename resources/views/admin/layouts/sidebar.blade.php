@@ -29,8 +29,8 @@
       PEMBAYARAN
     </a>
 
-    @if(session('user_role') === 'owner')
-    <!-- Owner Only Menu -->
+    @if(session('user_role') === 'admin')
+    <!-- Admin Only Menu -->
     <hr class="my-2 border-white/30">
     <a href="{{ route('admin.staff') }}" class="flex items-center px-4 py-2 {{ request()->routeIs('admin.staff') ? 'bg-white/90 text-orange-700' : 'text-white hover:bg-orange-500/50' }} rounded-md font-semibold">
       <i class="fa-solid fa-users w-5 mr-3"></i>

@@ -28,7 +28,7 @@
   </div>
 
   {{-- Department Stats --}}
-  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     @foreach ($departmentStats ?? [] as $dept)
       <div class="bg-white shadow rounded-lg p-4 text-center">
         <p class="text-lg font-semibold">{{ $dept['name'] }}</p>
@@ -42,7 +42,6 @@
     <ul class="flex border-b text-sm font-medium">
       <li class="mr-2"><a href="#employees" class="tab-link inline-block p-4 border-b-2 border-blue-600" data-tab="employees">Daftar Karyawan</a></li>
       <li class="mr-2"><a href="#schedule" class="tab-link inline-block p-4" data-tab="schedule">Jadwal Kerja</a></li>
-      <li class="mr-2"><a href="#payroll" class="tab-link inline-block p-4" data-tab="payroll">Payroll</a></li>
     </ul>
   </div>
 
@@ -91,59 +90,113 @@
 
   {{-- Schedule Tab --}}
   <div id="schedule" class="tab-content hidden">
-    <div class="bg-white shadow rounded-lg p-6 text-center">
-      <p class="text-gray-500">Jadwal Kerja Coming Soon...</p>
-    </div>
-  </div>
-
-  {{-- Payroll Tab --}}
-  <div id="payroll" class="tab-content hidden">
-    <h2 class="text-xl font-semibold mb-4">Ringkasan Payroll</h2>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <div class="bg-white shadow rounded-lg p-4 text-center">
-        <p class="text-green-600 text-2xl font-bold">Rp {{ number_format(($totalPayroll ?? 0)/1000000, 1) }}M</p>
-        <p class="text-gray-500 text-sm">Total Payroll Bulan Ini</p>
+    <div class="bg-white shadow rounded-lg p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-semibold">Jadwal Shift Karyawan</h2>
+        <div class="flex items-center gap-4">
+          <button onclick="previousWeek()" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <span class="font-medium" id="weekLabel">Minggu ini</span>
+          <button onclick="nextWeek()" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
       </div>
-      <div class="bg-white shadow rounded-lg p-4 text-center">
-        <p class="text-blue-600 text-2xl font-bold">{{ $totalEmployees ?? 0 }}</p>
-        <p class="text-gray-500 text-sm">Total Karyawan Aktif</p>
-      </div>
-      <div class="bg-white shadow rounded-lg p-4 text-center">
-        <p class="text-purple-600 text-2xl font-bold">Rp {{ number_format(($avgSalary ?? 0)/1000000, 1) }}M</p>
-        <p class="text-gray-500 text-sm">Rata-rata Gaji</p>
-      </div>
-    </div>
 
-    <div class="bg-white shadow rounded-lg overflow-hidden">
-      <table class="w-full text-sm">
-        <thead class="bg-gray-50 text-gray-600">
-          <tr>
-            <th class="p-3 text-left">Nama</th>
-            <th class="p-3 text-left">Posisi</th>
-            <th class="p-3 text-left">Departemen</th>
-            <th class="p-3 text-left">Gaji Pokok</th>
-            <th class="p-3 text-left">Bonus</th>
-            <th class="p-3 text-left">Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          @forelse ($employees ?? [] as $emp)
-            <tr class="border-t">
-              <td class="p-3 font-medium">{{ $emp['name'] }}</td>
-              <td class="p-3">{{ $emp['position'] }}</td>
-              <td class="p-3"><span class="px-2 py-1 rounded text-xs bg-gray-100">{{ $emp['department'] }}</span></td>
-              <td class="p-3">Rp {{ number_format($emp['salary'] ?? 0, 0, ',', '.') }}</td>
-              <td class="p-3">Rp {{ number_format($emp['bonus'] ?? 0, 0, ',', '.') }}</td>
-              <td class="p-3 font-bold text-gray-800">Rp {{ number_format(($emp['salary'] ?? 0) + ($emp['bonus'] ?? 0), 0, ',', '.') }}</td>
+      {{-- Legend --}}
+      <div class="flex gap-4 mb-4 text-sm">
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 bg-yellow-200 border border-yellow-400 rounded"></div>
+          <span>Shift Pagi (08:00 - 16:00)</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 bg-blue-200 border border-blue-400 rounded"></div>
+          <span>Shift Malam (16:00 - 24:00)</span>
+        </div>
+      </div>
+
+      {{-- Calendar Table --}}
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border p-3 text-left font-semibold w-48">Karyawan</th>
+              @php
+                $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+              @endphp
+              @foreach($days as $day)
+                <th class="border p-3 text-center font-semibold">{{ $day }}</th>
+              @endforeach
             </tr>
-          @empty
-            <tr>
-              <td colspan="6" class="p-8 text-center text-gray-500">Belum ada data payroll</td>
-            </tr>
-          @endforelse
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            @forelse ($employees ?? [] as $emp)
+              <tr>
+                <td class="border p-3">
+                  <div class="font-medium">{{ $emp['name'] }}</div>
+                  <div class="text-xs text-gray-500">{{ $emp['department'] }}</div>
+                </td>
+                @for($day = 0; $day < 7; $day++)
+                  @php
+                    // Generate shift pattern (alternating or based on department)
+                    $shift = '';
+                    if ($emp['department'] === 'Groomer') {
+                      // Groomers work morning shifts on weekdays, off on weekends
+                      $shift = $day < 5 ? 'pagi' : 'off';
+                    } elseif ($emp['department'] === 'Handler') {
+                      // Handlers work night shifts
+                      $shift = 'malam';
+                    } elseif ($emp['department'] === 'Trainer') {
+                      // Trainers alternate shifts
+                      $shift = $day % 2 === 0 ? 'pagi' : 'malam';
+                    }
+                    
+                    $bgColor = $shift === 'pagi' ? 'bg-yellow-100' : ($shift === 'malam' ? 'bg-blue-100' : 'bg-gray-50');
+                    $textColor = $shift === 'pagi' ? 'text-yellow-800' : ($shift === 'malam' ? 'text-blue-800' : 'text-gray-400');
+                    $time = $shift === 'pagi' ? '08:00 - 16:00' : ($shift === 'malam' ? '16:00 - 24:00' : 'Libur');
+                  @endphp
+                  <td class="border p-2 text-center {{ $bgColor }}">
+                    <div class="text-xs font-medium {{ $textColor }}">
+                      {{ $shift === 'pagi' ? 'Pagi' : ($shift === 'malam' ? 'Malam' : 'Libur') }}
+                    </div>
+                    <div class="text-xs text-gray-600 mt-1">{{ $time }}</div>
+                  </td>
+                @endfor
+              </tr>
+            @empty
+              <tr>
+                <td colspan="8" class="p-8 text-center text-gray-500">Belum ada data karyawan</td>
+              </tr>
+            @endforelse
+          </tbody>
+        </table>
+      </div>
+
+      {{-- Summary --}}
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <p class="text-yellow-800 text-lg font-bold">
+            {{ collect($employees ?? [])->filter(function($e) { return $e['department'] === 'Groomer'; })->count() + 
+               collect($employees ?? [])->filter(function($e) { return $e['department'] === 'Trainer'; })->count() }}
+          </p>
+          <p class="text-yellow-700 text-sm">Shift Pagi Hari Ini</p>
+        </div>
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <p class="text-blue-800 text-lg font-bold">
+            {{ collect($employees ?? [])->filter(function($e) { return $e['department'] === 'Handler'; })->count() }}
+          </p>
+          <p class="text-blue-700 text-sm">Shift Malam Hari Ini</p>
+        </div>
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <p class="text-gray-800 text-lg font-bold">{{ count($employees ?? []) }}</p>
+          <p class="text-gray-700 text-sm">Total Karyawan Aktif</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -160,6 +213,7 @@
       </div>
       <form action="{{ route('admin.staff.store') }}" method="POST">
         @csrf
+        <input type="hidden" name="role" value="staff">
         <div class="grid grid-cols-2 gap-4">
           <div class="col-span-2">
             <label class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
@@ -177,11 +231,13 @@
             <label class="block text-sm font-medium text-gray-700">Password</label>
             <input type="password" name="password" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Role</label>
-            <select name="role" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-              <option value="staff">Staff</option>
-              <option value="admin">Admin</option>
+          <div class="col-span-2">
+            <label class="block text-sm font-medium text-gray-700">Spesialisasi</label>
+            <select name="specialization" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+              <option value="">Pilih Spesialisasi</option>
+              <option value="groomer">Groomer</option>
+              <option value="handler">Handler</option>
+              <option value="trainer">Trainer</option>
             </select>
           </div>
           <div class="col-span-2">
@@ -211,6 +267,7 @@
       <form id="editStaffForm" method="POST">
         @csrf
         @method('PUT')
+        <input type="hidden" name="role" value="staff">
         <div class="grid grid-cols-2 gap-4">
           <div class="col-span-2">
             <label class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
@@ -224,15 +281,16 @@
             <label class="block text-sm font-medium text-gray-700">No. Telepon</label>
             <input type="text" id="edit_no_telepon" name="no_telepon" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
           </div>
-          <div>
+          <div class="col-span-2">
             <label class="block text-sm font-medium text-gray-700">Password (Kosongkan jika tidak diubah)</label>
             <input type="password" id="edit_password" name="password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Role</label>
-            <select id="edit_role" name="role" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-              <option value="staff">Staff</option>
-              <option value="admin">Admin</option>
+          <div class="col-span-2">
+            <label class="block text-sm font-medium text-gray-700">Spesialisasi</label>
+            <select id="edit_specialization" name="specialization" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+              <option value="groomer">Groomer</option>
+              <option value="handler">Handler</option>
+              <option value="trainer">Trainer</option>
             </select>
           </div>
           <div class="col-span-2">
@@ -290,8 +348,14 @@
         document.getElementById('edit_nama_lengkap').value = data.nama_lengkap;
         document.getElementById('edit_email').value = data.email;
         document.getElementById('edit_no_telepon').value = data.no_telepon || '';
-        document.getElementById('edit_role').value = data.role;
         document.getElementById('edit_alamat').value = data.alamat;
+        
+        // Set specialization
+        const specializationSelect = document.getElementById('edit_specialization');
+        if (specializationSelect && data.specialization) {
+          specializationSelect.value = data.specialization;
+        }
+        
         document.getElementById('editStaffForm').action = `/admin/staff/${id}`;
         document.getElementById('editStaffModal').classList.remove('hidden');
       })
@@ -323,6 +387,34 @@
     }
     if (event.target == editModal) {
       closeEditModal();
+    }
+  }
+
+  // Schedule navigation
+  let currentWeekOffset = 0;
+
+  function previousWeek() {
+    currentWeekOffset--;
+    updateWeekLabel();
+  }
+
+  function nextWeek() {
+    currentWeekOffset++;
+    updateWeekLabel();
+  }
+
+  function updateWeekLabel() {
+    const label = document.getElementById('weekLabel');
+    if (currentWeekOffset === 0) {
+      label.textContent = 'Minggu ini';
+    } else if (currentWeekOffset === -1) {
+      label.textContent = 'Minggu lalu';
+    } else if (currentWeekOffset === 1) {
+      label.textContent = 'Minggu depan';
+    } else if (currentWeekOffset < 0) {
+      label.textContent = `${Math.abs(currentWeekOffset)} minggu yang lalu`;
+    } else {
+      label.textContent = `${currentWeekOffset} minggu ke depan`;
     }
   }
 @endpush

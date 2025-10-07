@@ -476,43 +476,64 @@ class AdminController extends Controller
             ->get();
 
         $employees = $employees->map(function($emp) {
+            // Map specialization to department and position
+            $specialization = $emp->specialization;
+            
+            // Only process staff with valid specialization
+            if (!in_array($specialization, ['groomer', 'handler', 'trainer'])) {
+                return null; // Skip invalid/null specializations
+            }
+            
+            switch ($specialization) {
+                case 'groomer':
+                    $department = 'Groomer';
+                    $position = 'Pet Groomer';
+                    $specializationName = 'Grooming & Perawatan';
+                    break;
+                case 'handler':
+                    $department = 'Handler';
+                    $position = 'Pet Handler';
+                    $specializationName = 'Penanganan Hewan';
+                    break;
+                case 'trainer':
+                    $department = 'Trainer';
+                    $position = 'Pet Trainer';
+                    $specializationName = 'Pelatihan Hewan';
+                    break;
+            }
+            
             return [
                 'id' => $emp->id_pengguna,
                 'name' => $emp->nama_lengkap,
-                'position' => $emp->role === 'admin' ? 'Administrator' : 'Staff Operasional',
+                'position' => $position,
                 'status' => 'active',
-                'department' => $emp->role === 'admin' ? 'Administrasi' : 'Operasional',
+                'department' => $department,
+                'specialization_code' => $specialization,
                 'email' => $emp->email,
                 'phone' => $emp->no_telepon ?? '-',
                 'shift' => 'Pagi (08:00 - 16:00)',
-                'specialization' => $emp->role === 'admin' ? 'Manajemen Sistem' : 'Perawatan Hewan',
+                'specialization' => $specializationName,
                 'experience' => Carbon::parse($emp->created_at)->diffInMonths(now()) . ' bulan',
                 'joinDate' => Carbon::parse($emp->created_at)->format('d M Y'),
                 'rating' => 4.5,
-                'salary' => $emp->role === 'admin' ? 8000000 : 5000000,
+                'salary' => 5000000,
                 'bonus' => $emp->staff_penitipans_count * 100000 + $emp->update_kondisis_count * 50000,
                 'task_count' => $emp->staff_penitipans_count + $emp->update_kondisis_count
             ];
-        })->toArray();
+        })->filter()->values()->toArray(); // Filter out nulls and reindex
 
-        // Department Stats
-        $adminCount = count(array_filter($employees, fn($e) => $e['department'] === 'Administrasi'));
-        $staffCount = count(array_filter($employees, fn($e) => $e['department'] === 'Operasional'));
+        // Department Stats - Count by specialization
+        $groomerCount = count(array_filter($employees, fn($e) => $e['department'] === 'Groomer'));
+        $handlerCount = count(array_filter($employees, fn($e) => $e['department'] === 'Handler'));
+        $trainerCount = count(array_filter($employees, fn($e) => $e['department'] === 'Trainer'));
         
         $departmentStats = [
-            ['name' => 'Operasional', 'employees' => $staffCount],
-            ['name' => 'Administrasi', 'employees' => $adminCount],
-            ['name' => 'Grooming', 'employees' => 0],
-            ['name' => 'Veteriner', 'employees' => 0],
-            ['name' => 'Customer Service', 'employees' => 0],
+            ['name' => 'Groomer', 'employees' => $groomerCount],
+            ['name' => 'Handler', 'employees' => $handlerCount],
+            ['name' => 'Trainer', 'employees' => $trainerCount],
         ];
 
-        // Payroll Stats
-        $totalPayroll = array_sum(array_column($employees, 'salary')) + array_sum(array_column($employees, 'bonus'));
-        $totalEmployees = count($employees);
-        $avgSalary = $totalEmployees > 0 ? $totalPayroll / $totalEmployees : 0;
-
-        return view('admin.staff', compact('employees', 'departmentStats', 'totalPayroll', 'totalEmployees', 'avgSalary'));
+        return view('admin.staff', compact('employees', 'departmentStats'));
     }
 
     /**
@@ -527,7 +548,8 @@ class AdminController extends Controller
                 'password' => 'required|string|min:6',
                 'no_telepon' => 'required|string|max:20',
                 'alamat' => 'required|string',
-                'role' => 'required|in:admin,staff',
+                'role' => 'required|in:staff',
+                'specialization' => 'required|in:groomer,handler,trainer',
             ]);
 
             Pengguna::create([
@@ -536,7 +558,8 @@ class AdminController extends Controller
                 'password' => bcrypt($validated['password']),
                 'no_telepon' => $validated['no_telepon'],
                 'alamat' => $validated['alamat'],
-                'role' => $validated['role'],
+                'role' => 'staff',
+                'specialization' => $validated['specialization'],
             ]);
 
             return redirect()->route('admin.staff')->with('success', 'Karyawan berhasil ditambahkan!');
@@ -556,7 +579,8 @@ class AdminController extends Controller
                 'email' => 'required|email|unique:pengguna,email,' . $id . ',id_pengguna',
                 'no_telepon' => 'required|string|max:20',
                 'alamat' => 'required|string',
-                'role' => 'required|in:admin,staff',
+                'role' => 'required|in:staff',
+                'specialization' => 'required|in:groomer,handler,trainer',
                 'password' => 'nullable|string|min:6',
             ]);
 
@@ -567,7 +591,8 @@ class AdminController extends Controller
                 'email' => $validated['email'],
                 'no_telepon' => $validated['no_telepon'],
                 'alamat' => $validated['alamat'],
-                'role' => $validated['role'],
+                'role' => 'staff',
+                'specialization' => $validated['specialization'],
             ];
 
             // Update password only if provided
