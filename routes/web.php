@@ -11,7 +11,13 @@ use App\Http\Controllers\AdminController;
 
 // Halaman Utama
 Route::get('/', function () {
-    return view('welcome');
+    // Get statistics from database
+    $stats = [
+        'total_staff' => DB::table('pengguna')->where('role', 'staff')->count(),
+        'total_hewan' => DB::table('hewan')->count(),
+    ];
+    
+    return view('welcome', compact('stats'));
 })->name('welcome');
 
 Route::get('/tes-db', function () {

@@ -113,19 +113,19 @@
     <h2 class="text-4xl font-bold text-center text-gray-800 mb-12">Apa Kata Pelanggan Kami</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
       <div class="testimonial bg-white p-6 rounded-2xl shadow-lg opacity-0 translate-y-10 scale-95">
-        <img src="/img/user1.jpg" class="w-16 h-16 rounded-full mx-auto mb-4 object-cover" alt="Sarah">
+        <img src="https://i.pravatar.cc/150?img=47" class="w-16 h-16 rounded-full mx-auto mb-4 object-cover" alt="Sarah">
         <p class="text-yellow-400 text-xl mb-3">★★★★★</p>
         <p class="text-gray-700 mb-4">"Kucing saya Mimi terlihat bahagia dan sehat setelah menginap 1 minggu."</p>
         <p class="font-semibold text-gray-800">Sarah Wijayanto</p>
       </div>
       <div class="testimonial bg-white p-6 rounded-2xl shadow-lg opacity-0 translate-y-10 scale-95">
-        <img src="/img/user2.jpg" class="w-16 h-16 rounded-full mx-auto mb-4 object-cover" alt="Rama">
+        <img src="https://i.pravatar.cc/150?img=12" class="w-16 h-16 rounded-full mx-auto mb-4 object-cover" alt="Rama">
         <p class="text-yellow-400 text-xl mb-3">★★★★★</p>
         <p class="text-gray-700 mb-4">"Area bermainnya luas, staf ramah, dan komunikatif."</p>
         <p class="font-semibold text-gray-800">Rama Putra</p>
       </div>
       <div class="testimonial bg-white p-6 rounded-2xl shadow-lg opacity-0 translate-y-10 scale-95">
-        <img src="/img/user3.jpg" class="w-16 h-16 rounded-full mx-auto mb-4 object-cover" alt="Laras">
+        <img src="https://i.pravatar.cc/150?img=32" class="w-16 h-16 rounded-full mx-auto mb-4 object-cover" alt="Laras">
         <p class="text-yellow-400 text-xl mb-3">★★★★★</p>
         <p class="text-gray-700 mb-4">"Update hariannya bikin tenang. Sangat direkomendasikan!"</p>
         <p class="font-semibold text-gray-800">Laras Anindya</p>
@@ -136,21 +136,12 @@
   <!-- STATS -->
   <section class="flex justify-center space-x-16 py-10">
     <div class="text-center">
-      <p class="text-4xl font-bold counter" data-target="24">0</p>
-      <p class="text-gray-600">Perawatan</p>
+      <p class="text-4xl font-bold counter" data-target="{{ $stats['total_staff'] ?? 0 }}">0</p>
+      <p class="text-gray-600">Staff Profesional</p>
     </div>
     <div class="text-center">
-      <p class="text-4xl font-bold counter" data-target="500">0</p>
-      <p class="text-gray-600">Pet Senang</p>
-    </div>
-    <div class="text-center">
-      <p class="text-4xl font-bold flex items-center">
-        <span class="counter" data-target="5">0</span>
-        <svg class="w-8 h-8 text-yellow-400 ml-1" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.368-2.448a1 1 0 00-1.175 0l-3.368 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69L9.049 2.927z"/>
-        </svg>
-      </p>
-      <p class="text-gray-600">Rating</p>
+      <p class="text-4xl font-bold counter" data-target="{{ $stats['total_hewan'] ?? 0 }}">0</p>
+      <p class="text-gray-600">Hewan Senang</p>
     </div>
   </section>
 
