@@ -26,7 +26,14 @@ Route::get('/tes-db', function () {
 
 // Halaman Statis
 Route::get('/about', function () {
-    return view('about');
+    // Get statistics from database
+    $stats = [
+        'total_hewan' => DB::table('hewan')->count(),
+        'total_penitipan' => DB::table('penitipan')->count(),
+        'total_customer' => DB::table('pengguna')->where('role', 'pet_owner')->count(),
+    ];
+    
+    return view('about', compact('stats'));
 })->name('about');
 
 Route::get('/fasilitas', function () {

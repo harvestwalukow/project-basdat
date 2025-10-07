@@ -97,22 +97,18 @@
     <!-- Statistik -->
     <div class="bg-[#F2784B] text-white rounded-2xl p-12 max-w-6xl mx-auto mb-20 animate-fade-in-up">
         <h2 class="text-3xl mb-8 text-center font-bold">Pencapaian Kami</h2>
-        <div class="grid md:grid-cols-4 gap-8 text-center">
+        <div class="grid md:grid-cols-3 gap-8 text-center">
             <div>
-                <div class="text-5xl font-bold mb-2 counter" data-target="1000">0</div>
-                <p>Hewan Dilayani</p>
+                <div class="text-5xl font-bold mb-2 counter" data-target="{{ $stats['total_hewan'] ?? 0 }}">0</div>
+                <p>Hewan Terdaftar</p>
             </div>
             <div>
-                <div class="text-5xl font-bold mb-2 counter" data-target="5">0</div>
-                <p>Bulan Pengalaman</p>
+                <div class="text-5xl font-bold mb-2 counter" data-target="{{ $stats['total_penitipan'] ?? 0 }}">0</div>
+                <p>Total Reservasi</p>
             </div>
             <div>
-                <div class="text-5xl font-bold mb-2 counter" data-target="24">0</div>
-                <p>Layanan Darurat</p>
-            </div>
-            <div>
-                <div class="text-5xl font-bold mb-2 counter" data-target="98">0</div>
-                <p>Kepuasan Pelanggan</p>
+                <div class="text-5xl font-bold mb-2 counter" data-target="{{ $stats['total_customer'] ?? 0 }}">0</div>
+                <p>Pelanggan Setia</p>
             </div>
         </div>
     </div>
