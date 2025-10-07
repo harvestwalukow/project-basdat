@@ -62,31 +62,37 @@
 
     <!-- Tim Profesional (Auto Slider) -->
     <div class="max-w-6xl mx-auto px-6 mb-20 overflow-hidden">
-        <h2 class="text-3xl font-bold text-center mb-12 text-[#F2784B] animate-fade-in-up">Tim Profesional Kami</h2>
-        <div class="relative w-full">
-            <div id="team-slider" class="flex transition-transform duration-700 ease-in-out">
-                @foreach([
-                    ['👩‍⚕️', 'Harvest ecclesiano C. w', '164231104', 'Back End'],
-                    ['👨‍⚕️', 'Mayla Faiza Rahma', '164231090', 'Back End'],
-                    ['🐾', 'Ibrahim Ihram Hakim', '164231094', 'Back End'],
-                    ['🐶', 'Salwa Dewi Aqiilah', '164231101', 'Front End'],
-                    ['🧼', 'Fatma Hidayatul Khusna', '164231002', 'Front End'],
-                    ['🐕', 'Hanny Marcelly', '164231111', 'Front End']
-                ] as $member)
-                    <div class="min-w-[33.3333%] px-4">
-                        <div class="bg-white rounded-xl shadow-lg p-8 text-center hover:-translate-y-2 hover:shadow-2xl transition-all duration-500">
-                            <div class="w-24 h-24 bg-[#FEFBF7] border rounded-full mx-auto mb-4 flex items-center justify-center text-3xl">
-                                {{ $member[0] }}
-                            </div>
-                            <h3 class="font-bold">{{ $member[1] }}</h3>
-                            <p class="text-gray-600">{{ $member[2] }}</p>
-                            <p class="text-sm text-[#F2784B] font-medium">{{ $member[3] }}</p>
-                        </div>
-                    </div>
-                @endforeach
+    <h2 class="text-3xl font-bold text-center mb-12 text-[#F2784B] animate-fade-in-up">
+        Tim Profesional Kami
+    </h2>
+
+    <div class="relative w-full">
+        <div id="team-slider" class="flex transition-transform duration-700 ease-in-out">
+        @foreach([
+            ['/img/harvest.jpg', 'Harvest Ecclesiano C. W', '164231104', 'Back End'],
+            ['/img/mayla.jpg', 'Mayla Faiza Rahma', '164231090', 'Back End'],
+            ['/img/ibrahim.jpg', 'Ibrahim Ihram Hakim', '164231094', 'Back End'],
+            ['/img/salwa.jpg', 'Salwa Dewi Aqiilah', '164231101', 'Front End'],
+            ['/img/fatma.jpg', 'Fatma Hidayatul Khusna', '164231002', 'Front End'],
+            ['/img/hanny.jpg', 'Hanny Marcelly', '164231111', 'Front End']
+        ] as $member)
+            <div class="min-w-[33.3333%] px-4">
+            <div class="bg-[#fff1dc] rounded-xl shadow-lg p-8 text-center hover:-translate-y-2 hover:shadow-2xl transition-all duration-500">
+                <!-- Foto Tim -->
+                <img src="{{ $member[0] }}" alt="{{ $member[1] }}"
+                    class="w-24 h-24 object-cover rounded-full mx-auto mb-4 border-4 border-white shadow-md">
+                
+                <!-- Info Tim -->
+                <h3 class="font-bold text-gray-800">{{ $member[1] }}</h3>
+                <p class="text-gray-700">{{ $member[2] }}</p>
+                <p class="text-sm text-[#F2784B] font-medium">{{ $member[3] }}</p>
             </div>
+            </div>
+        @endforeach
         </div>
     </div>
+    </div>
+
 
     <!-- Statistik -->
     <div class="bg-[#F2784B] text-white rounded-2xl p-12 max-w-6xl mx-auto mb-20 animate-fade-in-up">
