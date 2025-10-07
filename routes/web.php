@@ -12,7 +12,7 @@ use App\Http\Controllers\AdminController;
 // Halaman Utama
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Route::get('/tes-db', function () {
     try {
@@ -27,19 +27,19 @@ Route::get('/tes-db', function () {
 // Halaman Statis
 Route::get('/about', function () {
     return view('about');
-});
+})->name('about');
 
 Route::get('/fasilitas', function () {
     return view('fasilitas');
-});
+})->name('fasilitas');
 
 Route::get('/kontak', function () {
     return view('kontak');
-});
+})->name('kontak');
 
 Route::get('/layanan', function () {
     return view('layanan');
-});
+})->name('layanan');
 
 // Auth Pages
 Route::get('/signin', function () {
