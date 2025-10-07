@@ -32,7 +32,7 @@
             <li class="flex items-center">Area bermain indoor/outdoor</li>
             <li class="flex items-center">Laporan harian via WA (foto)</li>
           </ul>
-          <a href="{{ url('/reservasi') }}" class="mt-auto inline-block text-center rounded-lg bg-[#F2784B] px-4 py-2 text-white hover:bg-[#e0673d]">
+          <a href="{{ route('reservasi') }}" class="mt-auto inline-block text-center rounded-lg bg-[#F2784B] px-4 py-2 text-white hover:bg-[#e0673d]">
             Pilih Paket Basic
           </a>
         </div>
@@ -51,7 +51,7 @@
             <li class="flex items-center">Laporan harian via WA + VC</li>
             <li class="flex items-center">Snack & Treats</li>
           </ul>
-          <a href="{{ url('/reservasi') }}" class="mt-auto inline-block text-center rounded-lg bg-[#F2784B] px-4 py-2 text-white hover:bg-[#e0673d]">
+          <a href="{{ route('reservasi') }}" class="mt-auto inline-block text-center rounded-lg bg-[#F2784B] px-4 py-2 text-white hover:bg-[#e0673d]">
             Pilih Paket Premium
           </a>
         </div>

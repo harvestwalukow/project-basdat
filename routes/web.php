@@ -41,33 +41,6 @@ Route::get('/layanan', function () {
     return view('layanan');
 });
 
-// Reservasi
-Route::get('/reservasi', function () {
-    $user = session('user_email') ? Pengguna::where('email', session('user_email'))->first() : null;
-    
-    // Get active paket layanan (main packages)
-    $paketLayanans = DB::table('paket_layanan')
-        ->where('is_active', true)
-        ->where('nama_paket', 'LIKE', '%Paket%')
-        ->orderBy('harga_per_hari', 'asc')
-        ->get();
-    
-    // Get active layanan tambahan (add-ons)
-    $layananTambahan = DB::table('paket_layanan')
-        ->where('is_active', true)
-        ->where('nama_paket', 'NOT LIKE', '%Paket%')
-        ->orderBy('harga_per_hari', 'asc')
-        ->get();
-    
-    return view('user.reservasi', [
-        'user' => $user,
-        'paketLayanans' => $paketLayanans,
-        'layananTambahan' => $layananTambahan
-    ]);
-})->name('reservasi');
-
-Route::post('/reservasi', [PenitipanController::class, 'store'])->name('reservasi.submit');
-
 // Auth Pages
 Route::get('/signin', function () {
     return view('signin');
@@ -189,6 +162,33 @@ Route::middleware('admin')->group(function () {
 
 // Protected Routes - User (Pelanggan)
 Route::middleware('user')->group(function () {
+    // Reservasi - Harus login dulu
+    Route::get('/reservasi', function () {
+        $user = session('user_email') ? Pengguna::where('email', session('user_email'))->first() : null;
+        
+        // Get active paket layanan (main packages)
+        $paketLayanans = DB::table('paket_layanan')
+            ->where('is_active', true)
+            ->where('nama_paket', 'LIKE', '%Paket%')
+            ->orderBy('harga_per_hari', 'asc')
+            ->get();
+        
+        // Get active layanan tambahan (add-ons)
+        $layananTambahan = DB::table('paket_layanan')
+            ->where('is_active', true)
+            ->where('nama_paket', 'NOT LIKE', '%Paket%')
+            ->orderBy('harga_per_hari', 'asc')
+            ->get();
+        
+        return view('user.reservasi', [
+            'user' => $user,
+            'paketLayanans' => $paketLayanans,
+            'layananTambahan' => $layananTambahan
+        ]);
+    })->name('reservasi');
+
+    Route::post('/reservasi', [PenitipanController::class, 'store'])->name('reservasi.submit');
+
     Route::get('/dashboard', function () {
         $userId = session('user_id');
         $user = Pengguna::find($userId);

@@ -16,7 +16,7 @@
           Tempat penitipan <strong>khusus anjing dan kucing</strong> dengan kamar nyaman, area bermain seru, dan update harian yang bikin tenang.
         </p>
         <div class="flex gap-4">
-          <a href="{{ url('/reservasi') }}" class="px-6 py-3 rounded-full bg-orange-400 text-white font-semibold shadow hover:bg-orange-500">
+          <a href="{{ route('reservasi') }}" class="px-6 py-3 rounded-full bg-orange-400 text-white font-semibold shadow hover:bg-orange-500">
             Reservasi Sekarang
           </a>
           <a href="#fasilitas" class="px-6 py-3 rounded-full border border-orange-400 text-orange-500 font-semibold hover:bg-orange-50">
@@ -160,7 +160,7 @@
       <div>
         <h2 class="text-4xl font-bold text-gray-800 mb-4">Siap Reservasi untuk Sahabat Berbulu? 🐶🐱</h2>
         <p class="text-gray-700 mb-6">Pastikan hewan kesayangan Anda mendapatkan pengalaman terbaik dengan layanan premium dari PawsHotel.</p>
-        <a href="{{ url('/reservasi') }}" class="px-8 py-4 bg-[#F2784B] hover:bg-[#e0673d] text-white font-semibold rounded-xl shadow-lg">
+        <a href="{{ route('reservasi') }}" class="px-8 py-4 bg-[#F2784B] hover:bg-[#e0673d] text-white font-semibold rounded-xl shadow-lg">
           Reservasi Sekarang →
         </a>
       </div>
