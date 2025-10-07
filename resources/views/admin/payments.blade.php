@@ -26,14 +26,11 @@
   @endif
 
   <!-- Header -->
-  <header class="flex items-center justify-between mb-6">
+  <header class="mb-6">
     <div>
       <h1 class="text-3xl font-bold">PEMBAYARAN</h1>
       <p class="text-gray-600">Lacak semua pembayaran dan transaksi</p>
     </div>
-    <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-100">
-      Ekspor Laporan
-    </button>
   </header>
 
   <!-- Stats -->

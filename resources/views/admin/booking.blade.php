@@ -8,8 +8,8 @@
     <p class="text-gray-500">Kelola semua penitipan dan reservasi hewan</p>
   </header>
 
-  <!-- Statistik Ringkas (Pending dihapus) -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  <!-- Statistik Ringkas -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
     <div class="bg-white p-4 rounded-xl shadow">
       <h4 class="text-sm text-gray-500">Total Penitipan</h4>
       <p class="text-2xl font-bold text-gray-800">{{ $totalPenitipan }}</p>
@@ -21,6 +21,16 @@
     <div class="bg-white p-4 rounded-xl shadow">
       <h4 class="text-sm text-gray-500">Selesai</h4>
       <p class="text-2xl font-bold text-blue-500">{{ $selesaiCount }}</p>
+    </div>
+    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-xl shadow border border-purple-200">
+      <h4 class="text-sm text-purple-700 font-medium">Kamar Premium</h4>
+      <p class="text-2xl font-bold text-purple-800">{{ $premiumUsed }}/{{ $premiumTotal }}</p>
+      <p class="text-xs text-purple-600 mt-1">{{ $premiumAvailable }} tersedia</p>
+    </div>
+    <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-xl shadow border border-orange-200">
+      <h4 class="text-sm text-orange-700 font-medium">Kamar Basic</h4>
+      <p class="text-2xl font-bold text-orange-800">{{ $basicUsed }}/{{ $basicTotal }}</p>
+      <p class="text-xs text-orange-600 mt-1">{{ $basicAvailable }} tersedia</p>
     </div>
   </div>
 
@@ -98,6 +108,7 @@
 @endsection
 
 @push('scripts')
+<script>
 (function () {
   'use strict';
 
@@ -143,4 +154,5 @@
 
   filterTable();
 })();
+</script>
 @endpush

@@ -25,32 +25,36 @@ class AdminController extends Controller
         $totalHewan = Hewan::count();
         $totalPengguna = Pengguna::where('role', 'pet_owner')->count();
 
-        // Get weekly revenue (last 7 days)
-        $weeklyRevenue = Pembayaran::where('status_pembayaran', 'lunas')
-            ->where('tanggal_bayar', '>=', Carbon::now()->subDays(7))
+        // Get monthly revenue (last 12 months)
+        $monthlyRevenue = Pembayaran::where('status_pembayaran', 'lunas')
+            ->where('tanggal_bayar', '>=', Carbon::now()->subMonths(12))
             ->select(
-                DB::raw('DATE(tanggal_bayar) as date'),
+                DB::raw('YEAR(tanggal_bayar) as year'),
+                DB::raw('MONTH(tanggal_bayar) as month'),
                 DB::raw('SUM(jumlah_bayar) as total')
             )
-            ->groupBy('date')
-            ->orderBy('date')
+            ->groupBy('year', 'month')
+            ->orderBy('year')
+            ->orderBy('month')
             ->get();
 
-        // Prepare weekly revenue data for chart
+        // Prepare monthly revenue data for chart
         $revenueData = [];
         $revenueLabels = [];
         
-        // Indonesian day names
-        $dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        // Indonesian month names (short)
+        $monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
         
-        for ($i = 6; $i >= 0; $i--) {
-            $date = Carbon::now()->subDays($i);
+        for ($i = 11; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
             
-            // Use Indonesian day names
-            $revenueLabels[] = $dayNames[$date->dayOfWeek] . ', ' . $date->format('d M');
+            // Use Indonesian month names
+            $revenueLabels[] = $monthNames[$date->month - 1] . ' ' . $date->format('Y');
             
-            $dayRevenue = $weeklyRevenue->firstWhere('date', $date->format('Y-m-d'));
-            $revenueData[] = $dayRevenue ? (float) $dayRevenue->total : 0;
+            $monthRevenue = $monthlyRevenue->first(function($item) use ($date) {
+                return $item->year == $date->year && $item->month == $date->month;
+            });
+            $revenueData[] = $monthRevenue ? (float) $monthRevenue->total : 0;
         }
 
         // Get today's schedule (penitipan that start or end today)
@@ -96,11 +100,45 @@ class AdminController extends Controller
         $aktifCount = $penitipans->where('status', 'aktif')->count();
         $selesaiCount = $penitipans->where('status', 'selesai')->count();
 
+        // Calculate room capacity based on active bookings
+        $aktivePenitipans = Penitipan::with(['detailPenitipan.paketLayanan'])
+            ->where('status', 'aktif')
+            ->get();
+
+        // Count rooms by package type
+        $premiumUsed = 0;
+        $basicUsed = 0;
+        
+        foreach ($aktivePenitipans as $penitipan) {
+            foreach ($penitipan->detailPenitipan as $detail) {
+                if ($detail->paketLayanan) {
+                    $namaPacket = strtolower($detail->paketLayanan->nama_paket);
+                    if (str_contains($namaPacket, 'premium')) {
+                        $premiumUsed++;
+                    } elseif (str_contains($namaPacket, 'basic')) {
+                        $basicUsed++;
+                    }
+                }
+            }
+        }
+
+        // Room capacity limits
+        $premiumTotal = 50;
+        $basicTotal = 50;
+        $premiumAvailable = $premiumTotal - $premiumUsed;
+        $basicAvailable = $basicTotal - $basicUsed;
+
         return view('admin.booking', compact(
             'penitipans',
             'totalPenitipan',
             'aktifCount',
-            'selesaiCount'
+            'selesaiCount',
+            'premiumUsed',
+            'premiumTotal',
+            'premiumAvailable',
+            'basicUsed',
+            'basicTotal',
+            'basicAvailable'
         ));
     }
 
@@ -179,6 +217,12 @@ class AdminController extends Controller
 
             // Get current staff ID from session
             $staffId = session('user_id');
+
+            // Verify staff ID exists in pengguna table
+            $staffExists = Pengguna::find($staffId);
+            if (!$staffExists) {
+                return back()->with('error', 'Staff tidak valid. Silakan login kembali.');
+            }
 
             // Handle file upload
             $fotoPath = null;

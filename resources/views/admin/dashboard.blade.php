@@ -23,7 +23,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
   <!-- Chart -->
   <div class="lg:col-span-2 bg-white border border-slate-100 p-6 rounded-2xl shadow-sm h-[380px]">
-    <h3 class="text-xl font-semibold mb-4 text-slate-800">Pendapatan Mingguan</h3>
+    <h3 class="text-xl font-semibold mb-4 text-slate-800">Pendapatan Bulanan</h3>
     <div class="h-[300px]">
       <canvas id="revenueChart"></canvas>
     </div>
@@ -81,6 +81,7 @@
 @endsection
 
 @push('scripts')
+<script>
 document.addEventListener('DOMContentLoaded', function() {
   const revenueCanvas = document.getElementById('revenueChart');
   
@@ -138,4 +139,5 @@ document.addEventListener('DOMContentLoaded', function() {
     console.error('Canvas element with id "revenueChart" not found');
   }
 });
+</script>
 @endpush
