@@ -141,214 +141,141 @@
   </div>
 </section>
 
+<!-- TESTIMONI + STATS -->
+<section id="testimoni" 
+  class="relative py-20 bg-cover bg-center bg-no-repeat"
+  style="background-image: url('/img/backround.png');">
 
-  <!-- TESTIMONI -->
-<<<<<<< HEAD
-  <!-- TESTIMONI + STATS -->
-  <section id="testimoni" 
-    class="relative py-20 bg-cover bg-center bg-no-repeat"
-    style="background-image: url('/img/backround.png');">
-    
-    <!-- Overlay lembut agar teks tetap jelas -->
-    <div class="absolute inset-0 bg-black/10"></div>
+  <!-- Overlay lembut agar teks tetap jelas -->
+  <div class="absolute inset-0 bg-black/10"></div>
 
-    <div class="relative z-10">
-      <h2 class="text-4xl font-bold text-center text-gray-800 mb-12">
-        Apa Kata Pelanggan Kami
-      </h2>
+  <div class="relative z-10">
+    <h2 class="text-4xl font-bold text-center text-gray-800 mb-12">
+      Apa Kata Pelanggan Kami
+    </h2>
 
-      <!-- Testimonial Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6 mb-16">
-        <!-- Card 1 -->
-        <div class="testimonial bg-[#fff5e6] rounded-2xl shadow-lg p-6 hover:shadow-xl transition-transform duration-300 hover:scale-[1.02] opacity-0 translate-y-10">
-          <img src="/img/user1.jpg" class="w-full h-48 overflow-hidden rounded-md mb-4 object-cover" alt="Sarah">
-          <p class="text-yellow-400 text-xl mb-3">★★★★★</p>
-          <p class="text-gray-800 mb-4 italic">
-            "Kucing saya Mimi terlihat bahagia dan sehat setelah menginap 1 minggu."
-          </p>
-          <p class="font-semibold text-gray-900">Sarah Wijayanto</p>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="testimonial bg-[#fff5e6] rounded-2xl shadow-lg p-6 hover:shadow-xl transition-transform duration-300 hover:scale-[1.02] opacity-0 translate-y-10">
-          <img src="/img/user2.jpg" class="w-full h-48 overflow-hidden rounded-md mb-4 object-cover" alt="Rama">
-          <p class="text-yellow-400 text-xl mb-3">★★★★★</p>
-          <p class="text-gray-800 mb-4 italic">
-            "Area bermainnya luas, staf ramah, dan komunikatif."
-          </p>
-          <p class="font-semibold text-gray-900">Rama Putra</p>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="testimonial bg-[#fff5e6] rounded-2xl shadow-lg p-6 hover:shadow-xl transition-transform duration-300 hover:scale-[1.02] opacity-0 translate-y-10">
-          <img src="/img/user3.jpg" class="w-full h-48 overflow-hidden rounded-md mb-4 object-cover" alt="Laras">
-          <p class="text-yellow-400 text-xl mb-3">★★★★★</p>
-          <p class="text-gray-800 mb-4 italic">
-            "Update hariannya bikin tenang. Sangat direkomendasikan!"
-          </p>
-          <p class="font-semibold text-gray-900">Laras Anindya</p>
-        </div>
-      </div>
-
-      <!-- Stats Counter -->
-      <div class="flex flex-col md:flex-row justify-center items-center md:space-x-16 space-y-8 md:space-y-0">
-        <div class="text-center">
-          <p class="text-4xl font-bold text-gray-800 counter" data-target="24">0</p>
-          <p class="text-gray-700">Perawatan</p>
-        </div>
-        <div class="text-center">
-          <p class="text-4xl font-bold text-gray-800 counter" data-target="500">0</p>
-          <p class="text-gray-700">Pet Senang</p>
-        </div>
-        <div class="text-center">
-          <p class="text-4xl font-bold text-gray-800 flex items-center justify-center">
-            <span class="counter" data-target="5">0</span>
-            <svg class="w-8 h-8 text-yellow-400 ml-1" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.368-2.448a1 1 0 00-1.175 0l-3.368 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69L9.049 2.927z"/>
-            </svg>
-          </p>
-          <p class="text-gray-700">Rating</p>
-        </div>
-=======
-  <section id="testimoni" class="py-16 bg-[#FEFBF7]/60 relative">
-    <h2 class="text-4xl font-bold text-center text-gray-800 mb-12">Apa Kata Pelanggan Kami</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
-      <div class="testimonial bg-white p-6 rounded-2xl shadow-lg opacity-0 translate-y-10 scale-95">
-        <img src="https://i.pravatar.cc/150?img=47" class="w-16 h-16 rounded-full mx-auto mb-4 object-cover" alt="Sarah">
+    <!-- Testimonial Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6 mb-16">
+      <!-- Card 1 -->
+      <div class="testimonial bg-[#fff5e6] rounded-2xl shadow-lg p-6 hover:shadow-xl transition-transform duration-300 hover:scale-[1.02] opacity-0 translate-y-10 scale-95">
+        <img src="/img/user1.jpg" class="w-full h-48 overflow-hidden rounded-md mb-4 object-cover" alt="Sarah">
         <p class="text-yellow-400 text-xl mb-3">★★★★★</p>
-        <p class="text-gray-700 mb-4">"Kucing saya Mimi terlihat bahagia dan sehat setelah menginap 1 minggu."</p>
-        <p class="font-semibold text-gray-800">Sarah Wijayanto</p>
+        <p class="text-gray-800 mb-4 italic">
+          "Kucing saya Mimi terlihat bahagia dan sehat setelah menginap 1 minggu."
+        </p>
+        <p class="font-semibold text-gray-900">Sarah Wijayanto</p>
       </div>
-      <div class="testimonial bg-white p-6 rounded-2xl shadow-lg opacity-0 translate-y-10 scale-95">
-        <img src="https://i.pravatar.cc/150?img=12" class="w-16 h-16 rounded-full mx-auto mb-4 object-cover" alt="Rama">
-        <p class="text-yellow-400 text-xl mb-3">★★★★★</p>
-        <p class="text-gray-700 mb-4">"Area bermainnya luas, staf ramah, dan komunikatif."</p>
-        <p class="font-semibold text-gray-800">Rama Putra</p>
-      </div>
-      <div class="testimonial bg-white p-6 rounded-2xl shadow-lg opacity-0 translate-y-10 scale-95">
-        <img src="https://i.pravatar.cc/150?img=32" class="w-16 h-16 rounded-full mx-auto mb-4 object-cover" alt="Laras">
-        <p class="text-yellow-400 text-xl mb-3">★★★★★</p>
-        <p class="text-gray-700 mb-4">"Update hariannya bikin tenang. Sangat direkomendasikan!"</p>
-        <p class="font-semibold text-gray-800">Laras Anindya</p>
->>>>>>> 19a22ccdcf817f9c2c7c3ad8b50c065cff37bcd9
-      </div>
-    </div>
-  </section>
 
-<<<<<<< HEAD
-=======
-  <!-- STATS -->
-  <section class="flex justify-center space-x-16 py-10">
-    <div class="text-center">
-      <p class="text-4xl font-bold counter" data-target="{{ $stats['total_staff'] ?? 0 }}">0</p>
-      <p class="text-gray-600">Staff Profesional</p>
-    </div>
-    <div class="text-center">
-      <p class="text-4xl font-bold counter" data-target="{{ $stats['total_hewan'] ?? 0 }}">0</p>
-      <p class="text-gray-600">Hewan Senang</p>
-    </div>
-  </section>
->>>>>>> 19a22ccdcf817f9c2c7c3ad8b50c065cff37bcd9
+      <!-- Card 2 -->
+      <div class="testimonial bg-[#fff5e6] rounded-2xl shadow-lg p-6 hover:shadow-xl transition-transform duration-300 hover:scale-[1.02] opacity-0 translate-y-10 scale-95">
+        <img src="/img/user2.jpg" class="w-full h-48 overflow-hidden rounded-md mb-4 object-cover" alt="Rama">
+        <p class="text-yellow-400 text-xl mb-3">★★★★★</p>
+        <p class="text-gray-800 mb-4 italic">
+          "Area bermainnya luas, staf ramah, dan komunikatif."
+        </p>
+        <p class="font-semibold text-gray-900">Rama Putra</p>
+      </div>
 
-  <!-- CTA AKHIR -->
-  <section class="relative py-20 bg-gradient-to-r from-orange-100 via-orange-50 to-pink-100">
-    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
-      <div>
-        <h2 class="text-4xl font-bold text-gray-800 mb-4">Siap Reservasi untuk Sahabat Berbulu? 🐶🐱</h2>
-        <p class="text-gray-700 mb-6">Pastikan hewan kesayangan Anda mendapatkan pengalaman terbaik dengan layanan premium dari PawsHotel.</p>
-        <a href="{{ route('reservasi') }}" class="px-8 py-4 bg-[#F2784B] hover:bg-[#e0673d] text-white font-semibold rounded-xl shadow-lg">
-          Reservasi Sekarang →
-        </a>
-      </div>
-      <div class="flex justify-center">
-        <img src="/img/rumah.png" alt="Happy Pets" class="w-full h-50 overflow-hidden rounded-md mb-3" alt="Play">
+      <!-- Card 3 -->
+      <div class="testimonial bg-[#fff5e6] rounded-2xl shadow-lg p-6 hover:shadow-xl transition-transform duration-300 hover:scale-[1.02] opacity-0 translate-y-10 scale-95">
+        <img src="/img/user3.jpg" class="w-full h-48 overflow-hidden rounded-md mb-4 object-cover" alt="Laras">
+        <p class="text-yellow-400 text-xl mb-3">★★★★★</p>
+        <p class="text-gray-800 mb-4 italic">
+          "Update hariannya bikin tenang. Sangat direkomendasikan!"
+        </p>
+        <p class="font-semibold text-gray-900">Laras Anindya</p>
       </div>
     </div>
-  </section>
+
+    <!-- Stats Counter -->
+    <div class="flex flex-col md:flex-row justify-center items-center md:space-x-16 space-y-8 md:space-y-0">
+      <div class="text-center">
+        <p class="text-4xl font-bold text-gray-800 counter" data-target="24">0</p>
+        <p class="text-gray-700">Perawatan</p>
+      </div>
+      <div class="text-center">
+        <p class="text-4xl font-bold text-gray-800 counter" data-target="500">0</p>
+        <p class="text-gray-700">Pet Senang</p>
+      </div>
+      <div class="text-center">
+        <p class="text-4xl font-bold text-gray-800 flex items-center justify-center">
+          <span class="counter" data-target="5">0</span>
+          <svg class="w-8 h-8 text-yellow-400 ml-1" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.368-2.448a1 1 0 00-1.175 0l-3.368 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69L9.049 2.927z"/>
+          </svg>
+        </p>
+        <p class="text-gray-700">Rating</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA AKHIR -->
+<section class="relative py-20 bg-gradient-to-r from-orange-100 via-orange-50 to-pink-100">
+  <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
+    <div>
+      <h2 class="text-4xl font-bold text-gray-800 mb-4">Siap Reservasi untuk Sahabat Berbulu? 🐶🐱</h2>
+      <p class="text-gray-700 mb-6">Pastikan hewan kesayangan Anda mendapatkan pengalaman terbaik dengan layanan premium dari PawsHotel.</p>
+      <a href="{{ route('reservasi') }}" class="px-8 py-4 bg-[#F2784B] hover:bg-[#e0673d] text-white font-semibold rounded-xl shadow-lg">
+        Reservasi Sekarang →
+      </a>
+    </div>
+    <div class="flex justify-center">
+      <img src="/img/rumah.png" alt="Happy Pets" class="w-full h-50 overflow-hidden rounded-md mb-3">
+    </div>
+  </div>
+</section>
+
+@endsection
 
 @push('scripts')
-  <script>
-    // Script dots slider
-    const slider = document.getElementById('syarat-slider');
-    const dots = document.querySelectorAll('#dots .dot');
-    slider.addEventListener('scroll', () => {
-      const scrollLeft = slider.scrollLeft;
-      const width = slider.scrollWidth - slider.clientWidth;
-      const section = Math.round((scrollLeft / width) * (dots.length - 1));
-      dots.forEach((dot, i) => {
-        dot.classList.toggle('bg-orange-400', i === section);
-        dot.classList.toggle('bg-gray-300', i !== section);
-      });
+<script>
+  // Hilangkan scrollbar
+  const style = document.createElement('style');
+  style.innerHTML = `
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  `;
+  document.head.appendChild(style);
+
+  // Testimoni Animasi
+  const testimonials = document.querySelectorAll('.testimonial');
+  const testimonialObserver = new IntersectionObserver(entries => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.remove("opacity-0", "translate-y-10", "scale-95");
+          entry.target.classList.add("opacity-100", "translate-y-0", "scale-100", "transition-all", "duration-700");
+        }, index * 200);
+      } else {
+        entry.target.classList.add("opacity-0", "translate-y-10", "scale-95");
+        entry.target.classList.remove("opacity-100", "translate-y-0", "scale-100");
+      }
     });
+  }, { threshold: 0.2 });
+  testimonials.forEach(card => testimonialObserver.observe(card));
 
-    // Hilangkan scrollbar
-    const style = document.createElement('style');
-    style.innerHTML = `
-      .scrollbar-hide::-webkit-scrollbar { display: none; }
-      .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-    `;
-    document.head.appendChild(style);
-  </script>
-
-
-  <script>
-    // Fasilitas Animasi
-    const facilityCards = document.querySelectorAll(".facility-card");
-    const facilityObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.remove("opacity-0", "translate-y-10");
-          entry.target.classList.add("opacity-100", "translate-y-0", "transition-all", "duration-700");
-        } else {
-          entry.target.classList.add("opacity-0", "translate-y-10");
-          entry.target.classList.remove("opacity-100", "translate-y-0");
-        }
-      });
-    }, { threshold: 0.2 });
-    facilityCards.forEach((card, index) => {
-      card.style.transitionDelay = `${index * 0.2}s`;
-      facilityObserver.observe(card);
+  // Counter Animasi
+  const counters = document.querySelectorAll('.counter');
+  function animateCounter(counter) {
+    const target = +counter.getAttribute('data-target');
+    let count = 0;
+    const step = Math.ceil(target / 100);
+    const interval = setInterval(() => {
+      count += step;
+      if (count >= target) {
+        count = target;
+        clearInterval(interval);
+      }
+      counter.innerText = count;
+    }, 30);
+  }
+  const counterObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) animateCounter(entry.target);
+      else entry.target.innerText = "0";
     });
-
-    // Testimoni Animasi
-    const testimonials = document.querySelectorAll('.testimonial');
-    const testimonialObserver = new IntersectionObserver(entries => {
-      entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            entry.target.classList.remove("opacity-0", "translate-y-10", "scale-95");
-            entry.target.classList.add("opacity-100", "translate-y-0", "scale-100", "transition-all", "duration-700");
-          }, index * 200);
-        } else {
-          entry.target.classList.add("opacity-0", "translate-y-10", "scale-95");
-          entry.target.classList.remove("opacity-100", "translate-y-0", "scale-100");
-        }
-      });
-    }, { threshold: 0.2 });
-    testimonials.forEach(card => testimonialObserver.observe(card));
-
-    // Counter Animasi
-    const counters = document.querySelectorAll('.counter');
-    function animateCounter(counter) {
-      const target = +counter.getAttribute('data-target');
-      let count = 0;
-      const step = Math.ceil(target / 100);
-      const interval = setInterval(() => {
-        count += step;
-        if (count >= target) {
-          count = target;
-          clearInterval(interval);
-        }
-        counter.innerText = count;
-      }, 30);
-    }
-    const counterObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) animateCounter(entry.target);
-        else entry.target.innerText = "0";
-      });
-    }, { threshold: 0.5 });
-    counters.forEach(counter => counterObserver.observe(counter));
-  </script>
+  }, { threshold: 0.5 });
+  counters.forEach(counter => counterObserver.observe(counter));
+</script>
 @endpush
-@endsection
