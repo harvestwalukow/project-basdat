@@ -138,10 +138,26 @@
                     {{ ucfirst($update->kondisi_hewan) }}
                   </span>
                 </td>
-                <td class="p-4">
-                  <p class="text-sm">{{ Str::limit($update->aktivitas_hari_ini, 40) }}</p>
+                <td class="p-4 max-w-md">
+                  <div class="aktivitas-text">
+                    <p class="text-sm aktivitas-short">{{ Str::limit($update->aktivitas_hari_ini, 40) }}</p>
+                    <p class="text-sm aktivitas-full hidden">{{ $update->aktivitas_hari_ini }}</p>
+                    @if(strlen($update->aktivitas_hari_ini) > 40)
+                      <button onclick="toggleAktivitas(this)" class="text-blue-600 hover:text-blue-800 text-xs mt-1">
+                        Lihat selengkapnya
+                      </button>
+                    @endif
+                  </div>
                   @if($update->catatan_staff)
-                    <p class="text-xs text-gray-500 mt-1">{{ Str::limit($update->catatan_staff, 30) }}</p>
+                    <div class="catatan-text mt-2">
+                      <p class="text-xs text-gray-500 catatan-short">{{ Str::limit($update->catatan_staff, 30) }}</p>
+                      <p class="text-xs text-gray-500 catatan-full hidden">{{ $update->catatan_staff }}</p>
+                      @if(strlen($update->catatan_staff) > 30)
+                        <button onclick="toggleCatatan(this)" class="text-blue-600 hover:text-blue-800 text-xs mt-1">
+                          Lihat selengkapnya
+                        </button>
+                      @endif
+                    </div>
                   @endif
                 </td>
                 <td class="p-4">
@@ -355,5 +371,39 @@ function searchFunction() {
 
 // Test saat halaman dimuat
 console.log('Update kondisi search script loaded successfully!');
+
+// Fungsi toggle untuk aktivitas
+function toggleAktivitas(button) {
+  const parent = button.closest('.aktivitas-text');
+  const shortText = parent.querySelector('.aktivitas-short');
+  const fullText = parent.querySelector('.aktivitas-full');
+  
+  if (shortText.classList.contains('hidden')) {
+    shortText.classList.remove('hidden');
+    fullText.classList.add('hidden');
+    button.textContent = 'Lihat selengkapnya';
+  } else {
+    shortText.classList.add('hidden');
+    fullText.classList.remove('hidden');
+    button.textContent = 'Lihat lebih sedikit';
+  }
+}
+
+// Fungsi toggle untuk catatan
+function toggleCatatan(button) {
+  const parent = button.closest('.catatan-text');
+  const shortText = parent.querySelector('.catatan-short');
+  const fullText = parent.querySelector('.catatan-full');
+  
+  if (shortText.classList.contains('hidden')) {
+    shortText.classList.remove('hidden');
+    fullText.classList.add('hidden');
+    button.textContent = 'Lihat selengkapnya';
+  } else {
+    shortText.classList.add('hidden');
+    fullText.classList.remove('hidden');
+    button.textContent = 'Lihat lebih sedikit';
+  }
+}
 </script>
 @endsection
