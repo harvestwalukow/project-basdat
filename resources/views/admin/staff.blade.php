@@ -285,6 +285,7 @@
 @endsection
 
 @push('scripts')
+<script>
   // Tab switching
   document.querySelectorAll('.tab-link').forEach(link => {
     link.addEventListener('click', e => {
@@ -376,5 +377,5 @@
       closeEditModal();
     }
   }
-
+</script>
 @endpush
