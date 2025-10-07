@@ -252,6 +252,92 @@ class AdminController extends Controller
     }
 
     /**
+     * Get Update Kondisi Details (JSON)
+     */
+    public function showUpdateKondisi($id)
+    {
+        try {
+            $updateKondisi = UpdateKondisi::with(['penitipan.hewan', 'penitipan.pemilik', 'staff'])
+                ->findOrFail($id);
+            return response()->json($updateKondisi);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Update kondisi tidak ditemukan'], 404);
+        }
+    }
+
+    /**
+     * Update Update Kondisi
+     */
+    public function updateUpdateKondisi(Request $request, $id)
+    {
+        try {
+            // Validate input
+            $validated = $request->validate([
+                'id_penitipan' => 'required|exists:penitipan,id_penitipan',
+                'kondisi_hewan' => 'required|string|max:255',
+                'aktivitas_hari_ini' => 'required|string',
+                'catatan_staff' => 'nullable|string',
+                'foto_hewan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            // Find update kondisi
+            $updateKondisi = UpdateKondisi::findOrFail($id);
+
+            // Handle file upload
+            $fotoPath = $updateKondisi->foto_hewan;
+            if ($request->hasFile('foto_hewan')) {
+                // Delete old photo if exists
+                if ($updateKondisi->foto_hewan && file_exists(public_path($updateKondisi->foto_hewan))) {
+                    unlink(public_path($updateKondisi->foto_hewan));
+                }
+
+                $file = $request->file('foto_hewan');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('uploads/update_kondisi'), $filename);
+                $fotoPath = 'uploads/update_kondisi/' . $filename;
+            }
+
+            // Update update kondisi
+            $updateKondisi->update([
+                'id_penitipan' => $validated['id_penitipan'],
+                'kondisi_hewan' => $validated['kondisi_hewan'],
+                'aktivitas_hari_ini' => $validated['aktivitas_hari_ini'],
+                'catatan_staff' => $validated['catatan_staff'],
+                'foto_hewan' => $fotoPath,
+            ]);
+
+            return redirect()->route('admin.rooms')->with('success', 'Update kondisi berhasil diperbarui!');
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete Update Kondisi
+     */
+    public function deleteUpdateKondisi($id)
+    {
+        try {
+            // Find update kondisi
+            $updateKondisi = UpdateKondisi::findOrFail($id);
+
+            // Delete photo if exists
+            if ($updateKondisi->foto_hewan && file_exists(public_path($updateKondisi->foto_hewan))) {
+                unlink(public_path($updateKondisi->foto_hewan));
+            }
+
+            // Delete update kondisi
+            $updateKondisi->delete();
+
+            return redirect()->route('admin.rooms')->with('success', 'Update kondisi berhasil dihapus!');
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Paket Layanan Management
      */
     public function service()
@@ -505,6 +591,27 @@ class AdminController extends Controller
             return response()->json(['success' => true, 'message' => 'Status berhasil diubah']);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Delete Paket Layanan
+     */
+    public function deletePaket($id)
+    {
+        try {
+            $paket = PaketLayanan::findOrFail($id);
+            
+            // Check if paket has related bookings
+            if ($paket->detailPenitipan()->count() > 0) {
+                return back()->with('error', 'Tidak dapat menghapus paket yang sudah memiliki pemesanan!');
+            }
+
+            $paket->delete();
+
+            return redirect()->route('admin.service')->with('success', 'Paket layanan berhasil dihapus!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 

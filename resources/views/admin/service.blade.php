@@ -125,6 +125,7 @@
                     class="text-{{ $paket->is_active ? 'red' : 'green' }}-600 hover:underline text-sm">
                     {{ $paket->is_active ? 'Nonaktifkan' : 'Aktifkan' }}
                   </button>
+                  <button onclick="deletePaket({{ $paket->id_paket }})" class="text-red-600 hover:underline text-sm">Hapus</button>
                 </div>
               </td>
             </tr>
@@ -450,6 +451,31 @@ function toggleStatus(id, newStatus) {
       console.error('Error:', error);
       alert('Terjadi kesalahan');
     });
+  }
+}
+
+function deletePaket(id) {
+  if (confirm('Apakah Anda yakin ingin menghapus paket layanan ini? Tindakan ini tidak dapat dibatalkan.')) {
+    // Create a form and submit it
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `/admin/paket-layanan/${id}`;
+    
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = '_token';
+    csrfInput.value = csrfToken;
+    
+    const methodInput = document.createElement('input');
+    methodInput.type = 'hidden';
+    methodInput.name = '_method';
+    methodInput.value = 'DELETE';
+    
+    form.appendChild(csrfInput);
+    form.appendChild(methodInput);
+    document.body.appendChild(form);
+    form.submit();
   }
 }
 

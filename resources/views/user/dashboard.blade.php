@@ -125,10 +125,18 @@
         @foreach($reservations as $reservation)
           <div class="reservation-card border border-gray-200 rounded-lg p-4 hover:border-[#F2784B] hover:shadow-md transition" data-status="{{ $reservation->status }}">
             <div class="flex items-start justify-between">
-              <div class="flex items-start space-x-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-{{ $reservation->jenis_hewan == 'cat' ? 'purple' : 'orange' }}-400 to-{{ $reservation->jenis_hewan == 'cat' ? 'purple' : 'orange' }}-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                  {{ $reservation->jenis_hewan == 'cat' ? '🐱' : '🐕' }}
-                </div>
+              <div class="flex items-start space-x-3 flex-1">
+                @if($reservation->latest_foto)
+                  <!-- Show latest photo from update kondisi -->
+                  <div class="w-20 h-20 rounded-lg overflow-hidden shadow-md flex-shrink-0 cursor-pointer hover:opacity-80 transition" onclick="openPhotoModal('/{{ $reservation->latest_foto }}', '{{ $reservation->nama_hewan }}', '{{ \Carbon\Carbon::parse($reservation->latest_foto_waktu)->format('d M Y H:i') }}')">
+                    <img src="/{{ $reservation->latest_foto }}" alt="{{ $reservation->nama_hewan }}" class="w-full h-full object-cover">
+                  </div>
+                @else
+                  <!-- Show default icon -->
+                  <div class="w-12 h-12 bg-gradient-to-br from-{{ $reservation->jenis_hewan == 'cat' ? 'purple' : 'orange' }}-400 to-{{ $reservation->jenis_hewan == 'cat' ? 'purple' : 'orange' }}-600 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                    {{ $reservation->jenis_hewan == 'cat' ? '🐱' : '🐕' }}
+                  </div>
+                @endif
                 <div class="flex-1">
                   <p class="font-semibold text-gray-800">{{ $reservation->nama_hewan }} - {{ ucfirst($reservation->ras) }}</p>
                   <p class="text-sm text-gray-600">
@@ -141,6 +149,11 @@
                   </p>
                   @if($reservation->catatan_khusus)
                     <p class="text-xs text-gray-500 mt-1">📝 {{ $reservation->catatan_khusus }}</p>
+                  @endif
+                  @if($reservation->latest_foto)
+                    <p class="text-xs text-blue-600 mt-1">
+                      📸 Foto terakhir: {{ \Carbon\Carbon::parse($reservation->latest_foto_waktu)->format('d M Y H:i') }}
+                    </p>
                   @endif
                 </div>
               </div>
@@ -214,6 +227,27 @@
   </div>
 </div>
 
+<!-- Photo Modal/Lightbox -->
+<div id="photoModal" class="fixed inset-0 bg-black bg-opacity-90 hidden items-center justify-center z-50 p-4" onclick="closePhotoModal()">
+  <div class="relative max-w-4xl w-full" onclick="event.stopPropagation()">
+    <!-- Close Button -->
+    <button onclick="closePhotoModal()" class="absolute -top-12 right-0 text-white hover:text-gray-300 transition">
+      <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+    
+    <!-- Photo Container -->
+    <div class="bg-white rounded-lg overflow-hidden shadow-2xl">
+      <img id="modalPhoto" src="" alt="" class="w-full h-auto max-h-[80vh] object-contain">
+      <div class="p-4 bg-gray-50">
+        <p id="modalPetName" class="font-semibold text-gray-800 text-lg"></p>
+        <p id="modalPhotoDate" class="text-sm text-gray-600 mt-1"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
 @push('scripts')
 <script>
   function filterReservations(status) {
@@ -236,6 +270,33 @@
       }
     });
   }
+
+  // Photo Modal Functions
+  function openPhotoModal(photoUrl, petName, photoDate) {
+    document.getElementById('modalPhoto').src = photoUrl;
+    document.getElementById('modalPhoto').alt = petName;
+    document.getElementById('modalPetName').textContent = petName;
+    document.getElementById('modalPhotoDate').textContent = '📸 Diambil pada: ' + photoDate;
+    
+    const modal = document.getElementById('photoModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden'; // Prevent background scroll
+  }
+
+  function closePhotoModal() {
+    const modal = document.getElementById('photoModal');
+    modal.classList.remove('flex');
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto'; // Restore scroll
+  }
+
+  // Close modal with Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closePhotoModal();
+    }
+  });
 </script>
 @endpush
 @endsection

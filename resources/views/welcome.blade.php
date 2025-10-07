@@ -143,6 +143,7 @@
 
 
   <!-- TESTIMONI -->
+<<<<<<< HEAD
   <!-- TESTIMONI + STATS -->
   <section id="testimoni" 
     class="relative py-20 bg-cover bg-center bg-no-repeat"
@@ -208,10 +209,46 @@
           </p>
           <p class="text-gray-700">Rating</p>
         </div>
+=======
+  <section id="testimoni" class="py-16 bg-[#FEFBF7]/60 relative">
+    <h2 class="text-4xl font-bold text-center text-gray-800 mb-12">Apa Kata Pelanggan Kami</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
+      <div class="testimonial bg-white p-6 rounded-2xl shadow-lg opacity-0 translate-y-10 scale-95">
+        <img src="https://i.pravatar.cc/150?img=47" class="w-16 h-16 rounded-full mx-auto mb-4 object-cover" alt="Sarah">
+        <p class="text-yellow-400 text-xl mb-3">★★★★★</p>
+        <p class="text-gray-700 mb-4">"Kucing saya Mimi terlihat bahagia dan sehat setelah menginap 1 minggu."</p>
+        <p class="font-semibold text-gray-800">Sarah Wijayanto</p>
+      </div>
+      <div class="testimonial bg-white p-6 rounded-2xl shadow-lg opacity-0 translate-y-10 scale-95">
+        <img src="https://i.pravatar.cc/150?img=12" class="w-16 h-16 rounded-full mx-auto mb-4 object-cover" alt="Rama">
+        <p class="text-yellow-400 text-xl mb-3">★★★★★</p>
+        <p class="text-gray-700 mb-4">"Area bermainnya luas, staf ramah, dan komunikatif."</p>
+        <p class="font-semibold text-gray-800">Rama Putra</p>
+      </div>
+      <div class="testimonial bg-white p-6 rounded-2xl shadow-lg opacity-0 translate-y-10 scale-95">
+        <img src="https://i.pravatar.cc/150?img=32" class="w-16 h-16 rounded-full mx-auto mb-4 object-cover" alt="Laras">
+        <p class="text-yellow-400 text-xl mb-3">★★★★★</p>
+        <p class="text-gray-700 mb-4">"Update hariannya bikin tenang. Sangat direkomendasikan!"</p>
+        <p class="font-semibold text-gray-800">Laras Anindya</p>
+>>>>>>> 19a22ccdcf817f9c2c7c3ad8b50c065cff37bcd9
       </div>
     </div>
   </section>
 
+<<<<<<< HEAD
+=======
+  <!-- STATS -->
+  <section class="flex justify-center space-x-16 py-10">
+    <div class="text-center">
+      <p class="text-4xl font-bold counter" data-target="{{ $stats['total_staff'] ?? 0 }}">0</p>
+      <p class="text-gray-600">Staff Profesional</p>
+    </div>
+    <div class="text-center">
+      <p class="text-4xl font-bold counter" data-target="{{ $stats['total_hewan'] ?? 0 }}">0</p>
+      <p class="text-gray-600">Hewan Senang</p>
+    </div>
+  </section>
+>>>>>>> 19a22ccdcf817f9c2c7c3ad8b50c065cff37bcd9
 
   <!-- CTA AKHIR -->
   <section class="relative py-20 bg-gradient-to-r from-orange-100 via-orange-50 to-pink-100">

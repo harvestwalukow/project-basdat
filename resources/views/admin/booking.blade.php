@@ -46,7 +46,13 @@
       <option value="Dibatalkan">Dibatalkan</option>
     </select>
 
-    <input id="dateFilter" type="date" class="px-4 py-2 border rounded-lg" />
+    <select id="sortFilter" class="px-4 py-2 border rounded-lg">
+      <option value="">Urutkan</option>
+      <option value="masuk-desc">Tanggal Masuk (Terbaru)</option>
+      <option value="masuk-asc">Tanggal Masuk (Terlama)</option>
+      <option value="keluar-desc">Tanggal Keluar (Terbaru)</option>
+      <option value="keluar-asc">Tanggal Keluar (Terlama)</option>
+    </select>
   </div>
 
   <!-- Notifikasi contoh (dihapus) -->
@@ -76,7 +82,10 @@
 
         <tbody id="bookingTable">
           @forelse($penitipans as $penitipan)
-            <tr class="border-b hover:bg-gray-50" data-status="{{ strtolower($penitipan->status) }}">
+            <tr class="border-b hover:bg-gray-50" 
+                data-status="{{ strtolower($penitipan->status) }}"
+                data-masuk="{{ $penitipan->tanggal_masuk }}"
+                data-keluar="{{ $penitipan->tanggal_keluar }}">
               <td class="p-4">PNT-{{ str_pad($penitipan->id_penitipan, 4, '0', STR_PAD_LEFT) }}</td>
               <td class="p-4">{{ $penitipan->pemilik->nama_lengkap }}</td>
               <td class="p-4">{{ $penitipan->hewan->nama_hewan }}</td>
@@ -114,8 +123,9 @@
 
   const searchInput  = document.getElementById('searchInput');
   const statusFilter = document.getElementById('statusFilter');
-  const dateFilter   = document.getElementById('dateFilter');
-  const rows         = Array.from(document.querySelectorAll('#bookingTable tr'));
+  const sortFilter   = document.getElementById('sortFilter');
+  const tableBody    = document.getElementById('bookingTable');
+  let rows           = Array.from(document.querySelectorAll('#bookingTable tr'));
 
   function normalize(text) {
     return (text || '').toString().toLowerCase().trim();
@@ -124,7 +134,6 @@
   function filterTable() {
     const q      = normalize(searchInput.value);
     const status = normalize(statusFilter.value);
-    const date   = dateFilter.value; // format YYYY-MM-DD (catatan: contoh data tanggal human-readable)
 
     rows.forEach(row => {
       const id      = normalize(row.cells[0]?.innerText);
@@ -138,19 +147,43 @@
       const matchesSearch = q === '' || searchable.includes(q);
       const matchesStatus = status === '' || rStatus === status;
 
-      // NB: jika ingin filter tanggal benar2 presisi, simpan tanggal sebagai data-attr ISO.
-      let matchesDate = true;
-      if (date) {
-        matchesDate = masuk.includes(date) || keluar.includes(date);
-      }
-
-      row.style.display = (matchesSearch && matchesStatus && matchesDate) ? '' : 'none';
+      row.style.display = (matchesSearch && matchesStatus) ? '' : 'none';
     });
+  }
+
+  function sortTable() {
+    const sortValue = sortFilter.value;
+    if (!sortValue) return;
+
+    const [field, order] = sortValue.split('-');
+    
+    // Get visible rows only
+    const visibleRows = rows.filter(row => row.style.display !== 'none');
+    
+    // Sort the rows
+    visibleRows.sort((a, b) => {
+      const dateA = new Date(a.dataset[field]);
+      const dateB = new Date(b.dataset[field]);
+      
+      if (order === 'asc') {
+        return dateA - dateB;
+      } else {
+        return dateB - dateA;
+      }
+    });
+
+    // Re-append rows to table in sorted order
+    visibleRows.forEach(row => {
+      tableBody.appendChild(row);
+    });
+    
+    // Update rows array to match new order
+    rows = Array.from(document.querySelectorAll('#bookingTable tr'));
   }
 
   if (searchInput)  searchInput.addEventListener('input',  filterTable);
   if (statusFilter) statusFilter.addEventListener('change', filterTable);
-  if (dateFilter)   dateFilter.addEventListener('change',  filterTable);
+  if (sortFilter)   sortFilter.addEventListener('change', sortTable);
 
   filterTable();
 })();

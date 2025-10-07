@@ -1,7 +1,13 @@
 <!-- Sidebar -->
 <aside class="w-64 bg-gradient-to-b from-orange-400 to-orange-600 text-white flex flex-col">
   <div class="p-6 text-2xl font-bold border-b border-white/30">
-    PET HOTEL ADMIN
+    @if(session('user_role') === 'admin')
+      PAWS HOTEL OWNER
+    @elseif(session('user_role') === 'staff')
+      PAWS HOTEL STAFF
+    @else
+      PAWS HOTEL ADMIN
+    @endif
   </div>
   <nav class="flex-1 px-4 py-6 space-y-2">
     <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-2 {{ request()->routeIs('admin.dashboard') ? 'bg-white/90 text-orange-700' : 'text-white hover:bg-orange-500/50' }} rounded-md font-semibold">

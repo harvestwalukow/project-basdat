@@ -11,7 +11,13 @@ use App\Http\Controllers\AdminController;
 
 // Halaman Utama
 Route::get('/', function () {
-    return view('welcome');
+    // Get statistics from database
+    $stats = [
+        'total_staff' => DB::table('pengguna')->where('role', 'staff')->count(),
+        'total_hewan' => DB::table('hewan')->count(),
+    ];
+    
+    return view('welcome', compact('stats'));
 })->name('welcome');
 
 Route::get('/tes-db', function () {
@@ -26,7 +32,14 @@ Route::get('/tes-db', function () {
 
 // Halaman Statis
 Route::get('/about', function () {
-    return view('about');
+    // Get statistics from database
+    $stats = [
+        'total_hewan' => DB::table('hewan')->count(),
+        'total_penitipan' => DB::table('penitipan')->count(),
+        'total_customer' => DB::table('pengguna')->where('role', 'pet_owner')->count(),
+    ];
+    
+    return view('about', compact('stats'));
 })->name('about');
 
 Route::get('/fasilitas', function () {
@@ -140,10 +153,14 @@ Route::middleware('admin')->group(function () {
     Route::put('/admin/hewan/{id}/update', [AdminController::class, 'updatePet'])->name('admin.pets.update');
     Route::get('/admin/update-kondisi', [AdminController::class, 'rooms'])->name('admin.rooms');
     Route::post('/admin/update-kondisi', [AdminController::class, 'storeUpdateKondisi'])->name('admin.rooms.store');
+    Route::get('/admin/update-kondisi/{id}', [AdminController::class, 'showUpdateKondisi'])->name('admin.rooms.show');
+    Route::put('/admin/update-kondisi/{id}', [AdminController::class, 'updateUpdateKondisi'])->name('admin.rooms.update');
+    Route::delete('/admin/update-kondisi/{id}', [AdminController::class, 'deleteUpdateKondisi'])->name('admin.rooms.delete');
     Route::get('/admin/paket-layanan', [AdminController::class, 'service'])->name('admin.service');
     Route::post('/admin/paket-layanan', [AdminController::class, 'storePaket'])->name('admin.service.store');
     Route::get('/admin/paket-layanan/{id}', [AdminController::class, 'showPaket'])->name('admin.service.show');
     Route::put('/admin/paket-layanan/{id}', [AdminController::class, 'updatePaket'])->name('admin.service.update');
+    Route::delete('/admin/paket-layanan/{id}', [AdminController::class, 'deletePaket'])->name('admin.service.delete');
     Route::put('/admin/paket-layanan/{id}/toggle', [AdminController::class, 'togglePaketStatus'])->name('admin.service.toggle');
     Route::get('/admin/pembayaran', [AdminController::class, 'payments'])->name('admin.payments');
     Route::put('/admin/pembayaran/{id}/update-status', [AdminController::class, 'updatePaymentStatus'])->name('admin.payments.update');
@@ -203,6 +220,12 @@ Route::middleware('user')->group(function () {
             ->leftJoin('pembayaran', 'penitipan.id_penitipan', '=', 'pembayaran.id_penitipan')
             ->leftJoin('detail_penitipan', 'penitipan.id_penitipan', '=', 'detail_penitipan.id_penitipan')
             ->leftJoin('paket_layanan', 'detail_penitipan.id_paket', '=', 'paket_layanan.id_paket')
+            ->leftJoin(DB::raw('(SELECT id_penitipan, foto_hewan, waktu_update, 
+                ROW_NUMBER() OVER (PARTITION BY id_penitipan ORDER BY waktu_update DESC) as rn 
+                FROM update_kondisi WHERE foto_hewan IS NOT NULL) as latest_update'), function($join) {
+                $join->on('penitipan.id_penitipan', '=', 'latest_update.id_penitipan')
+                     ->where('latest_update.rn', '=', 1);
+            })
             ->where('penitipan.id_pemilik', $userId)
             ->select(
                 'penitipan.*',
@@ -211,7 +234,9 @@ Route::middleware('user')->group(function () {
                 'hewan.ras',
                 'pembayaran.status_pembayaran',
                 'pembayaran.nomor_transaksi',
-                'paket_layanan.nama_paket'
+                'paket_layanan.nama_paket',
+                'latest_update.foto_hewan as latest_foto',
+                'latest_update.waktu_update as latest_foto_waktu'
             )
             ->orderBy('penitipan.created_at', 'desc')
             ->get();
