@@ -2,101 +2,104 @@
 
 @section('title', 'Form Reservasi - PawsHotel')
 
-@section('body-style', 'style="background-image: url(\'/img/backround.png\');"')
+@section('body-style', 'style=background-image:url("/img/bg2.png");background-size:cover;background-attachment:fixed;background-repeat:no-repeat;')
 
 @section('content')
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="text-center mb-8">
       <h1 class="text-4xl mb-4 font-bold text-gray-800">Form Reservasi</h1>
-      <p class="text-gray-700">Isi form di bawah untuk melakukan reservasi hotel hewan</p>
+      <p class="text-gray-700">Isi form di bawah untuk melakukan reservasi PawsHotel</p>
     </div>
 
     <form action="{{ route('reservasi.submit') }}" method="POST" class="space-y-8">
       @csrf
 
       <!-- Informasi Pemilik -->
-      <div class="bg-white shadow-md rounded-lg border border-yellow-200">
-        <div class="border-b bg-yellow-50 px-4 py-3 rounded-t-lg">
-          <h2 class="font-semibold text-gray-800">Informasi Pemilik</h2>
-          <p class="text-sm text-gray-500">Data diri pemilik hewan peliharaan</p>
+      <div class="bg-white shadow-md rounded-lg border" style="background-color:#fff9f2; border-color:#f9a826;">
+        <div class="border-b px-4 py-3 rounded-t-lg" style="background-color:#ffe2b9; border-color:#f9a826;">
+          <h2 class="font-semibold" style="color:#4b3d2a;">Informasi Pemilik</h2>
+          <p class="text-sm" style="color:#7b6650;">Data diri pemilik hewan peliharaan</p>
         </div>
         <div class="p-4 grid md:grid-cols-2 gap-4">
           <div>
-            <label for="ownerName" class="block text-sm font-medium text-gray-700">Nama Lengkap *</label>
-            <input type="text" id="ownerName" name="ownerName" value="{{ $user->nama_lengkap ?? session('user_name', '') }}" class="mt-1 block w-full border rounded p-2" required>
+            <label for="ownerName" class="block text-sm font-medium" style="color:#4b3d2a;">Nama Lengkap *</label>
+            <input type="text" id="ownerName" name="ownerName" value="{{ $user->nama_lengkap ?? session('user_name', '') }}" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;" required>
           </div>
           <div>
-            <label for="phone" class="block text-sm font-medium text-gray-700">Nomor Telepon *</label>
-            <input type="text" id="phone" name="phone" value="{{ $user->no_telepon ?? '' }}" class="mt-1 block w-full border rounded p-2" required>
+            <label for="phone" class="block text-sm font-medium" style="color:#4b3d2a;">Nomor Telepon *</label>
+            <input type="text" id="phone" name="phone" value="{{ $user->no_telepon ?? '' }}" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;" required>
           </div>
           <div>
-            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-            <input type="email" id="email" name="email" value="{{ $user->email ?? session('user_email', '') }}" class="mt-1 block w-full border rounded p-2">
+            <label for="email" class="block text-sm font-medium" style="color:#4b3d2a;">Email</label>
+            <input type="email" id="email" name="email" value="{{ $user->email ?? session('user_email', '') }}" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;">
           </div>
           <div>
-            <label for="address" class="block text-sm font-medium text-gray-700">Alamat</label>
-            <input type="text" id="address" name="address" value="{{ $user->alamat ?? '' }}" class="mt-1 block w-full border rounded p-2">
+            <label for="address" class="block text-sm font-medium" style="color:#4b3d2a;">Alamat</label>
+            <input type="text" id="address" name="address" value="{{ $user->alamat ?? '' }}" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;">
           </div>
         </div>
       </div>
 
+
       <!-- Informasi Hewan -->
-      <div class="bg-white shadow-md rounded-lg border border-yellow-200">
-        <div class="border-b bg-yellow-50 px-4 py-3 rounded-t-lg">
-          <h2 class="font-semibold text-gray-800">Informasi Hewan Peliharaan</h2>
-          <p class="text-sm text-gray-500">Data hewan yang akan dititipkan</p>
+      <div class="bg-white shadow-md rounded-lg border" style="background-color:#fff9f2; border-color:#f9a826;">
+        <div class="border-b px-4 py-3 rounded-t-lg" style="background-color:#ffe2b9; border-color:#f9a826;">
+          <h2 class="font-semibold" style="color:#4b3d2a;">Informasi Hewan Peliharaan</h2>
+          <p class="text-sm" style="color:#7b6650;">Data hewan yang akan dititipkan</p>
         </div>
         <div class="p-4 grid md:grid-cols-2 gap-4">
           <div>
-            <label for="petName" class="block text-sm font-medium text-gray-700">Nama Hewan *</label>
-            <input type="text" id="petName" name="petName" class="mt-1 block w-full border rounded p-2" required>
+            <label for="petName" class="block text-sm font-medium" style="color:#4b3d2a;">Nama Hewan *</label>
+            <input type="text" id="petName" name="petName" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;" required>
           </div>
           <div>
-            <label for="petType" class="block text-sm font-medium text-gray-700">Jenis Hewan *</label>
-            <select id="petType" name="petType" class="mt-1 block w-full border rounded p-2" required>
+            <label for="petType" class="block text-sm font-medium" style="color:#4b3d2a;">Jenis Hewan *</label>
+            <select id="petType" name="petType" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;" required>
               <option value="">Pilih jenis hewan</option>
               <option value="dog">Anjing</option>
               <option value="cat">Kucing</option>
             </select>
           </div>
           <div>
-            <label for="petBreed" class="block text-sm font-medium text-gray-700">Ras/Breed</label>
-            <input type="text" id="petBreed" name="petBreed" class="mt-1 block w-full border rounded p-2">
+            <label for="petBreed" class="block text-sm font-medium" style="color:#4b3d2a;">Ras/Breed</label>
+            <input type="text" id="petBreed" name="petBreed" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;">
           </div>
           <div>
-            <label for="petAge" class="block text-sm font-medium text-gray-700">Umur (bulan)</label>
-            <input type="number" id="petAge" name="petAge" class="mt-1 block w-full border rounded p-2">
+            <label for="petAge" class="block text-sm font-medium" style="color:#4b3d2a;">Umur (bulan)</label>
+            <input type="number" id="petAge" name="petAge" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;">
           </div>
           <div>
-            <label for="petWeight" class="block text-sm font-medium text-gray-700">Berat Badan (kg)</label>
-            <input type="number" step="0.1" id="petWeight" name="petWeight" class="mt-1 block w-full border rounded p-2">
+            <label for="petWeight" class="block text-sm font-medium" style="color:#4b3d2a;">Berat Badan (kg)</label>
+            <input type="number" step="0.1" id="petWeight" name="petWeight" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;">
           </div>
         </div>
       </div>
 
+
       <!-- Detail Reservasi -->
-      <div class="bg-white shadow-md rounded-lg border border-yellow-200">
-        <div class="border-b bg-yellow-50 px-4 py-3 rounded-t-lg">
-          <h2 class="font-semibold text-gray-800">Detail Reservasi</h2>
-          <p class="text-sm text-gray-500">Pilih paket dan tanggal menginap</p>
+      <div class="bg-white shadow-md rounded-lg border" style="background-color:#fff9f2; border-color:#f9a826;">
+        <div class="border-b px-4 py-3 rounded-t-lg" style="background-color:#ffe2b9; border-color:#f9a826;">
+          <h2 class="font-semibold" style="color:#4b3d2a;">Detail Reservasi</h2>
+          <p class="text-sm" style="color:#7b6650;">Pilih paket dan tanggal menginap</p>
         </div>
 
         <div class="p-6 space-y-6">
           <!-- Paket Layanan -->
           <div>
-            <h3 class="text-lg font-semibold mb-2">Paket Layanan</h3>
+            <h3 class="text-lg font-semibold mb-2" style="color:#4b3d2a;">Paket Layanan</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               @forelse($paketLayanans as $paket)
-                <div class="bg-white rounded-lg border-2 border-[#F2784B] shadow-lg p-6 flex flex-col cursor-pointer hover:bg-orange-50 transition duration-300"
-                     data-harga="{{ $paket->harga_per_hari }}" 
-                     data-nama="{{ $paket->nama_paket }}" 
-                     data-id="{{ $paket->id_paket }}"
-                     onclick="pilihPaket(this)">
-                  <h3 class="text-2xl font-bold mb-2 text-gray-800">{{ str_replace('Paket ', '', $paket->nama_paket) }}</h3>
-                  <p class="text-[#F2784B] font-bold mb-4">Rp {{ number_format($paket->harga_per_hari, 0, ',', '.') }}</p>
-                  <p class="text-left text-gray-600 mb-4">{{ $paket->deskripsi }}</p>
+                <div class="bg-white rounded-lg border-2 shadow-lg p-6 flex flex-col cursor-pointer hover:bg-[#fff4e3] transition duration-300"
+                    style="border-color:#f9a826;"
+                    data-harga="{{ $paket->harga_per_hari }}" 
+                    data-nama="{{ $paket->nama_paket }}" 
+                    data-id="{{ $paket->id_paket }}"
+                    onclick="pilihPaket(this)">
+                  <h3 class="text-2xl font-bold mb-2" style="color:#4b3d2a;">{{ str_replace('Paket ', '', $paket->nama_paket) }}</h3>
+                  <p class="font-bold mb-4" style="color:#f9a826;">Rp {{ number_format($paket->harga_per_hari, 0, ',', '.') }}</p>
+                  <p class="text-left mb-4" style="color:#5c4b35;">{{ $paket->deskripsi }}</p>
                   @if($paket->fasilitas)
-                    <ul class="text-left space-y-2 text-gray-600 mb-6">
+                    <ul class="text-left space-y-2 mb-6" style="color:#5c4b35;">
                       @foreach(explode("\n", $paket->fasilitas) as $fasilitas)
                         @if(trim($fasilitas))
                           <li class="flex items-center">{{ trim($fasilitas) }}</li>
@@ -106,7 +109,7 @@
                   @endif
                 </div>
               @empty
-                <div class="col-span-2 text-center text-gray-500 p-6">
+                <div class="col-span-2 text-center p-6" style="color:#7b6650;">
                   <p>Belum ada paket layanan tersedia</p>
                 </div>
               @endforelse
@@ -118,56 +121,67 @@
 
           <!-- Layanan Tambahan -->
           <div>
-            <h3 class="text-lg font-semibold mb-2">Layanan Tambahan (Opsional)</h3>
+            <h3 class="text-lg font-semibold mb-2" style="color:#4b3d2a;">Layanan Tambahan (Opsional)</h3>
             <div class="flex flex-col space-y-3">
               @forelse($layananTambahan as $layanan)
-                <div class="flex items-center justify-between space-x-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                  <span class="text-gray-700 font-medium">{{ $layanan->nama_paket }} (+Rp {{ number_format($layanan->harga_per_hari, 0, ',', '.') }})</span>
+                <div class="flex items-center justify-between space-x-4 p-3 rounded-lg border"
+                    style="background-color:#ffffff; border-color:#f9a826;">
+                  <span class="font-medium" style="color:#4b3d2a;">
+                    {{ $layanan->nama_paket }} (+Rp {{ number_format($layanan->harga_per_hari, 0, ',', '.') }})
+                  </span>
                   <div class="flex items-center space-x-2">
-                    <button type="button" class="decrement bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded transition">-</button>
-                    <input type="number" value="0" min="0" 
-                      class="jumlah w-16 text-center border border-gray-300 rounded py-1" 
+                    <button type="button" class="decrement px-3 py-1 rounded transition"
+                            style="background-color:#fce3b2; color:#4b3d2a;">-</button>
+                    <input type="number" value="0" min="0"
+                      class="jumlah w-16 text-center border rounded py-1"
+                      style="border-color:#f9a826;"
                       data-harga="{{ $layanan->harga_per_hari }}"
                       data-id="{{ $layanan->id_paket }}"
                       data-nama="{{ $layanan->nama_paket }}"
                       name="addon_{{ $layanan->id_paket }}">
-                    <button type="button" class="increment bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded transition">+</button>
+                    <button type="button" class="increment px-3 py-1 rounded transition"
+                            style="background-color:#fce3b2; color:#4b3d2a;">+</button>
                   </div>
                 </div>
               @empty
-                <p class="text-gray-500 text-sm">Tidak ada layanan tambahan tersedia</p>
+                <p class="text-sm" style="color:#7b6650;">Tidak ada layanan tambahan tersedia</p>
               @endforelse
             </div>
           </div>
 
+
+          <!-- Permintaan Khusus -->
           <div class="form-group">
-            <label for="specialRequests">Permintaan Khusus</label>
+            <label for="specialRequests" style="color:#4b3d2a;">Permintaan Khusus</label>
             <textarea id="specialRequests" name="specialRequests"
               placeholder="Catatan khusus untuk perawatan hewan (alergi, obat, dll)"
-              rows="3" class="w-full p-2 rounded border border-gray-300 bg-gray-50"></textarea>
+              rows="3" class="w-full p-2 rounded border" 
+              style="border-color:#f9a826; background-color:#fffff;"></textarea>
           </div>
 
           <div class="grid md:grid-cols-2 gap-4">
             <div>
-              <label for="checkInDate" class="block text-sm font-medium text-gray-700">Tanggal Check-in *</label>
-              <input type="date" id="checkInDate" name="checkInDate" class="mt-1 block w-full border rounded p-2" required>
+              <label for="checkInDate" class="block text-sm font-medium" style="color:#4b3d2a;">Tanggal Check-in *</label>
+              <input type="date" id="checkInDate" name="checkInDate" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;" required>
             </div>
             <div>
-              <label for="checkOutDate" class="block text-sm font-medium text-gray-700">Tanggal Check-out *</label>
-              <input type="date" id="checkOutDate" name="checkOutDate" class="mt-1 block w-full border rounded p-2" required>
+              <label for="checkOutDate" class="block text-sm font-medium" style="color:#4b3d2a;">Tanggal Check-out *</label>
+              <input type="date" id="checkOutDate" name="checkOutDate" class="mt-1 block w-full border rounded p-2" style="border-color:#f9a826;" required>
             </div>
           </div>
         </div>
       </div>
 
-      <div id="ringkasanBiaya" class="bg-white shadow-md rounded-lg border border-yellow-200 p-4"></div>
+      <!-- Ringkasan Biaya -->
+      <div id="ringkasanBiaya" class="bg-white shadow-md rounded-lg border p-4" style="border-color:#f9a826; background-color:#fff9f2;"></div>
 
-      <div class="flex justify-end space-x-4 mt-6 border-t pt-4">
-        <a href="{{ url('/user/dashboard') }}" class="px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100">Kembali</a>
-        <button type="submit" class="px-4 py-2 rounded bg-[#F2784B] hover:bg-[#e0673d] text-white">Lanjut ke Pembayaran</button>
+      <!-- Tombol Aksi -->
+      <div class="flex justify-end space-x-4 mt-6 border-t pt-4" style="border-color:#f9a826;">
+        <a href="{{ url('/user/dashboard') }}" class="px-4 py-2 rounded border text-gray-700 hover:bg-[#fff4e3] transition" style="border-color:#f9a826;">Kembali</a>
+        <button type="submit" class="px-4 py-2 rounded text-white hover:opacity-90 transition" style="background-color:#f9a826;">Lanjut ke Pembayaran</button>
       </div>
-    </form>
-  </div>
+</div>
+
 
 @push('scripts')
   <script>
