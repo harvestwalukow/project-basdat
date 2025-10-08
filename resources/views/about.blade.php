@@ -56,7 +56,7 @@
             dengan standar setara hotel bintang lima.
         </p>
         <p class="text-gray-600 leading-relaxed">
-            Hingga kini, PawsHotel telah melayani lebih dari 5.000 hewan peliharaan dan terus berinovasi.
+            Hingga kini, PawsHotel telah melayani lebih dari {{ number_format($stats['total_hewan'] ?? 0) }} hewan peliharaan dan terus berinovasi.
         </p>
     </div>
 
