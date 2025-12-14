@@ -20,7 +20,7 @@
         </div>
         <div class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center text-white px-4">
             <h1 class="text-4xl md:text-5xl font-bold mb-4">Tentang <span class="text-[#F2784B]">PawsHotel</span></h1>
-            <p class="max-w-2xl text-lg">
+            <p class="text-lg px-6 md:px-16">
                 Hotel hewan khusus anjing dan kucing yang kami hadirkan sebagai rumah kedua bagi anabul kesayangan Anda, dengan fokus pada kenyamanan, keamanan, dan kebersihan. PawsHotel memahami bahwa setiap anabul punya karakter dan kebutuhan yang berbeda. Oleh karena itu, perawatan di PawsHotel dilakukan dengan perhatian intens, mulai dari rutinitas makan, waktu istirahat, hingga aktivitas bermain agar anabul tetap tenang dan bahagia selama menginap. Dengan fasilitas yang nyaman dan lingkungan yang higienis, PawsHotel ingin Anda bisa bepergian tanpa khawatir, karena anabul dirawat sepenuh hati oleh tim yang penyayang dan berpengalaman.
             </p>
         </div>
