@@ -100,45 +100,60 @@ class AdminController extends Controller
         $aktifCount = $penitipans->where('status', 'aktif')->count();
         $selesaiCount = $penitipans->where('status', 'selesai')->count();
 
-        // Calculate room capacity based on active bookings
-        $aktivePenitipans = Penitipan::with(['detailPenitipan.paketLayanan'])
+        // Calculate room capacity based on active bookings (by pet type and package type)
+        $aktivePenitipans = Penitipan::with(['hewan', 'detailPenitipan.paketLayanan'])
             ->where('status', 'aktif')
             ->get();
 
-        // Count rooms by package type
-        $premiumUsed = 0;
-        $basicUsed = 0;
+        // Count rooms by package type and pet type
+        $premiumKucingUsed = 0;
+        $basicKucingUsed = 0;
+        $premiumAnjingUsed = 0;
+        $basicAnjingUsed = 0;
         
         foreach ($aktivePenitipans as $penitipan) {
+            $jenisHewan = strtolower($penitipan->hewan->jenis_hewan ?? '');
+            
             foreach ($penitipan->detailPenitipan as $detail) {
                 if ($detail->paketLayanan) {
                     $namaPacket = strtolower($detail->paketLayanan->nama_paket);
-                    if (str_contains($namaPacket, 'premium')) {
-                        $premiumUsed++;
-                    } elseif (str_contains($namaPacket, 'basic')) {
-                        $basicUsed++;
+                    
+                    // Check if it's a main package (not add-on)
+                    if (str_contains($namaPacket, 'paket')) {
+                        // Determine pet type
+                        $isKucing = str_contains($jenisHewan, 'kucing') || str_contains($jenisHewan, 'cat');
+                        $isAnjing = str_contains($jenisHewan, 'anjing') || str_contains($jenisHewan, 'dog');
+                        
+                        // Count based on package type and pet type
+                        if (str_contains($namaPacket, 'premium')) {
+                            if ($isKucing) {
+                                $premiumKucingUsed++;
+                            } elseif ($isAnjing) {
+                                $premiumAnjingUsed++;
+                            }
+                        } elseif (str_contains($namaPacket, 'basic')) {
+                            if ($isKucing) {
+                                $basicKucingUsed++;
+                            } elseif ($isAnjing) {
+                                $basicAnjingUsed++;
+                            }
+                        }
+                        // Only count once per penitipan (main package)
+                        break;
                     }
                 }
             }
         }
-
-        // Room capacity limits
-        $premiumTotal = 50;
-        $basicTotal = 50;
-        $premiumAvailable = $premiumTotal - $premiumUsed;
-        $basicAvailable = $basicTotal - $basicUsed;
 
         return view('admin.booking', compact(
             'penitipans',
             'totalPenitipan',
             'aktifCount',
             'selesaiCount',
-            'premiumUsed',
-            'premiumTotal',
-            'premiumAvailable',
-            'basicUsed',
-            'basicTotal',
-            'basicAvailable'
+            'premiumKucingUsed',
+            'basicKucingUsed',
+            'premiumAnjingUsed',
+            'basicAnjingUsed'
         ));
     }
 

@@ -113,7 +113,7 @@
                 </td>
                 <td class="p-4">
                   <div class="text-xs">
-                    <p>Umur: {{ $hewan->umur }} tahun</p>
+                    <p>Umur: {{ $hewan->umur }} bulan</p>
                     <p>Berat: {{ $hewan->berat }} kg</p>
                     <p>{{ ucfirst($hewan->jenis_kelamin) }}</p>
                   </div>
@@ -349,7 +349,7 @@ function showDetailModal(id) {
       
       <div>
         <label class="text-sm text-gray-500">Umur</label>
-        <p class="font-semibold">${hewan.umur} tahun</p>
+        <p class="font-semibold">${hewan.umur} bulan</p>
       </div>
       
       <div>
@@ -457,7 +457,7 @@ function showEditModal(id) {
 
       <div class="grid grid-cols-3 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Umur (tahun)</label>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Umur (bulan)</label>
           <input type="number" name="umur" value="${hewan.umur}" min="0" required
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
