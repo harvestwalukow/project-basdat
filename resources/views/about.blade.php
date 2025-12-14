@@ -6,7 +6,7 @@
 
 @section('content')
     <!-- Hero Section with Auto Carousel -->
-    <div class="relative max-w-6xl mx-auto overflow-hidden rounded-2xl shadow-2xl mt-10 animate-fade-in-up">
+    <div class="relative max-w-screen-xl mx-auto overflow-hidden rounded-2xl shadow-2xl mt-10 animate-fade-in-up">
         <div id="hero-carousel" class="relative w-full h-[450px]">
             <div class="absolute inset-0 transition-opacity duration-1000 opacity-100">
                 <img src="/img/rumah.png" alt="Pet Hotel 1" class="w-full h-full object-cover">
