@@ -13,19 +13,21 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        // Insert admin user with id 9999 to match the manual login
-        DB::table('pengguna')->insert([
-            'id_pengguna' => 9999,
-            'nama_lengkap' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make('123456'),
-            'no_telepon' => '081234567890',
-            'alamat' => 'Alamat Admin',
-            'role' => 'admin',
-            'specialization' => null,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        // Create or update admin user with id 9999
+        DB::table('pengguna')->updateOrInsert(
+            ['id_pengguna' => 9999],
+            [
+                'nama_lengkap' => 'Admin',
+                'email' => 'admin@gmail.com',
+                'password' => Hash::make('123456'),
+                'no_telepon' => '081234567890',
+                'alamat' => 'Alamat Admin',
+                'role' => 'admin',
+                'specialization' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
     }
 }
 

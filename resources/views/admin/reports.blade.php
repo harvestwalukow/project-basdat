@@ -3,11 +3,12 @@
 @section('content')
 <div class="space-y-6">
   <!-- Header -->
-  <div class="flex items-center justify-between">
+  <div class="mb-6 flex justify-between items-end">
     <div>
-      <h1 class="text-2xl font-bold">Laporan & Analytics</h1>
-      <p id="pageSubtitle" class="text-gray-500">Ringkasan performa bisnis bulan ini</p>
+      <h1 class="text-3xl font-bold">PEMBAYARAN</h1>
+      <p class="text-gray-600">Lacak semua pembayaran dan transaksi</p>
     </div>
+    <span class="text-xs text-black bg-gray-50 px-2 py-1 rounded border">Sumber: FactTransaksi, FactKeuangan & FactCustomer</span>
   </div>
 
   <!-- Report Controls -->
@@ -77,6 +78,40 @@
         <div class="h-64">
           <canvas id="bookingChart"></canvas>
         </div>
+      </div>
+    </div>
+
+    <!-- Top Customers Table -->
+    <div class="bg-white rounded-xl shadow overflow-hidden">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg font-semibold">Top 10 Pelanggan</h3>
+        <p class="text-sm text-gray-500">Pelanggan dengan total pengeluaran tertinggi</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Transaksi</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Pengeluaran</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            @forelse($topCustomers as $customer)
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $customer['nama'] }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $customer['email'] }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $customer['total_transaksi'] }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">Rp {{ number_format($customer['total_pengeluaran'], 0, ',', '.') }}</td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">Tidak ada data pelanggan</td>
+              </tr>
+            @endforelse
+          </tbody>
+        </table>
       </div>
     </div>
 

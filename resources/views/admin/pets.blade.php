@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<div class="flex flex-col h-full">
+<div class="flex flex-col">
   <!-- Success/Error Messages -->
   @if(session('success'))
     <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg flex items-center justify-between">
@@ -26,9 +26,12 @@
   @endif
 
   <!-- Header -->
-  <header class="mb-6">
-    <h1 class="text-3xl font-bold">HEWAN</h1>
-    <p class="text-gray-600">Daftar semua hewan yang terdaftar di sistem</p>
+  <header class="mb-6 flex justify-between items-end">
+    <div>
+      <h1 class="text-3xl font-bold">HEWAN</h1>
+      <p class="text-gray-600">Daftar semua hewan yang terdaftar di sistem</p>
+    </div>
+    <span class="text-xs text-black bg-gray-50 px-2 py-1 rounded border">Sumber: FactTransaksi & FactKapasitasHarian</span>
   </header>
 
   <!-- Stats -->
@@ -45,6 +48,12 @@
       <h3 class="text-lg font-semibold text-gray-600">Kucing</h3>
       <p class="text-3xl font-bold mt-2">{{ $kucingCount }}</p>
     </div>
+  </div>
+
+  <!-- Daily Capacity Chart -->
+  <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <h3 class="text-lg font-semibold text-gray-700 mb-4">Kapasitas Harian (7 Hari Terakhir)</h3>
+    <canvas id="capacityChart" height="80"></canvas>
   </div>
 
   <!-- Filters -->
@@ -517,5 +526,46 @@ document.addEventListener('click', function(event) {
 });
 
 console.log('Pets page script loaded.');
+
+// Daily Capacity Chart
+const capacityCtx = document.getElementById('capacityChart');
+if (capacityCtx) {
+  new Chart(capacityCtx, {
+    type: 'line',
+    data: {
+      labels: @json($capacityLabels),
+      datasets: [{
+        label: 'Jumlah Hewan',
+        data: @json($capacityData),
+        borderColor: 'rgb(59, 130, 246)',
+        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        tension: 0.4,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top'
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1
+          }
+        }
+      }
+    }
+  });
+}
 </script>
 @endsection

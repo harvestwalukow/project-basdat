@@ -3,9 +3,12 @@
 @section('content')
 <div class="space-y-6">
   <!-- Header -->
-  <header class="mb-2">
-    <h1 class="text-3xl font-bold">Manajemen Penitipan</h1>
-    <p class="text-gray-500">Kelola semua penitipan dan reservasi hewan</p>
+  <header class="mb-2 flex justify-between items-end">
+    <div>
+      <h1 class="text-3xl font-bold">Manajemen Penitipan</h1>
+      <p class="text-gray-500">Kelola semua penitipan dan reservasi hewan</p>
+    </div>
+    <span class="text-xs text-black bg-gray-50 px-2 py-1 rounded border">Sumber: FactTransaksi</span>
   </header>
 
   <!-- Statistik Ringkas -->

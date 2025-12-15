@@ -18,6 +18,7 @@
     <div>
       <h1 class="text-2xl font-bold">Manajemen Karyawan</h1>
       <p class="text-gray-500">Kelola tim dan sumber daya manusia</p>
+      <span class="text-xs text-black bg-gray-50 px-2 py-1 rounded border inline-block mt-2">Sumber: FactTransaksi</span>
     </div>
     <button onclick="openAddModal()" class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">
       <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

@@ -13,17 +13,23 @@
     <h3 class="text-sm font-medium text-slate-500">Total Hewan</h3>
     <p class="text-3xl font-extrabold mt-2 text-slate-800">{{ $totalHewan }}</p>
   </div>
-  <div class="bg-white border border-slate-100 p-6 rounded-2xl shadow-sm">
+  <div class="bg-white border border-slate-100 p-6 rounded-2xl shadow-sm relative group">
     <h3 class="text-sm font-medium text-slate-500">Total Pengguna</h3>
     <p class="text-3xl font-extrabold mt-2 text-slate-800">{{ $totalPengguna }}</p>
+    <div class="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+      <span class="text-xs text-black">Sumber: FactTransaksi</span>
+    </div>
   </div>
 </div>
 
 <!-- Atas: Chart & Jadwal -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
   <!-- Chart -->
-  <div class="lg:col-span-2 bg-white border border-slate-100 p-6 rounded-2xl shadow-sm h-[380px]">
-    <h3 class="text-xl font-semibold mb-4 text-slate-800">Pendapatan Bulanan</h3>
+  <div class="lg:col-span-2 bg-white border border-slate-100 p-6 rounded-2xl shadow-sm h-[380px] relative">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-xl font-semibold text-slate-800">Pendapatan Bulanan</h3>
+      <span class="text-xs text-black bg-slate-50 px-2 py-1 rounded border border-slate-100">Sumber: FactKeuangan</span>
+    </div>
     <div class="h-[300px]">
       <canvas id="revenueChart"></canvas>
     </div>

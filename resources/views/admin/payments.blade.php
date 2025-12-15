@@ -26,11 +26,12 @@
   @endif
 
   <!-- Header -->
-  <header class="mb-6">
+  <header class="mb-6 flex justify-between items-end">
     <div>
       <h1 class="text-3xl font-bold">PEMBAYARAN</h1>
       <p class="text-gray-600">Lacak semua pembayaran dan transaksi</p>
     </div>
+    <span class="text-xs text-black bg-gray-50 px-2 py-1 rounded border">Sumber: FactTransaksi & FactKeuangan</span>
   </header>
 
   <!-- Stats -->

@@ -20,6 +20,7 @@
     <div>
       <h1 class="text-3xl font-bold">UPDATE KONDISI</h1>
       <p class="text-gray-600">Kelola update kondisi hewan dalam penitipan</p>
+      <span class="text-xs text-black bg-gray-50 px-2 py-1 rounded border inline-block mt-2">Sumber: Operational (UpdateKondisi) & Penitipan</span>
     </div>
     <button onclick="openModal()" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
