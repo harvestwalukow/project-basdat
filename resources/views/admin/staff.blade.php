@@ -16,7 +16,7 @@
 
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-2xl font-bold">Manajemen Karyawan</h1>
+      <h1 class="text-2xl font-bold">MANAJEMEN KARYAWAN</h1>
       <p class="text-gray-500">Kelola tim dan sumber daya manusia</p>
     </div>
     <button onclick="openAddModal()" class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">

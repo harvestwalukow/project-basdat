@@ -149,7 +149,7 @@ Route::get('/logout', function () {
 Route::middleware('admin')->group(function () {
     Route::get('/admin/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/penitipan', [AdminController::class, 'booking'])->name('admin.booking');
-    Route::get('/admin/hewan', [AdminController::class, 'pets'])->name('admin.pets');
+    // Route::get('/admin/hewan', [AdminController::class, 'pets'])->name('admin.pets'); // Removed - consolidated into booking page
     Route::put('/admin/hewan/{id}/update', [AdminController::class, 'updatePet'])->name('admin.pets.update');
     Route::get('/admin/update-kondisi', [AdminController::class, 'rooms'])->name('admin.rooms');
     Route::post('/admin/update-kondisi', [AdminController::class, 'storeUpdateKondisi'])->name('admin.rooms.store');

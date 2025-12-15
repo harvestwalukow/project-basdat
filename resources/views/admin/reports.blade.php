@@ -5,7 +5,7 @@
   <!-- Header -->
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-2xl font-bold">Laporan & Analytics</h1>
+      <h1 class="text-2xl font-bold">LAPORAN & ANALYTICS</h1>
       <p id="pageSubtitle" class="text-gray-500">Ringkasan performa bisnis bulan ini</p>
     </div>
   </div>

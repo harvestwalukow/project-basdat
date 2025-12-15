@@ -63,6 +63,26 @@ return [
             ]) : [],
         ],
 
+        'dw_basdat' => [
+            'driver' => 'mysql',
+            'url' => env('DW_DB_URL'),
+            'host' => env('DW_DB_HOST', '127.0.0.1'),
+            'port' => env('DW_DB_PORT', '3306'),
+            'database' => env('DW_DB_DATABASE', 'dw_basdat'),
+            'username' => env('DW_DB_USERNAME', 'root'),
+            'password' => env('DW_DB_PASSWORD', ''),
+            'unix_socket' => env('DW_DB_SOCKET', ''),
+            'charset' => env('DW_DB_CHARSET', 'utf8mb4'),
+            'collation' => env('DW_DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),

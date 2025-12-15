@@ -20,68 +20,87 @@ class AdminController extends Controller
      */
     public function dashboard()
     {
-        // Get statistics
-        $totalPenitipanAktif = Penitipan::where('status', 'aktif')->count();
-        $totalHewan = Hewan::count();
-        $totalPengguna = Pengguna::where('role', 'pet_owner')->count();
+        // 1. KPI Revenue (fact_keuangan_periodik) - Bulan ini
+        $currentMonth = Carbon::now();
+        $currentRevenue = \App\Models\FactKeuanganPeriodik::where('tahun', $currentMonth->year)
+            ->where('bulan', $currentMonth->month)
+            ->first();
+        
+        $totalRevenue = $currentRevenue ? $currentRevenue->total_revenue : 0;
+        $totalTransaksi = $currentRevenue ? $currentRevenue->jumlah_transaksi : 0;
+        $avgTransaksi = $currentRevenue ? $currentRevenue->avg_transaksi : 0;
 
-        // Get monthly revenue (last 12 months)
-        $monthlyRevenue = Pembayaran::where('status_pembayaran', 'lunas')
-            ->where('tanggal_bayar', '>=', Carbon::now()->subMonths(12))
-            ->select(
-                DB::raw('YEAR(tanggal_bayar) as year'),
-                DB::raw('MONTH(tanggal_bayar) as month'),
-                DB::raw('SUM(jumlah_bayar) as total')
-            )
-            ->groupBy('year', 'month')
-            ->orderBy('year')
-            ->orderBy('month')
-            ->get();
+        // 2. Grafik Revenue Bulanan (fact_keuangan_periodik) - Last 12 months
+        $monthlyRevenue = \App\Models\FactKeuanganPeriodik::orderBy('tahun', 'desc')
+            ->orderBy('bulan', 'desc')
+            ->limit(12)
+            ->get()
+            ->sortBy(function ($item) {
+                return $item->tahun * 100 + $item->bulan;
+            })
+            ->values();
 
-        // Prepare monthly revenue data for chart
         $revenueData = [];
         $revenueLabels = [];
-        
-        // Indonesian month names (short)
         $monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
         
         for ($i = 11; $i >= 0; $i--) {
             $date = Carbon::now()->subMonths($i);
-            
-            // Use Indonesian month names
             $revenueLabels[] = $monthNames[$date->month - 1] . ' ' . $date->format('Y');
             
             $monthRevenue = $monthlyRevenue->first(function($item) use ($date) {
-                return $item->year == $date->year && $item->month == $date->month;
+                return $item->tahun == $date->year && $item->bulan == $date->month;
             });
-            $revenueData[] = $monthRevenue ? (float) $monthRevenue->total : 0;
+            $revenueData[] = $monthRevenue ? (float) $monthRevenue->total_revenue : 0;
         }
 
-        // Get today's schedule (penitipan that start or end today)
+        // 3. KPI Penitipan Hari Ini (fact_kapasitas_harian)
         $today = Carbon::today();
-        $todaySchedule = Penitipan::with(['hewan', 'pemilik'])
-            ->where(function($query) use ($today) {
-                $query->whereDate('tanggal_masuk', $today)
-                      ->orWhereDate('tanggal_keluar', $today);
-            })
-            ->where('status', '!=', 'dibatalkan')
-            ->orderBy('tanggal_masuk')
-            ->get();
+        $todayWaktuKey = \App\Models\DimWaktu::where('tanggal', $today->format('Y-m-d'))->value('waktu_key');
+        
+        $todayCapacity = null;
+        if ($todayWaktuKey) {
+            $todayCapacity = \App\Models\FactKapasitasHarian::where('waktu_key', $todayWaktuKey)->first();
+        }
+        
+        $penitipanHariIni = $todayCapacity ? $todayCapacity->total_penitipan : 0;
+        $penitipanAktif = $todayCapacity ? $todayCapacity->penitipan_aktif : 0;
+        $penitipanPending = $todayCapacity ? $todayCapacity->penitipan_pending : 0;
 
-        // Get latest updates (kondisi updates)
-        $latestUpdates = UpdateKondisi::with(['penitipan.hewan', 'staff'])
-            ->orderBy('waktu_update', 'desc')
-            ->limit(10)
-            ->get();
+        // 4. Grafik Okupansi Harian (fact_kapasitas_harian) - Last 30 days
+        $okupansiData = [];
+        $okupansiLabels = [];
+        $okupansiAktif = [];
+        $okupansiPending = [];
+        
+        for ($i = 29; $i >= 0; $i--) {
+            $date = Carbon::now()->subDays($i);
+            $waktuKey = \App\Models\DimWaktu::where('tanggal', $date->format('Y-m-d'))->value('waktu_key');
+            
+            $capacity = null;
+            if ($waktuKey) {
+                $capacity = \App\Models\FactKapasitasHarian::where('waktu_key', $waktuKey)->first();
+            }
+            
+            $okupansiLabels[] = $date->format('d M');
+            $okupansiData[] = $capacity ? $capacity->total_penitipan : 0;
+            $okupansiAktif[] = $capacity ? $capacity->penitipan_aktif : 0;
+            $okupansiPending[] = $capacity ? $capacity->penitipan_pending : 0;
+        }
 
         return view('admin.dashboard', compact(
-            'totalPenitipanAktif',
-            'totalHewan',
-            'totalPengguna',
+            'totalRevenue',
+            'totalTransaksi',
+            'avgTransaksi',
             'revenueData',
             'revenueLabels',
-            'todaySchedule',
-            'latestUpdates'
+            'penitipanHariIni',
+            'penitipanAktif',
+            'penitipanPending',
+            'okupansiData',
+            'okupansiLabels',
+            'okupansiAktif',
+            'okupansiPending'
         ));
     }
 
@@ -90,22 +109,55 @@ class AdminController extends Controller
      */
     public function booking()
     {
-        // Get all penitipan with relationships
-        $penitipans = Penitipan::with(['hewan', 'pemilik', 'staff', 'pembayaran'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+        // Get all penitipan from fact_transaksi with dim data
+        $factTransaksi = \App\Models\FactTransaksi::orderBy('tanggal_masuk', 'desc')->get();
+        
+        // Map to format expected by the view (mimicking Penitipan structure)
+        $penitipans = $factTransaksi->map(function($trans) {
+            $dimHewan = \App\Models\DimHewan::where('hewan_key', $trans->hewan_key)->first();
+            $dimCustomer = \App\Models\DimCustomer::where('customer_key', $trans->customer_key)->first();
+            $dimPaket = \App\Models\DimPaket::where('paket_key', $trans->paket_key)->first();
+            
+            return (object)[
+                'id_penitipan' => $trans->id_penitipan,
+                'tanggal_masuk' => $trans->tanggal_masuk,
+                'tanggal_keluar' => Carbon::parse($trans->tanggal_masuk)->addDays($trans->jumlah_hari),
+                'status' => $trans->status,
+                'total_biaya' => $trans->total_biaya,
+                'created_at' => $trans->tanggal_masuk,
+                'hewan' => (object)[
+                    'nama_hewan' => $dimHewan->nama_hewan ?? 'N/A',
+                    'jenis_hewan' => $dimHewan->jenis_hewan ?? 'N/A',
+                ],
+                'pemilik' => (object)[
+                    'nama_lengkap' => $dimCustomer->nama_lengkap ?? 'N/A',
+                ],
+                'staff' => null,
+                'pembayaran' => (object)[
+                    'status_pembayaran' => $trans->status_pembayaran,
+                    'metode_pembayaran' => $trans->metode_pembayaran,
+                ],
+                'detailPenitipan' => collect([(object)[
+                    'paketLayanan' => (object)[
+                        'nama_paket' => $dimPaket->nama_paket ?? 'N/A',
+                    ]
+                ]]),
+            ];
+        });
 
-        // Calculate statistics
-        $totalPenitipan = $penitipans->count();
-        $aktifCount = $penitipans->where('status', 'aktif')->count();
-        $selesaiCount = $penitipans->where('status', 'selesai')->count();
+        // Calculate statistics from fact_kapasitas_harian
+        $latestCapacity = \App\Models\FactKapasitasHarian::join('dim_waktu', 'fact_kapasitas_harian.waktu_key', '=', 'dim_waktu.waktu_key')
+            ->orderBy('dim_waktu.tanggal', 'desc')
+            ->select('fact_kapasitas_harian.*')
+            ->first();
+        
+        $totalPenitipan = $latestCapacity ? $latestCapacity->total_penitipan : 0;
+        $aktifCount = $latestCapacity ? $latestCapacity->penitipan_aktif : 0;
+        $selesaiCount = $latestCapacity ? $latestCapacity->penitipan_selesai : 0;
 
-        // Calculate room capacity based on active bookings (by pet type and package type)
-        $aktivePenitipans = Penitipan::with(['hewan', 'detailPenitipan.paketLayanan'])
-            ->where('status', 'aktif')
-            ->get();
+        // Calculate room capacity based on active bookings
+        $aktivePenitipans = $penitipans->where('status', 'aktif');
 
-        // Count rooms by package type and pet type
         $premiumKucingUsed = 0;
         $basicKucingUsed = 0;
         $premiumAnjingUsed = 0;
@@ -118,13 +170,10 @@ class AdminController extends Controller
                 if ($detail->paketLayanan) {
                     $namaPacket = strtolower($detail->paketLayanan->nama_paket);
                     
-                    // Check if it's a main package (not add-on)
                     if (str_contains($namaPacket, 'paket')) {
-                        // Determine pet type
                         $isKucing = str_contains($jenisHewan, 'kucing') || str_contains($jenisHewan, 'cat');
                         $isAnjing = str_contains($jenisHewan, 'anjing') || str_contains($jenisHewan, 'dog');
                         
-                        // Count based on package type and pet type
                         if (str_contains($namaPacket, 'premium')) {
                             if ($isKucing) {
                                 $premiumKucingUsed++;
@@ -138,12 +187,19 @@ class AdminController extends Controller
                                 $basicAnjingUsed++;
                             }
                         }
-                        // Only count once per penitipan (main package)
                         break;
                     }
                 }
             }
         }
+
+        // Get all pets with owner and penitipan information for the pets table
+        $hewans = Hewan::with(['pemilik', 'penitipan' => function($query) {
+            // Sort penitipan by tanggal_masuk to get the latest one first
+            $query->orderBy('tanggal_masuk', 'desc');
+        }, 'penitipan.detailPenitipan.paketLayanan'])
+        ->orderBy('created_at', 'desc')
+        ->get();
 
         return view('admin.booking', compact(
             'penitipans',
@@ -153,7 +209,8 @@ class AdminController extends Controller
             'premiumKucingUsed',
             'basicKucingUsed',
             'premiumAnjingUsed',
-            'basicAnjingUsed'
+            'basicAnjingUsed',
+            'hewans'
         ));
     }
 
@@ -380,17 +437,49 @@ class AdminController extends Controller
      */
     public function payments()
     {
-        // Get all payments with relationships
-        $pembayarans = Pembayaran::with(['penitipan.hewan', 'penitipan.pemilik'])
-            ->orderBy('created_at', 'desc')
+        // Get all payments from fact_transaksi with dim data
+        $factTransaksi = \App\Models\FactTransaksi::where('status_pembayaran', '!=', '')
+            ->orderBy('tanggal_masuk', 'desc')
             ->get();
+        
+        // Map to format expected by the view (mimicking Pembayaran structure)
+        $pembayarans = $factTransaksi->map(function($trans) {
+            $dimHewan = \App\Models\DimHewan::where('hewan_key', $trans->hewan_key)->first();
+            $dimCustomer = \App\Models\DimCustomer::where('customer_key', $trans->customer_key)->first();
+            
+            return (object)[
+                'id_pembayaran' => $trans->id_penitipan, // Using penitipan as payment ID
+                'nomor_transaksi' => 'TRX-' . date('Ymd', strtotime($trans->tanggal_masuk)) . '-' . str_pad($trans->id_penitipan, 6, '0', STR_PAD_LEFT),
+                'jumlah_bayar' => $trans->total_biaya,
+                'metode_pembayaran' => $trans->metode_pembayaran ?? 'cash',
+                'status_pembayaran' => $trans->status_pembayaran ?? 'pending',
+                'tanggal_bayar' => $trans->tanggal_masuk,
+                'created_at' => $trans->tanggal_masuk,
+                'penitipan' => (object)[
+                    'id_penitipan' => $trans->id_penitipan,
+                    'hewan' => (object)[
+                        'nama_hewan' => $dimHewan->nama_hewan ?? 'N/A',
+                        'jenis_hewan' => $dimHewan->jenis_hewan ?? 'N/A',
+                    ],
+                    'pemilik' => (object)[
+                        'nama_lengkap' => $dimCustomer->nama_lengkap ?? 'N/A',
+                        'email' => $dimCustomer->email ?? 'N/A',
+                    ],
+                ],
+            ];
+        });
 
-        // Calculate statistics
-        $totalPendapatan = Pembayaran::where('status_pembayaran', 'lunas')->sum('jumlah_bayar');
+        // Calculate statistics from fact_keuangan_periodik (current month)
+        $currentMonth = Carbon::now();
+        $currentRevenue = \App\Models\FactKeuanganPeriodik::where('tahun', $currentMonth->year)
+            ->where('bulan', $currentMonth->month)
+            ->first();
+        
+        $totalPendapatan = $currentRevenue ? $currentRevenue->total_revenue : 0;
         $totalPembayaran = $pembayarans->count();
 
-        // Payment method statistics
-        $paymentMethodStats = Pembayaran::where('status_pembayaran', 'lunas')
+        // Payment method statistics from fact_transaksi
+        $paymentMethodStats = \App\Models\FactTransaksi::where('status_pembayaran', 'lunas')
             ->select('metode_pembayaran', DB::raw('count(*) as count'))
             ->groupBy('metode_pembayaran')
             ->get();
@@ -404,20 +493,13 @@ class AdminController extends Controller
         ];
 
         foreach ($paymentMethodStats as $stat) {
-            $paymentMethodData[$stat->metode_pembayaran] = $stat->count;
+            if ($stat->metode_pembayaran) {
+                $paymentMethodData[$stat->metode_pembayaran] = $stat->count;
+            }
         }
 
-        // Daily revenue for last 7 days
-        $dailyRevenue = Pembayaran::where('status_pembayaran', 'lunas')
-            ->where('tanggal_bayar', '>=', Carbon::now()->subDays(7))
-            ->select(
-                DB::raw('DATE(tanggal_bayar) as date'),
-                DB::raw('SUM(jumlah_bayar) as total')
-            )
-            ->groupBy('date')
-            ->orderBy('date')
-            ->get();
-
+        // Daily revenue for last 7 days from fact_keuangan_periodik and fact_transaksi
+        // We'll aggregate from fact_transaksi for daily granularity
         $dailyRevenueData = [];
         $dailyRevenueLabels = [];
         
@@ -425,8 +507,18 @@ class AdminController extends Controller
             $date = Carbon::now()->subDays($i);
             $dailyRevenueLabels[] = $date->format('d M');
             
-            $dayRevenue = $dailyRevenue->firstWhere('date', $date->format('Y-m-d'));
-            $dailyRevenueData[] = $dayRevenue ? $dayRevenue->total : 0;
+            // Get waktu_key for the date
+            $waktuKey = \App\Models\DimWaktu::where('tanggal', $date->format('Y-m-d'))->value('waktu_key');
+            
+            if ($waktuKey) {
+                // Sum revenue from fact_transaksi for this date
+                $dayRevenue = \App\Models\FactTransaksi::where('waktu_key', $waktuKey)
+                    ->where('status_pembayaran', 'lunas')
+                    ->sum('total_biaya');
+                $dailyRevenueData[] = $dayRevenue ?: 0;
+            } else {
+                $dailyRevenueData[] = 0;
+            }
         }
 
         return view('admin.payments', compact(
@@ -463,7 +555,7 @@ class AdminController extends Controller
             // Update pet data
             $hewan->update($validated);
 
-            return redirect()->route('admin.pets')->with('success', 'Data hewan berhasil diperbarui!');
+            return redirect()->route('admin.booking')->with('success', 'Data hewan berhasil diperbarui!');
 
         } catch (\Exception $e) {
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());

@@ -27,21 +27,36 @@
 
   <!-- Header -->
   <header class="mb-6">
-    <div>
-      <h1 class="text-3xl font-bold">PEMBAYARAN</h1>
-      <p class="text-gray-600">Lacak semua pembayaran dan transaksi</p>
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold">TRANSAKSI</h1>
+        <p class="text-gray-600">Lacak semua pembayaran dan transaksi</p>
+      </div>
+      <div class="relative">
+        <button onclick="toggleExportMenu()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium flex items-center gap-2">
+          <i class="fa-solid fa-file-export"></i>
+          <span>Export Laporan</span>
+          <i class="fa-solid fa-chevron-down text-xs"></i>
+        </button>
+        <div id="exportMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+          <button onclick="exportTransactionsCSV()" class="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 border-b">
+            <i class="fa-solid fa-file-csv text-green-600"></i>
+            <span class="font-medium">Export CSV</span>
+          </button>
+          <button onclick="exportTransactionsPDF()" class="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3">
+            <i class="fa-solid fa-file-pdf text-red-600"></i>
+            <span class="font-medium">Export PDF</span>
+          </button>
+        </div>
+      </div>
     </div>
   </header>
 
   <!-- Stats -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+  <div class="grid grid-cols-1 gap-6 mb-6">
     <div class="bg-white p-6 rounded-lg shadow-md">
         <h3 class="text-lg font-semibold text-gray-600">Total Pendapatan</h3>
         <p class="text-3xl font-bold mt-2">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</p>
-    </div>
-    <div class="bg-white p-6 rounded-lg shadow-md">
-        <h3 class="text-lg font-semibold text-gray-600">Total Pembayaran</h3>
-        <p class="text-3xl font-bold mt-2">{{ $totalPembayaran }}</p>
     </div>
   </div>
 
@@ -113,7 +128,7 @@
                   data-status="{{ $pembayaran->status_pembayaran }}"
                   data-date="{{ $pembayaran->tanggal_bayar ? $pembayaran->tanggal_bayar->format('Y-m-d') : '' }}">
                 <td class="p-4 font-medium">{{ $pembayaran->nomor_transaksi }}</td>
-                <td class="p-4">PNT-{{ str_pad($pembayaran->id_penitipan, 4, '0', STR_PAD_LEFT) }}</td>
+                <td class="p-4">PNT-{{ str_pad($pembayaran->penitipan->id_penitipan, 4, '0', STR_PAD_LEFT) }}</td>
                 <td class="p-4">
                   <div>
                     <p class="font-medium">{{ $pembayaran->penitipan->pemilik->nama_lengkap }}</p>
@@ -367,13 +382,241 @@ document.addEventListener('click', function(event) {
   if (event.target === modal) {
     closePaymentModal();
   }
+  
+  // Close export menu when clicking outside
+  const exportMenu = document.getElementById('exportMenu');
+  const exportButton = event.target.closest('button[onclick="toggleExportMenu()"]');
+  if (exportMenu && !exportMenu.contains(event.target) && !exportButton) {
+    exportMenu.classList.add('hidden');
+  }
 });
 
-console.log('Pembayaran page loaded');
+// Toggle Export Menu
+function toggleExportMenu() {
+  const menu = document.getElementById('exportMenu');
+  menu.classList.toggle('hidden');
+}
+
+// Export Transactions to CSV
+function exportTransactionsCSV() {
+  // Close menu
+  document.getElementById('exportMenu').classList.add('hidden');
+  
+  // Get all visible payment rows
+  const rows = document.querySelectorAll('.payment-row');
+  const visibleRows = Array.from(rows).filter(row => row.style.display !== 'none');
+  
+  if (visibleRows.length === 0) {
+    alert('Tidak ada data untuk di-export');
+    return;
+  }
+  
+  // Prepare CSV data
+  let csvContent = "data:text/csv;charset=utf-8,";
+  
+  // Add headers
+  csvContent += "ID Pembayaran,ID Penitipan,Pelanggan,Email,Tanggal Bayar,Jumlah,Metode,Status\n";
+  
+  // Add data rows
+  visibleRows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    const idPembayaran = cells[0]?.innerText.trim() || '';
+    const idPenitipan = cells[1]?.innerText.trim() || '';
+    const pelanggan = cells[2]?.querySelector('p.font-medium')?.innerText.trim() || '';
+    const email = cells[2]?.querySelector('p.text-xs')?.innerText.trim() || '';
+    const tanggalBayar = cells[3]?.innerText.trim() || '';
+    const jumlah = cells[4]?.innerText.trim() || '';
+    const metode = cells[5]?.innerText.trim() || '';
+    const status = cells[6]?.innerText.trim() || '';
+    
+    // Escape commas and quotes in data
+    const escapeCsv = (str) => {
+      if (str.includes(',') || str.includes('"')) {
+        return '"' + str.replace(/"/g, '""') + '"';
+      }
+      return str;
+    };
+    
+    csvContent += `${escapeCsv(idPembayaran)},${escapeCsv(idPenitipan)},${escapeCsv(pelanggan)},${escapeCsv(email)},${escapeCsv(tanggalBayar)},${escapeCsv(jumlah)},${escapeCsv(metode)},${escapeCsv(status)}\n`;
+  });
+  
+  // Create download link
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  
+  // Generate filename with current date
+  const today = new Date();
+  const dateStr = today.getFullYear() + '-' + 
+                  String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+                  String(today.getDate()).padStart(2, '0');
+  link.setAttribute("download", `transaksi_${dateStr}.csv`);
+  
+  // Trigger download
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  
+  console.log('CSV Export completed: ' + visibleRows.length + ' transactions');
+}
+
+// Export Transactions to PDF
+async function exportTransactionsPDF() {
+  // Close menu
+  document.getElementById('exportMenu').classList.add('hidden');
+  
+  // Show loading indicator
+  const loadingDiv = document.createElement('div');
+  loadingDiv.id = 'pdfLoading';
+  loadingDiv.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center';
+  loadingDiv.innerHTML = `
+    <div class="bg-white p-6 rounded-lg shadow-xl">
+      <div class="flex items-center gap-3">
+        <svg class="animate-spin h-8 w-8 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span class="text-lg font-semibold">Generating PDF...</span>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(loadingDiv);
+  
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    let yPosition = 15;
+    
+    // Header
+    doc.setFontSize(20);
+    doc.setFont(undefined, 'bold');
+    doc.text('Laporan Transaksi', pageWidth / 2, yPosition, { align: 'center' });
+    
+    yPosition += 7;
+    doc.setFontSize(10);
+    doc.setFont(undefined, 'normal');
+    const today = new Date();
+    const dateStr = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+    doc.text('Tanggal Export: ' + dateStr, pageWidth / 2, yPosition, { align: 'center' });
+    
+    yPosition += 10;
+    
+    // Total Pendapatan
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'bold');
+    const totalPendapatan = document.querySelector('.bg-white.p-6 .text-3xl.font-bold')?.innerText || 'Rp 0';
+    doc.text('Total Pendapatan: ' + totalPendapatan, 15, yPosition);
+    
+    yPosition += 12;
+    
+    // Capture Charts
+    const paymentMethodChart = document.getElementById('paymentMethodChart');
+    const dailyRevenueChart = document.getElementById('dailyRevenueChart');
+    
+    if (paymentMethodChart && dailyRevenueChart) {
+      // Payment Method Chart (left)
+      const canvas1 = await html2canvas(paymentMethodChart, { scale: 2 });
+      const imgData1 = canvas1.toDataURL('image/png');
+      const chartWidth = (pageWidth - 35) / 2;
+      const chartHeight = chartWidth * 0.75;
+      
+      doc.addImage(imgData1, 'PNG', 15, yPosition, chartWidth, chartHeight);
+      
+      // Daily Revenue Chart (right)
+      const canvas2 = await html2canvas(dailyRevenueChart, { scale: 2 });
+      const imgData2 = canvas2.toDataURL('image/png');
+      
+      doc.addImage(imgData2, 'PNG', 15 + chartWidth + 5, yPosition, chartWidth, chartHeight);
+      
+      yPosition += chartHeight + 10;
+    }
+    
+    // Table Header
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'bold');
+    doc.text('Daftar Transaksi', 15, yPosition);
+    yPosition += 7;
+    
+    // Get visible payment rows
+    const rows = document.querySelectorAll('.payment-row');
+    const visibleRows = Array.from(rows).filter(row => row.style.display !== 'none');
+    
+    if (visibleRows.length === 0) {
+      doc.setFontSize(10);
+      doc.setFont(undefined, 'normal');
+      doc.text('Tidak ada data transaksi', 15, yPosition);
+    } else {
+      // Table data
+      const tableData = [];
+      visibleRows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        tableData.push([
+          cells[0]?.innerText.trim() || '',
+          cells[1]?.innerText.trim() || '',
+          cells[2]?.querySelector('p.font-medium')?.innerText.trim() || '',
+          cells[3]?.innerText.trim() || '',
+          cells[4]?.innerText.trim() || '',
+          cells[5]?.innerText.trim() || '',
+          cells[6]?.innerText.trim() || ''
+        ]);
+      });
+      
+      // Add table using autoTable
+      doc.autoTable({
+        startY: yPosition,
+        head: [['ID Bayar', 'ID Penitipan', 'Pelanggan', 'Tgl Bayar', 'Jumlah', 'Metode', 'Status']],
+        body: tableData,
+        styles: { fontSize: 8, cellPadding: 2 },
+        headStyles: { fillColor: [249, 115, 22], textColor: 255, fontStyle: 'bold' },
+        alternateRowStyles: { fillColor: [249, 250, 251] },
+        margin: { left: 15, right: 15 },
+        columnStyles: {
+          0: { cellWidth: 25 },
+          1: { cellWidth: 25 },
+          2: { cellWidth: 35 },
+          3: { cellWidth: 22 },
+          4: { cellWidth: 30 },
+          5: { cellWidth: 20 },
+          6: { cellWidth: 18 }
+        }
+      });
+    }
+    
+    // Footer
+    const finalY = doc.lastAutoTable?.finalY || yPosition + 10;
+    if (finalY < pageHeight - 20) {
+      doc.setFontSize(8);
+      doc.setFont(undefined, 'italic');
+      doc.text('Generated by Harvest Walukow Pet Care System', pageWidth / 2, pageHeight - 10, { align: 'center' });
+    }
+    
+    // Save PDF
+    const pdfDateStr = today.getFullYear() + '-' + 
+                    String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+                    String(today.getDate()).padStart(2, '0');
+    doc.save(`transaksi_${pdfDateStr}.pdf`);
+    
+    console.log('PDF Export completed: ' + visibleRows.length + ' transactions');
+    
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    alert('Terjadi kesalahan saat membuat PDF. Silakan coba lagi.');
+  } finally {
+    // Remove loading indicator
+    document.getElementById('pdfLoading')?.remove();
+  }
+}
+
+console.log('Transaksi page loaded');
 </script>
 @endsection
 
 @push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   // Payment Method Chart (Horizontal Bar)

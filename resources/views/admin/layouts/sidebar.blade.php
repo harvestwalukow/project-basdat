@@ -26,14 +26,15 @@
       <i class="fa-solid fa-house-chimney w-5 mr-3 flex-shrink-0"></i>
       <span class="sidebar-text whitespace-nowrap">DASHBOARD</span>
     </a>
-    <a href="{{ route('admin.booking') }}" class="flex items-center px-4 py-2 {{ request()->routeIs('admin.booking') ? 'bg-white/90 text-orange-700' : 'text-white hover:bg-orange-500/50' }} rounded-md font-semibold" title="Penitipan">
+    <a href="{{ route('admin.booking') }}" class="flex items-center px-4 py-2 {{ request()->routeIs('admin.booking') ? 'bg-white/90 text-orange-700' : 'text-white hover:bg-orange-500/50' }} rounded-md font-semibold" title="Operasional">
       <i class="fa-solid fa-clipboard-check w-5 mr-3 flex-shrink-0"></i>
-      <span class="sidebar-text whitespace-nowrap">PENITIPAN</span>
+      <span class="sidebar-text whitespace-nowrap">OPERASIONAL</span>
     </a>
-    <a href="{{ route('admin.pets') }}" class="flex items-center px-4 py-2 {{ request()->routeIs('admin.pets') ? 'bg-white/90 text-orange-700' : 'text-white hover:bg-orange-500/50' }} rounded-md font-semibold" title="Hewan">
-      <i class="fa-solid fa-dog w-5 mr-3 flex-shrink-0"></i>
-      <span class="sidebar-text whitespace-nowrap">HEWAN</span>
+    <a href="{{ route('admin.payments') }}" class="flex items-center px-4 py-2 {{ request()->routeIs('admin.payments') ? 'bg-white/90 text-orange-700' : 'text-white hover:bg-orange-500/50' }} rounded-md font-semibold" title="Transaksi">
+      <i class="fa-solid fa-money-bill-transfer w-5 mr-3 flex-shrink-0"></i>
+      <span class="sidebar-text whitespace-nowrap">TRANSAKSI</span>
     </a>
+
     <a href="{{ route('admin.rooms') }}" class="flex items-center px-4 py-2 {{ request()->routeIs('admin.rooms') ? 'bg-white/90 text-orange-700' : 'text-white hover:bg-orange-500/50' }} rounded-md font-semibold" title="Update Kondisi">
       <i class="fa-solid fa-camera-retro w-5 mr-3 flex-shrink-0"></i>
       <span class="sidebar-text whitespace-nowrap">UPDATE KONDISI</span>
@@ -41,10 +42,6 @@
     <a href="{{ route('admin.service') }}" class="flex items-center px-4 py-2 {{ request()->routeIs('admin.service') ? 'bg-white/90 text-orange-700' : 'text-white hover:bg-orange-500/50' }} rounded-md font-semibold" title="Paket Layanan">
       <i class="fa-solid fa-boxes-stacked w-5 mr-3 flex-shrink-0"></i>
       <span class="sidebar-text whitespace-nowrap">PAKET LAYANAN</span>
-    </a>
-    <a href="{{ route('admin.payments') }}" class="flex items-center px-4 py-2 {{ request()->routeIs('admin.payments') ? 'bg-white/90 text-orange-700' : 'text-white hover:bg-orange-500/50' }} rounded-md font-semibold" title="Pembayaran">
-      <i class="fa-solid fa-money-bill-transfer w-5 mr-3 flex-shrink-0"></i>
-      <span class="sidebar-text whitespace-nowrap">PEMBAYARAN</span>
     </a>
 
     @if(session('user_role') === 'admin')

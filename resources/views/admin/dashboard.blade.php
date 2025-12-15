@@ -3,79 +3,73 @@
 @section('content')
 <h1 class="text-3xl font-bold border-b pb-4 mb-6">DASHBOARD</h1>
 
-<!-- Stat Cards -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+<!-- Row 1: KPI Revenue & Grafik Revenue Bulanan -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+  <!-- KPI Revenue (fact_keuangan_periodik) -->
   <div class="bg-white border border-slate-100 p-6 rounded-2xl shadow-sm">
-    <h3 class="text-sm font-medium text-slate-500">Penitipan Aktif</h3>
-    <p class="text-3xl font-extrabold mt-2 text-slate-800">{{ $totalPenitipanAktif }}</p>
+    <h3 class="text-lg font-semibold mb-4 text-slate-800">KPI Revenue</h3>
+    <p class="text-xs text-slate-500 mb-2">Bulan Ini (fact_keuangan_periodik)</p>
+    
+    <div class="space-y-3">
+      <div>
+        <p class="text-xs text-slate-500">Total Revenue</p>
+        <p class="text-2xl font-bold text-slate-800">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</p>
+      </div>
+      
+      <div>
+        <p class="text-xs text-slate-500">Total Transaksi</p>
+        <p class="text-xl font-semibold text-slate-700">{{ number_format($totalTransaksi, 0, ',', '.') }}</p>
+      </div>
+      
+      <div>
+        <p class="text-xs text-slate-500">Rata-rata per Transaksi</p>
+        <p class="text-lg font-medium text-slate-600">Rp {{ number_format($avgTransaksi, 0, ',', '.') }}</p>
+      </div>
+    </div>
   </div>
-  <div class="bg-white border border-slate-100 p-6 rounded-2xl shadow-sm">
-    <h3 class="text-sm font-medium text-slate-500">Total Hewan</h3>
-    <p class="text-3xl font-extrabold mt-2 text-slate-800">{{ $totalHewan }}</p>
-  </div>
-  <div class="bg-white border border-slate-100 p-6 rounded-2xl shadow-sm">
-    <h3 class="text-sm font-medium text-slate-500">Total Pengguna</h3>
-    <p class="text-3xl font-extrabold mt-2 text-slate-800">{{ $totalPengguna }}</p>
-  </div>
-</div>
 
-<!-- Atas: Chart & Jadwal -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-  <!-- Chart -->
-  <div class="lg:col-span-2 bg-white border border-slate-100 p-6 rounded-2xl shadow-sm h-[380px]">
-    <h3 class="text-xl font-semibold mb-4 text-slate-800">Pendapatan Bulanan</h3>
-    <div class="h-[300px]">
+  <!-- Grafik Revenue Bulanan -->
+  <div class="lg:col-span-2 bg-white border border-slate-100 p-6 rounded-2xl shadow-sm">
+    <h3 class="text-lg font-semibold mb-2 text-slate-800">Grafik Revenue Bulanan</h3>
+    <p class="text-xs text-slate-500 mb-4">12 Bulan Terakhir (fact_keuangan_periodik)</p>
+    <div class="h-[280px]">
       <canvas id="revenueChart"></canvas>
     </div>
   </div>
-
-  <!-- Jadwal Hari Ini -->
-  <div class="bg-white border border-slate-100 p-6 rounded-2xl shadow-sm h-[380px]">
-    <h3 class="text-xl font-semibold mb-4 text-slate-800">Jadwal Hari Ini</h3>
-    <div class="space-y-4 overflow-y-auto max-h-[300px]">
-      @forelse($todaySchedule as $schedule)
-        <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
-          <p class="font-semibold text-sm text-slate-800">{{ $schedule->hewan->nama_hewan }}</p>
-          <p class="text-xs text-slate-600">Pemilik: {{ $schedule->pemilik->nama_lengkap }}</p>
-          <p class="text-xs text-slate-500">
-            @if(\Carbon\Carbon::parse($schedule->tanggal_masuk)->isToday())
-              <span class="text-green-600">✓ Check-in</span>
-            @endif
-            @if(\Carbon\Carbon::parse($schedule->tanggal_keluar)->isToday())
-              <span class="text-blue-600">← Check-out</span>
-            @endif
-          </p>
-        </div>
-      @empty
-        <p class="text-sm text-slate-500">Tidak ada jadwal hari ini</p>
-      @endforelse
-    </div>
-  </div>
 </div>
 
-<!-- Bawah: Update Kondisi (full width) -->
-<div class="grid grid-cols-1 lg:grid-cols-3">
-  <div class="lg:col-span-3 bg-white border border-slate-100 p-6 rounded-2xl shadow-sm">
-    <h3 class="text-xl font-semibold mb-4 text-slate-800">Update Kondisi Terbaru</h3>
+<!-- Row 2: KPI Penitipan Hari Ini & Grafik Okupansi Harian -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- KPI Penitipan Hari Ini (fact_kapasitas_harian) -->
+  <div class="bg-white border border-slate-100 p-6 rounded-2xl shadow-sm">
+    <h3 class="text-lg font-semibold mb-4 text-slate-800">KPI Penitipan Hari Ini</h3>
+    <p class="text-xs text-slate-500 mb-2">{{ \Carbon\Carbon::now()->format('d M Y') }} (fact_kapasitas_harian)</p>
+    
+    <div class="space-y-3">
+      <div>
+        <p class="text-xs text-slate-500">Total Penitipan</p>
+        <p class="text-2xl font-bold text-slate-800">{{ $penitipanHariIni }}</p>
+      </div>
+      
+      <div>
+        <p class="text-xs text-slate-500">Penitipan Aktif</p>
+        <p class="text-xl font-semibold text-green-600">{{ $penitipanAktif }}</p>
+      </div>
+      
+      <div>
+        <p class="text-xs text-slate-500">Penitipan Pending</p>
+        <p class="text-lg font-medium text-orange-600">{{ $penitipanPending }}</p>
+      </div>
+    </div>
+  </div>
 
-    <!-- Tinggi diperpanjang + scroll kalau isi memanjang -->
-    <ul class="space-y-3 max-h-[520px] overflow-y-auto pr-2">
-      @forelse($latestUpdates as $update)
-        <li class="flex items-start gap-3 p-4 bg-slate-50 rounded-lg border border-slate-200">
-          <div class="flex-shrink-0 w-10 h-10 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center font-bold">
-            {{ substr($update->penitipan->hewan->nama_hewan, 0, 1) }}
-          </div>
-          <div class="flex-1 min-w-0">
-            <p class="text-sm font-semibold text-slate-800">{{ $update->penitipan->hewan->nama_hewan }}</p>
-            <p class="text-xs text-slate-600">Kondisi: {{ $update->kondisi_hewan }}</p>
-            <p class="text-xs text-slate-500">Aktivitas: {{ Str::limit($update->aktivitas_hari_ini, 50) }}</p>
-            <p class="text-xs text-slate-400 mt-1">{{ $update->waktu_update->diffForHumans() }} - {{ $update->staff->nama_lengkap }}</p>
-          </div>
-        </li>
-      @empty
-        <li class="text-sm text-slate-500 text-center py-4">Belum ada update kondisi</li>
-      @endforelse
-    </ul>
+  <!-- Grafik Okupansi Harian -->
+  <div class="lg:col-span-2 bg-white border border-slate-100 p-6 rounded-2xl shadow-sm">
+    <h3 class="text-lg font-semibold mb-2 text-slate-800">Grafik Okupansi Harian</h3>
+    <p class="text-xs text-slate-500 mb-4">30 Hari Terakhir (fact_kapasitas_harian)</p>
+    <div class="h-[280px]">
+      <canvas id="okupansiChart"></canvas>
+    </div>
   </div>
 </div>
 @endsection
@@ -83,20 +77,20 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Revenue Chart
   const revenueCanvas = document.getElementById('revenueChart');
-  
   if (revenueCanvas) {
-    const revenueCtx = revenueCanvas.getContext('2d');
-    new Chart(revenueCtx, {
+    new Chart(revenueCanvas.getContext('2d'), {
       type: 'line',
       data: {
         labels: @json($revenueLabels ?? []),
         datasets: [{
-          label: 'Pendapatan (Rp)',
+          label: 'Revenue (Rp)',
           data: @json($revenueData ?? []),
-          borderColor: 'rgba(242,120,75,1)',
-          backgroundColor: 'rgba(242,120,75,0.2)',
+          borderColor: 'rgba(59, 130, 246, 1)',
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
           pointRadius: 4,
+          pointBackgroundColor: 'rgba(59, 130, 246, 1)',
           borderWidth: 2,
           tension: 0.4,
           fill: true,
@@ -110,33 +104,85 @@ document.addEventListener('DOMContentLoaded', function() {
             beginAtZero: true,
             ticks: {
               callback: function(value) {
-                return 'Rp ' + value.toLocaleString('id-ID');
+                return 'Rp ' + (value / 1000000).toFixed(1) + 'M';
               }
             }
           } 
         },
         plugins: { 
-          legend: { 
-            display: true, 
-            labels: { boxWidth: 12 } 
-          },
+          legend: { display: true, labels: { boxWidth: 12 } },
           tooltip: {
             callbacks: {
               label: function(context) {
-                let label = context.dataset.label || '';
-                if (label) {
-                  label += ': ';
-                }
-                label += 'Rp ' + context.parsed.y.toLocaleString('id-ID');
-                return label;
+                return 'Revenue: Rp ' + context.parsed.y.toLocaleString('id-ID');
               }
             }
           }
         }
       }
     });
-  } else {
-    console.error('Canvas element with id "revenueChart" not found');
+  }
+
+  // Okupansi Chart
+  const okupansiCanvas = document.getElementById('okupansiChart');
+  if (okupansiCanvas) {
+    new Chart(okupansiCanvas.getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: @json($okupansiLabels ?? []),
+        datasets: [
+          {
+            label: 'Total Penitipan',
+            data: @json($okupansiData ?? []),
+            borderColor: 'rgba(99, 102, 241, 1)',
+            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+            pointRadius: 3,
+            borderWidth: 2,
+            tension: 0.3,
+            fill: true,
+          },
+          {
+            label: 'Aktif',
+            data: @json($okupansiAktif ?? []),
+            borderColor: 'rgba(34, 197, 94, 1)',
+            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+            pointRadius: 3,
+            borderWidth: 2,
+            tension: 0.3,
+            fill: true,
+          },
+          {
+            label: 'Pending',
+            data: @json($okupansiPending ?? []),
+            borderColor: 'rgba(251, 146, 60, 1)',
+            backgroundColor: 'rgba(251, 146, 60, 0.1)',
+            pointRadius: 3,
+            borderWidth: 2,
+            tension: 0.3,
+            fill: true,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { 
+          y: { 
+            beginAtZero: true,
+            ticks: {
+              stepSize: 5
+            }
+          } 
+        },
+        plugins: { 
+          legend: { display: true, position: 'top', labels: { boxWidth: 12, usePointStyle: true } },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+          }
+        }
+      }
+    });
   }
 });
 </script>
