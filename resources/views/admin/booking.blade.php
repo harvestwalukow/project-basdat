@@ -9,6 +9,9 @@
   </header>
 
   <!-- Statistik Ringkas -->
+  <div class="mb-2 flex justify-end">
+     <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-medium">fact_kapasitas_harian</span>
+  </div>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-4">
     <div class="bg-white p-4 rounded-xl shadow">
       <h4 class="text-sm text-gray-500">Total Penitipan</h4>
@@ -51,11 +54,40 @@
         placeholder="Cari nama hewan, pemilik, atau ID"
         class="flex-grow w-full sm:w-auto px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         onkeyup="searchFunction()">
-      <select id="jenisFilter" class="px-4 py-2 border rounded-lg" onchange="searchFunction()">
-        <option value="">Semua Jenis</option>
-        <option value="anjing">Anjing</option>
-        <option value="kucing">Kucing</option>
-      </select>
+      <div class="relative">
+        <select id="jenisFilter" class="appearance-none px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" onchange="searchFunction()">
+          <option value="">Semua Jenis</option>
+          <option value="anjing">Anjing</option>
+          <option value="kucing">Kucing</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+        </div>
+      </div>
+
+      <div class="relative">
+        <select id="layananFilter" class="appearance-none px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" onchange="searchFunction()">
+          <option value="">Semua Layanan</option>
+          @foreach($filterLayanan as $layanan)
+            <option value="{{ strtolower($layanan) }}">{{ $layanan }}</option>
+          @endforeach
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+        </div>
+      </div>
+
+      <div class="relative">
+        <select id="statusFilter" class="appearance-none px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" onchange="searchFunction()">
+          <option value="">Semua Status</option>
+          @foreach($filterStatus as $status)
+            <option value="{{ strtolower($status) }}">{{ ucfirst($status) }}</option>
+          @endforeach
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -95,7 +127,10 @@
                 if ($jenisForFilter === 'cat') $jenisForFilter = 'kucing';
                 if ($jenisForFilter === 'dog') $jenisForFilter = 'anjing';
               @endphp
-              <tr class="pet-row border-b hover:bg-gray-50" data-jenis="{{ $jenisForFilter }}">
+              <tr class="pet-row border-b hover:bg-gray-50 bg-white" 
+                  data-jenis="{{ $jenisForFilter }}" 
+                  data-layanan="{{ $activeServicesString ?? '' }}" 
+                  data-status="{{ $searchStatus ?? '' }}">
                 <td class="p-4">
                   <div>
                     <p class="font-semibold">{{ $hewan->nama_hewan }}</p>
@@ -137,6 +172,9 @@
                         }
                       }
                     }
+                    $activeServicesString = $semuaLayanan->map(fn($item) => strtolower($item))->implode(' ');
+                    // Default valid status for filter attributes
+                    $searchStatus = $statusPenitipan ? strtolower($statusPenitipan) : '';
                   @endphp
                   @if($semuaLayanan->isNotEmpty())
                     @foreach($semuaLayanan as $layanan)
@@ -163,13 +201,22 @@
                 <td class="p-4">
                   <p class="text-xs">{{ $hewan->penitipan->count() }} kali</p>
                   @if($hewan->penitipan->count() > 0)
-                    <p class="text-xs text-gray-500">Terakhir: {{ $hewan->penitipan->first()->tanggal_masuk->format('d M Y') }}</p>
+                    @php
+                       $lastBooking = $hewan->penitipan->first();
+                       $masuk = \Carbon\Carbon::parse($lastBooking->tanggal_masuk);
+                       $keluar = \Carbon\Carbon::parse($lastBooking->tanggal_keluar);
+                    @endphp
+                    <p class="text-xs text-gray-500">{{ $masuk->format('d M') }} - {{ $keluar->format('d M Y') }}</p>
                   @endif
                 </td>
                 <td class="p-4">
                   <div class="flex gap-2">
-                    <button onclick="showDetailModal({{ $hewan->id_hewan }})" class="text-blue-600 hover:underline text-xs">Detail</button>
-                    <button onclick="showEditModal({{ $hewan->id_hewan }})" class="text-green-600 hover:underline text-xs">Edit</button>
+                    <button onclick="showDetailModal({{ $hewan->id_hewan }})" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Detail">
+                      <i class="fa-solid fa-eye"></i>
+                    </button>
+                    <button onclick="showEditModal({{ $hewan->id_hewan }})" class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition" title="Edit">
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -281,19 +328,27 @@
 function searchFunction() {
   var searchValue = document.getElementById('petSearch').value.toLowerCase();
   var jenisValue  = document.getElementById('jenisFilter').value.toLowerCase();
+  var layananValue= document.getElementById('layananFilter').value.toLowerCase();
+  var statusValue = document.getElementById('statusFilter').value.toLowerCase();
 
   var rows = document.getElementsByClassName('pet-row');
   var visibleCount = 0;
 
   for (var i = 0; i < rows.length; i++) {
     var row = rows[i];
-    var rowText   = row.innerText.toLowerCase();
-    var rowJenis  = (row.getAttribute('data-jenis') || '').toLowerCase();
+    var rowText = row.innerText.toLowerCase();
+    var rowJenis = (row.getAttribute('data-jenis') || '').toLowerCase();
+    var rowLayanan = (row.getAttribute('data-layanan') || '').toLowerCase();
+    var rowStatus = (row.getAttribute('data-status') || '').toLowerCase();
 
     var showRow = true;
 
     if (searchValue && !rowText.includes(searchValue)) showRow = false;
     if (jenisValue  && rowJenis !== jenisValue)       showRow = false;
+    // Check if the selected service exists in the row's services string (substring match)
+    if (layananValue && !rowLayanan.includes(layananValue)) showRow = false;
+    // Status might be exact match or included
+    if (statusValue && rowStatus !== statusValue) showRow = false;
 
     row.style.display = showRow ? '' : 'none';
     if (showRow) visibleCount++;
@@ -444,6 +499,10 @@ function closeDetailModal() {
 function showEditModal(id) {
   const hewan = hewansData.find(h => h.id_hewan === id);
   if (!hewan) return;
+  
+  // Get latest booking status
+  const latestBooking = hewan.penitipan && hewan.penitipan.length > 0 ? hewan.penitipan[0] : null;
+  const currentStatus = latestBooking ? latestBooking.status : '';
 
   document.getElementById('editForm').action = '/admin/hewan/' + id + '/update';
 
@@ -509,6 +568,20 @@ function showEditModal(id) {
           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Riwayat penyakit, vaksinasi, dll.">${hewan.catatan_medis || ''}</textarea>
       </div>
+
+      ${latestBooking ? `
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Status Penitipan Terakhir</label>
+        <select name="status_penitipan" 
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="pending" ${currentStatus === 'pending' ? 'selected' : ''}>Pending</option>
+          <option value="aktif" ${currentStatus === 'aktif' ? 'selected' : ''}>Aktif</option>
+          <option value="selesai" ${currentStatus === 'selesai' ? 'selected' : ''}>Selesai</option>
+          <option value="batal" ${currentStatus === 'batal' ? 'selected' : ''}>Batal</option>
+        </select>
+        <p class="text-xs text-gray-500 mt-1">Mengubah status ini akan mengupdate booking terakhir.</p>
+      </div>
+      ` : ''}
     </div>
   `;
 

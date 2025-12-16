@@ -155,8 +155,14 @@ class AdminController extends Controller
         $aktifCount = $latestCapacity ? $latestCapacity->penitipan_aktif : 0;
         $selesaiCount = $latestCapacity ? $latestCapacity->penitipan_selesai : 0;
 
-        // Calculate room capacity based on active bookings
-        $aktivePenitipans = $penitipans->where('status', 'aktif');
+        // Calculate room capacity based on active bookings (UNIQUE pets only)
+        // Ensure we don't double count if a pet has multiple active transaction entries (data quality fix)
+        $aktivePenitipans = $penitipans->where('status', 'aktif')->unique(function($item) {
+             return strtolower($item->hewan->nama_hewan . $item->hewan->jenis_hewan);
+        });
+        
+        // Override active count based on unique pets
+        $aktifCount = $aktivePenitipans->count();
 
         $premiumKucingUsed = 0;
         $basicKucingUsed = 0;
@@ -194,12 +200,32 @@ class AdminController extends Controller
         }
 
         // Get all pets with owner and penitipan information for the pets table
-        $hewans = Hewan::with(['pemilik', 'penitipan' => function($query) {
+        $allHewans = Hewan::with(['pemilik', 'penitipan' => function($query) {
             // Sort penitipan by tanggal_masuk to get the latest one first
             $query->orderBy('tanggal_masuk', 'desc');
         }, 'penitipan.detailPenitipan.paketLayanan'])
         ->orderBy('created_at', 'desc')
         ->get();
+
+        // Group pets by unique attributes and merge their booking history
+        $hewans = $allHewans->groupBy(function ($item) {
+            return strtolower($item->nama_hewan . $item->jenis_hewan . $item->ras . $item->id_pemilik);
+        })->map(function ($group) {
+            // Use the first pet as the representative
+            $mainPet = $group->first();
+            
+            // Merge penitipan (bookings) from all pets in this group
+            $allPenitipan = $group->pluck('penitipan')->flatten()->sortByDesc('tanggal_masuk');
+            
+            // Override the relation with the merged collection
+            $mainPet->setRelation('penitipan', $allPenitipan);
+            
+            return $mainPet;
+        })->values();
+
+        // Get data for filters
+        $filterLayanan = \App\Models\PaketLayanan::orderBy('nama_paket')->pluck('nama_paket');
+        $filterStatus = ['pending', 'aktif', 'selesai', 'batal']; // Standard statuses
 
         return view('admin.booking', compact(
             'penitipans',
@@ -210,7 +236,9 @@ class AdminController extends Controller
             'basicKucingUsed',
             'premiumAnjingUsed',
             'basicAnjingUsed',
-            'hewans'
+            'hewans',
+            'filterLayanan',
+            'filterStatus'
         ));
     }
 
@@ -437,37 +465,13 @@ class AdminController extends Controller
      */
     public function payments()
     {
-        // Get all payments from fact_transaksi with dim data
-        $factTransaksi = \App\Models\FactTransaksi::where('status_pembayaran', '!=', '')
-            ->orderBy('tanggal_masuk', 'desc')
+        // Get operational payments from database (as requested)
+        $pembayarans = \App\Models\Pembayaran::with(['penitipan.hewan', 'penitipan.pemilik'])
+            ->orderBy('tanggal_bayar', 'desc')
             ->get();
-        
-        // Map to format expected by the view (mimicking Pembayaran structure)
-        $pembayarans = $factTransaksi->map(function($trans) {
-            $dimHewan = \App\Models\DimHewan::where('hewan_key', $trans->hewan_key)->first();
-            $dimCustomer = \App\Models\DimCustomer::where('customer_key', $trans->customer_key)->first();
-            
-            return (object)[
-                'id_pembayaran' => $trans->id_penitipan, // Using penitipan as payment ID
-                'nomor_transaksi' => 'TRX-' . date('Ymd', strtotime($trans->tanggal_masuk)) . '-' . str_pad($trans->id_penitipan, 6, '0', STR_PAD_LEFT),
-                'jumlah_bayar' => $trans->total_biaya,
-                'metode_pembayaran' => $trans->metode_pembayaran ?? 'cash',
-                'status_pembayaran' => $trans->status_pembayaran ?? 'pending',
-                'tanggal_bayar' => $trans->tanggal_masuk,
-                'created_at' => $trans->tanggal_masuk,
-                'penitipan' => (object)[
-                    'id_penitipan' => $trans->id_penitipan,
-                    'hewan' => (object)[
-                        'nama_hewan' => $dimHewan->nama_hewan ?? 'N/A',
-                        'jenis_hewan' => $dimHewan->jenis_hewan ?? 'N/A',
-                    ],
-                    'pemilik' => (object)[
-                        'nama_lengkap' => $dimCustomer->nama_lengkap ?? 'N/A',
-                        'email' => $dimCustomer->email ?? 'N/A',
-                    ],
-                ],
-            ];
-        });
+
+        // Get filter options
+        $filterStatus = ['pending', 'lunas', 'gagal'];
 
         // Calculate statistics from fact_keuangan_periodik (current month)
         $currentMonth = Carbon::now();
@@ -476,7 +480,9 @@ class AdminController extends Controller
             ->first();
         
         $totalPendapatan = $currentRevenue ? $currentRevenue->total_revenue : 0;
-        $totalPembayaran = $pembayarans->count();
+        $totalPendapatan = $currentRevenue ? $currentRevenue->total_revenue : 0;
+    // Use FactTransaksi for total count statistics as requested
+    $totalPembayaran = \App\Models\FactTransaksi::count();
 
         // Payment method statistics from fact_transaksi
         $paymentMethodStats = \App\Models\FactTransaksi::where('status_pembayaran', 'lunas')
@@ -527,7 +533,8 @@ class AdminController extends Controller
             'totalPembayaran',
             'paymentMethodData',
             'dailyRevenueData',
-            'dailyRevenueLabels'
+            'dailyRevenueLabels',
+            'filterStatus'
         ));
     }
 
@@ -547,13 +554,22 @@ class AdminController extends Controller
                 'jenis_kelamin' => 'required|in:jantan,betina,tidak diketahui',
                 'kondisi_khusus' => 'nullable|string',
                 'catatan_medis' => 'nullable|string',
+                'status_penitipan' => 'nullable|in:pending,aktif,selesai,batal', // Added status validation
             ]);
 
             // Find pet
             $hewan = Hewan::findOrFail($id);
 
             // Update pet data
-            $hewan->update($validated);
+            $hewan->update(collect($validated)->except('status_penitipan')->toArray());
+            
+            // Update latest booking status if provided
+            if ($request->has('status_penitipan')) {
+                $latestBooking = $hewan->penitipan()->orderBy('tanggal_masuk', 'desc')->first();
+                if ($latestBooking) {
+                    $latestBooking->update(['status' => $validated['status_penitipan']]);
+                }
+            }
 
             return redirect()->route('admin.booking')->with('success', 'Data hewan berhasil diperbarui!');
 

@@ -52,24 +52,39 @@
         onkeyup="searchFunction()"
       >
 
-      <select id="statusFilter" class="px-4 py-2 border rounded-lg" onchange="searchFunction()">
-        <option value="">Semua Penitipan</option>
-        <option value="aktif">Aktif</option>
-        <option value="selesai">Selesai</option>
-      </select>
+      <div class="relative">
+        <select id="statusFilter" class="appearance-none px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" onchange="searchFunction()">
+          <option value="">Semua Penitipan</option>
+          <option value="aktif">Aktif</option>
+          <option value="selesai">Selesai</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+        </div>
+      </div>
 
-      <select id="staffFilter" class="px-4 py-2 border rounded-lg" onchange="searchFunction()">
-        <option value="">Semua Staff</option>
-        @foreach($staffMembers as $staff)
-            <option value="{{ strtolower(str_replace(' ', '_', $staff->nama_lengkap)) }}">{{ $staff->nama_lengkap }}</option>
-        @endforeach
-      </select>
+      <div class="relative">
+        <select id="staffFilter" class="appearance-none px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" onchange="searchFunction()">
+          <option value="">Semua Staff</option>
+          @foreach($staffMembers as $staff)
+              <option value="{{ strtolower(str_replace(' ', '_', $staff->nama_lengkap)) }}">{{ $staff->nama_lengkap }}</option>
+          @endforeach
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+        </div>
+      </div>
 
-      <select id="kondisiFilter" class="px-4 py-2 border rounded-lg" onchange="searchFunction()">
-        <option value="">Semua Kondisi</option>
-        <option value="sehat">Sehat</option>
-        <option value="perlu_perhatian">Perlu Perhatian</option>
-      </select>
+      <div class="relative">
+        <select id="kondisiFilter" class="appearance-none px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" onchange="searchFunction()">
+          <option value="">Semua Kondisi</option>
+          <option value="sehat">Sehat</option>
+          <option value="perlu_perhatian">Perlu Perhatian</option>
+        </select>
+         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+        </div>
+      </div>
 
       <input type="date" id="dateFilter" class="px-4 py-2 border rounded-lg" onchange="searchFunction()">
     </div>

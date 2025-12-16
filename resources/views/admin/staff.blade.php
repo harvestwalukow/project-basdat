@@ -66,9 +66,13 @@
             <p>Bergabung: {{ $emp['joinDate'] }}</p>
           </div>
 
-          <div class="flex gap-2">
-            <button onclick="openEditModal({{ $emp['id'] }})" class="flex-1 px-2 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700">Edit</button>
-            <button onclick="confirmDelete({{ $emp['id'] }}, '{{ $emp['name'] }}')" class="px-2 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700">Hapus</button>
+          <div class="flex gap-2 justify-end mt-4 pt-4 border-t">
+            <button onclick="openEditModal({{ $emp['id'] }})" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Edit">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button onclick="confirmDelete({{ $emp['id'] }}, '{{ $emp['name'] }}')" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition" title="Hapus">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
           </div>
         </div>
       @empty

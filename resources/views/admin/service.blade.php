@@ -56,22 +56,27 @@
           class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-64"
           onkeyup="filterServices()"
         >
-        <select id="tipeFilter" class="px-4 py-2 border rounded-lg" onchange="filterServices()">
-          <option value="">Semua Tipe</option>
-          <option value="paket">Paket</option>
-          <option value="tambahan">Tambahan</option>
-        </select>
-        <select id="statusFilter" class="px-4 py-2 border rounded-lg" onchange="filterServices()">
-          <option value="">Semua Status</option>
-          <option value="aktif">Aktif</option>
-          <option value="non_aktif">Non-Aktif</option>
-        </select>
-        <select id="hargaFilter" class="px-4 py-2 border rounded-lg" onchange="filterServices()">
-          <option value="">Semua Harga</option>
-          <option value="murah">&lt; Rp 200.000</option>
-          <option value="sedang">Rp 200.000 - Rp 300.000</option>
-          <option value="mahal">&gt; Rp 300.000</option>
-        </select>
+        <div class="relative">
+          <select id="tipeFilter" class="appearance-none px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" onchange="filterServices()">
+            <option value="">Semua Tipe</option>
+            <option value="paket">Paket</option>
+            <option value="tambahan">Tambahan</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+          </div>
+        </div>
+
+        <div class="relative">
+          <select id="statusFilter" class="appearance-none px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" onchange="filterServices()">
+            <option value="">Semua Status</option>
+            <option value="aktif">Aktif</option>
+            <option value="non_aktif">Non-Aktif</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+          </div>
+        </div>
       </div>
     </div>
     <div id="searchStatus" class="text-sm text-gray-600" style="display:none;"></div>
@@ -119,13 +124,20 @@
               </td>
               <td class="p-4">
                 <div class="flex items-center gap-2">
-                  <button onclick="openEditModal({{ $paket->id_paket }})" class="text-blue-600 hover:underline text-sm">Edit</button>
-                  <button onclick="openViewModal({{ $paket->id_paket }})" class="text-gray-600 hover:underline text-sm">Lihat</button>
-                  <button onclick="toggleStatus({{ $paket->id_paket }}, {{ $paket->is_active ? 'false' : 'true' }})" 
-                    class="text-{{ $paket->is_active ? 'red' : 'green' }}-600 hover:underline text-sm">
-                    {{ $paket->is_active ? 'Nonaktifkan' : 'Aktifkan' }}
+                  <button onclick="openEditModal({{ $paket->id_paket }})" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
                   </button>
-                  <button onclick="deletePaket({{ $paket->id_paket }})" class="text-red-600 hover:underline text-sm">Hapus</button>
+                  <button onclick="openViewModal({{ $paket->id_paket }})" class="p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition" title="Lihat">
+                    <i class="fa-solid fa-eye"></i>
+                  </button>
+                  <button onclick="toggleStatus({{ $paket->id_paket }}, {{ $paket->is_active ? 'false' : 'true' }})" 
+                    class="p-2 text-{{ $paket->is_active ? 'red' : 'green' }}-600 hover:bg-{{ $paket->is_active ? 'red' : 'green' }}-50 rounded-lg transition" 
+                    title="{{ $paket->is_active ? 'Nonaktifkan' : 'Aktifkan' }}">
+                    <i class="fa-solid {{ $paket->is_active ? 'fa-toggle-on' : 'fa-toggle-off' }}"></i>
+                  </button>
+                  <button onclick="deletePaket({{ $paket->id_paket }})" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition" title="Hapus">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
                 </div>
               </td>
             </tr>
@@ -500,7 +512,6 @@ function filterServices() {
   var searchValue = document.getElementById('serviceSearch').value.toLowerCase();
   var tipeValue   = document.getElementById('tipeFilter').value.toLowerCase();
   var statusValue = document.getElementById('statusFilter').value.toLowerCase();
-  var hargaValue  = document.getElementById('hargaFilter').value.toLowerCase();
 
   var rows = document.getElementsByClassName('service-row');
   var visibleCount = 0, totalRows = rows.length;
@@ -510,19 +521,12 @@ function filterServices() {
     var rowText   = row.innerText.toLowerCase();
     var rowTipe   = row.getAttribute('data-tipe')   || '';
     var rowStatus = row.getAttribute('data-status') || '';
-    var rowHarga  = parseInt(row.getAttribute('data-harga')) || 0;
 
     var showRow = true;
 
     if (searchValue && !rowText.includes(searchValue)) showRow = false;
     if (tipeValue   && rowTipe !== tipeValue)          showRow = false;
     if (statusValue && rowStatus !== statusValue)      showRow = false;
-
-    if (hargaValue) {
-      if (hargaValue === 'murah'  && rowHarga >= 200000) showRow = false;
-      if (hargaValue === 'sedang' && (rowHarga < 200000 || rowHarga > 300000)) showRow = false;
-      if (hargaValue === 'mahal'  && rowHarga <= 300000) showRow = false;
-    }
 
     row.style.display = showRow ? '' : 'none';
     if (showRow) visibleCount++;
@@ -533,7 +537,7 @@ function filterServices() {
 
   var searchStatus = document.getElementById('searchStatus');
   if (searchStatus) {
-    if (searchValue || tipeValue || statusValue || hargaValue) {
+    if (searchValue || tipeValue || statusValue) {
       searchStatus.textContent = 'Menampilkan ' + visibleCount + ' dari ' + totalRows + ' paket layanan';
       searchStatus.style.display = 'block';
     } else {
@@ -555,9 +559,8 @@ function updateStats(visibleCount) {
   var searchValue = document.getElementById('serviceSearch').value;
   var tipeValue   = document.getElementById('tipeFilter').value;
   var statusValue = document.getElementById('statusFilter').value;
-  var hargaValue  = document.getElementById('hargaFilter').value;
 
-  if (searchValue || tipeValue || statusValue || hargaValue) {
+  if (searchValue || tipeValue || statusValue) {
     document.getElementById('totalPaket').textContent = visibleCount;
     document.getElementById('paketAktif').textContent = aktifCount;
   } else {

@@ -53,10 +53,20 @@
   </header>
 
   <!-- Stats -->
+  <div class="mb-2 flex justify-end">
+     <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-medium">fact_transaksi</span>
+  </div>
   <div class="grid grid-cols-1 gap-6 mb-6">
-    <div class="bg-white p-6 rounded-lg shadow-md">
-        <h3 class="text-lg font-semibold text-gray-600">Total Pendapatan</h3>
-        <p class="text-3xl font-bold mt-2">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</p>
+    <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+        <div class="flex justify-between items-center">
+          <div>
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Total Pendapatan</h3>
+            <p class="text-3xl font-bold mt-1 text-gray-800">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</p>
+          </div>
+          <div class="p-3 bg-green-100 rounded-full text-green-600">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+        </div>
     </div>
   </div>
 
@@ -82,19 +92,31 @@
       <input type="text" id="paymentSearch" placeholder="Cari ID, pelanggan..." 
         class="flex-grow min-w-[200px] px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         onkeyup="filterPayments()">
-      <select id="metodeFilter" class="px-4 py-2 border rounded-lg" onchange="filterPayments()">
-        <option value="">Semua Metode</option>
-        <option value="cash">Cash</option>
-        <option value="transfer">Transfer Bank</option>
-        <option value="e_wallet">E-Wallet</option>
-        <option value="qris">QRIS</option>
-        <option value="kartu_kredit">Kartu Kredit</option>
-      </select>
-      <select id="statusFilter" class="px-4 py-2 border rounded-lg" onchange="filterPayments()">
-        <option value="">Semua Status</option>
-        <option value="lunas">Lunas</option>
-        <option value="gagal">Gagal</option>
-      </select>
+      <div class="relative">
+        <select id="metodeFilter" class="appearance-none px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" onchange="filterPayments()">
+          <option value="">Semua Metode</option>
+          <option value="cash">Cash</option>
+          <option value="transfer">Transfer Bank</option>
+          <option value="e_wallet">E-Wallet</option>
+          <option value="qris">QRIS</option>
+          <option value="kartu_kredit">Kartu Kredit</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+        </div>
+      </div>
+      
+      <div class="relative">
+        <select id="statusFilter" class="appearance-none px-4 py-2 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" onchange="filterPayments()">
+          <option value="">Semua Status</option>
+          @foreach($filterStatus as $status)
+            <option value="{{ $status }}">{{ ucfirst(str_replace('_', ' ', $status)) }}</option>
+          @endforeach
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+        </div>
+      </div>
       <input type="date" id="dateFilter" class="px-4 py-2 border rounded-lg" onchange="filterPayments()">
     </div>
   </div>
@@ -167,16 +189,18 @@
                   @if($pembayaran->status_pembayaran == 'pending')
                     <button 
                       onclick="openPaymentModal({{ $pembayaran->id_pembayaran }}, '{{ $pembayaran->nomor_transaksi }}', {{ $pembayaran->jumlah_bayar }}, '{{ $pembayaran->metode_pembayaran }}')"
-                      class="px-3 py-1.5 text-xs font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition">
-                      Konfirmasi Bayar
+                      class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition" 
+                      title="Konfirmasi Pembayaran">
+                      <i class="fa-solid fa-check-double"></i>
                     </button>
                   @elseif($pembayaran->status_pembayaran == 'lunas')
                     <span class="text-xs text-gray-500">-</span>
                   @else
                     <button 
                       onclick="openPaymentModal({{ $pembayaran->id_pembayaran }}, '{{ $pembayaran->nomor_transaksi }}', {{ $pembayaran->jumlah_bayar }}, '{{ $pembayaran->metode_pembayaran }}')"
-                      class="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition">
-                      Update Status
+                      class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" 
+                      title="Update Status">
+                      <i class="fa-solid fa-pen-to-square"></i>
                     </button>
                   @endif
                 </td>
