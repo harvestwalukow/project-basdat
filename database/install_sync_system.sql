@@ -110,3 +110,4 @@ SHOW PROCEDURE STATUS WHERE Db = 'dw_basdat' AND Name LIKE '%fact%';
 SELECT '=== Installation completed successfully ===' AS status;
 
 
+

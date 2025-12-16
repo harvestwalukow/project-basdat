@@ -214,12 +214,14 @@ Route::middleware('user')->group(function () {
             return redirect()->route('signin')->with('error', 'Silakan login terlebih dahulu.');
         }
 
-        // Get all reservations for this user with related data
+        // Get all reservations for this user with related data (grouped by penitipan)
         $reservations = DB::table('penitipan')
             ->leftJoin('hewan', 'penitipan.id_hewan', '=', 'hewan.id_hewan')
             ->leftJoin('pembayaran', 'penitipan.id_penitipan', '=', 'pembayaran.id_penitipan')
-            ->leftJoin('detail_penitipan', 'penitipan.id_penitipan', '=', 'detail_penitipan.id_penitipan')
-            ->leftJoin('paket_layanan', 'detail_penitipan.id_paket', '=', 'paket_layanan.id_paket')
+            ->leftJoin(DB::raw('(SELECT id_penitipan, GROUP_CONCAT(p.nama_paket SEPARATOR ", ") as nama_paket 
+                FROM detail_penitipan dp 
+                LEFT JOIN paket_layanan p ON dp.id_paket = p.id_paket 
+                GROUP BY id_penitipan) as paket_grouped'), 'penitipan.id_penitipan', '=', 'paket_grouped.id_penitipan')
             ->leftJoin(DB::raw('(SELECT id_penitipan, foto_hewan, waktu_update, 
                 ROW_NUMBER() OVER (PARTITION BY id_penitipan ORDER BY waktu_update DESC) as rn 
                 FROM update_kondisi WHERE foto_hewan IS NOT NULL) as latest_update'), function($join) {
@@ -234,18 +236,23 @@ Route::middleware('user')->group(function () {
                 'hewan.ras',
                 'pembayaran.status_pembayaran',
                 'pembayaran.nomor_transaksi',
-                'paket_layanan.nama_paket',
+                'paket_grouped.nama_paket',
                 'latest_update.foto_hewan as latest_foto',
                 'latest_update.waktu_update as latest_foto_waktu'
             )
             ->orderBy('penitipan.created_at', 'desc')
             ->get();
 
-        // Calculate statistics
+        // Calculate statistics - count unique pets by nama+jenis+ras
+        $uniquePetCount = DB::table('hewan')
+            ->where('id_pemilik', $userId)
+            ->select(DB::raw('COUNT(DISTINCT CONCAT(nama_hewan, "-", jenis_hewan, "-", COALESCE(ras, ""))) as unique_count'))
+            ->value('unique_count');
+
         $stats = [
             'total' => $reservations->count(),
             'aktif' => $reservations->where('status', 'aktif')->count(),
-            'hewan' => DB::table('hewan')->where('id_pemilik', $userId)->count(),
+            'hewan' => $uniquePetCount ?? 0,
         ];
 
         return view('user.dashboard', compact('user', 'reservations', 'stats'));
