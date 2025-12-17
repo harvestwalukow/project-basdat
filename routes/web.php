@@ -77,6 +77,13 @@ Route::post('/signin', function (Request $request) {
             'role' => 'admin',
             'redirect' => '/admin/',
         ],
+        'admin@google.com' => [
+            'id' => 8888,
+            'name' => 'Admin Google',
+            'password' => '123456',
+            'role' => 'admin',
+            'redirect' => '/admin/',
+        ],
     ];
 
     // Cek dulu apakah email cocok dengan manual user

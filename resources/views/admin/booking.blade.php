@@ -177,9 +177,11 @@
                     $searchStatus = $statusPenitipan ? strtolower($statusPenitipan) : '';
                   @endphp
                   @if($semuaLayanan->isNotEmpty())
-                    @foreach($semuaLayanan as $layanan)
-                      <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded mb-1 mr-1">{{ $layanan }}</span>
-                    @endforeach
+                    <div class="flex flex-col gap-1 items-start">
+                      @foreach($semuaLayanan as $layanan)
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">{{ $layanan }}</span>
+                      @endforeach
+                    </div>
                   @else
                     <p class="text-xs text-gray-400">-</p>
                   @endif

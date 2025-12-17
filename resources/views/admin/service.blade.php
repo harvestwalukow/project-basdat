@@ -111,7 +111,7 @@
                 data-status="{{ $paket->is_active ? 'aktif' : 'non_aktif' }}" 
                 data-harga="{{ $paket->harga_per_hari }}">
               <td class="p-4 font-medium">{{ $paket->nama_paket }}</td>
-              <td class="p-4">{{ $paket->deskripsi }}</td>
+              <td class="p-4 max-w-[250px] whitespace-normal break-words">{{ $paket->deskripsi }}</td>
               <td class="p-4">Rp {{ number_format($paket->harga_per_hari, 0, ',', '.') }}</td>
               <td class="p-4 text-center">{{ $paket->detail_penitipan_count ?? 0 }}</td>
               <td class="p-4 text-center">
